@@ -20,10 +20,10 @@ This table outlines what the configuration settings are in `config.json`.
 | ------------------ |:------------------------------------------------------------------------:|:--------------------------------------------------------------:|
 | `token`            | Discord Bot Token                                                        | `N345798SDG98NBDSFGLKHlh4.8sdglh.dfg8oe4lkndf_dhg0934sg2qevM`  |
 | `prefix`           | Command Prefix                                                           | `$`                                                            |
-| `host-channel-id`  | ID token of the hosts Discord channel                                    | `40972350972635`                                               |
-| `games-channel-id` | ID token of the Discord channel where votes and passwords will be posted | `40972350972635`                                               |
-| `chat-channel-id`  | ID token of the Discord channel used for chatting                        | `40972350972635`                                               |
-| `host-role-id`     | ID token of the hosts Discord role                                       | `40972350972635`                                               |
+| `host_channel_id`  | ID token of the hosts Discord channel                                    | `40972350972635`                                               |
+| `games_channel_id` | ID token of the Discord channel where votes and passwords will be posted | `40972350972635`                                               |
+| `chat_channel_id`  | ID token of the Discord channel used for chatting                        | `40972350972635`                                               |
+| `host_role_id`     | ID token of the hosts Discord role                                       | `40972350972635`                                               |
 
 ## 🚀 Usage:
 ```shell
