@@ -16,14 +16,18 @@ These are the required libraries/packages to run this bot:
 ## 🔧 Configure:
 This table outlines what the configuration settings are in `config.json`.
 
-| Config Option      | Description                                                              | Example                                                        |
-| ------------------ |:------------------------------------------------------------------------:|:--------------------------------------------------------------:|
-| `token`            | Discord Bot Token                                                        | `N345798SDG98NBDSFGLKHlh4.8sdglh.dfg8oe4lkndf_dhg0934sg2qevM`  |
-| `prefix`           | Command Prefix                                                           | `$`                                                            |
-| `host_channel_id`  | ID token of the hosts Discord channel                                    | `40972350972635`                                               |
-| `games_channel_id` | ID token of the Discord channel where votes and passwords will be posted | `40972350972635`                                               |
-| `chat_channel_id`  | ID token of the Discord channel used for chatting                        | `40972350972635`                                               |
-| `host_role_id`     | ID token of the hosts Discord role                                       | `40972350972635`                                               |
+| Config Option      |                               Description                                |                            Example                            |
+| ------------------ | :----------------------------------------------------------------------: | :-----------------------------------------------------------: |
+| `token`            |                            Discord Bot Token                             | `N345798SDG98NBDSFGLKHlh4.8sdglh.dfg8oe4lkndf_dhg0934sg2qevM` |
+| `prefix`           |                              Command Prefix                              |                              `$`                              |
+| `host_channel_id`  |                  ID token of the hosts Discord channel                   |                       `40972350972635`                        |
+| `games_channel_id` | ID token of the Discord channel where votes and passwords will be posted |                       `40972350972635`                        |
+| `chat_channel_id`  |            ID token of the Discord channel used for chatting             |                       `40972350972635`                        |
+| `host_role_id`     |                    ID token of the hosts Discord role                    |                       `40972350972635`                        |
+| `version`          |                 Version of the bot. Should be left as is                 |                            `0.0.1`                            |
+| `default_timer`    |                Default time in minutes for timers to use                 |                              `2`                              |
+| `activity`         |            Activity message the bot shows in the members list            |                       `40972350972635`                        |
+
 
 ## 🚀 Usage:
 ```shell
