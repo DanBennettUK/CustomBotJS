@@ -9,7 +9,7 @@ const config = require(`./config.json`);
 
 // Post in console when ready
 client.once('ready', () => {
-	console.log('Ready!');
+  console.log('Ready!');
 });
 
 // Debug errors
@@ -24,10 +24,10 @@ client.login(config.token);
 
 client.on("message", async message => {
   // Ignore bots own messages.
-  if(message.author.bot) return;
+  if (message.author.bot) return;
 
   // Ignore messages that do not begin with the prefix.
-  if(message.content.indexOf(config.prefix) !== 0) return;
+  if (message.content.indexOf(config.prefix) !== 0) return;
 
   // Here we separate our "command" name, and our "arguments" for the command.
   // e.g. if we have the message "+say Is this the real life?" , we'll get the following:
@@ -35,4 +35,11 @@ client.on("message", async message => {
   // args = ["Is", "this", "the", "real", "life?"]
   const args = message.content.slice(config.prefix.length).trim().split(/ +/g);
   const command = args.shift().toLowerCase();
+
+  if (command === "ping") {
+    // Calculates ping between sending a message and editing it, giving a nice round-trip latency.
+    // The second ping is an average latency between the bot and the websocket server (one-way, not round-trip)
+    const ping_message = await message.channel.send("Ping?");
+    ping_message.edit(`Pong! Latency is ${ping_message.createdTimestamp - message.createdTimestamp}ms. API Latency is ${Math.round(client.ping)}ms`);
+  }
 });
