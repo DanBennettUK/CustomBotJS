@@ -1,6 +1,7 @@
 # CustomBotJS - A Discord Bot for PUBG Custom Game organization
 
 Originally for /r/PUBATTLEGROUNDS aka PUBGReddit
+
 Based on [CustomsBot](https://github.com/Samwalton9/CustomsBot) by SamWalton.
 
 <div align="center">
@@ -26,7 +27,7 @@ This table outlines what the configuration settings are in `config.json`.
 
 ## 🚀 Usage:
 ```shell
-$ node . // I'll script this later.
+$ node . # I'll script this later.
 ```
 
 ## 📄 License:
