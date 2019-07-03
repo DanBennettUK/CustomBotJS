@@ -1,0 +1,10 @@
+{
+    "token": "",
+    "prefix": "$",
+    "host_channel_id": "",
+    "games_channel_id": "",
+    "chat_channel_id": "",
+    "host_role_id": "",
+    "version": "0.0.1",
+    "default_timer": "2"
+}
