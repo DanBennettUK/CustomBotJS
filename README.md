@@ -4,16 +4,21 @@ Originally for /r/PUBATTLEGROUNDS aka PUBGReddit
 
 Based on [CustomsBot](https://github.com/Samwalton9/CustomsBot) by SamWalton.
 
+[![CodeFactor](https://www.codefactor.io/repository/github/danbennettuk/custombotjs/badge)](https://www.codefactor.io/repository/github/danbennettuk/custombotjs)
+
 <div align="center">
     <img src="./botlogo.png" />
 </div>
 
 ## 📋 Requirements:
+
 These are the required libraries/packages to run this bot:
- - [Node](https://nodejs.org/en/)
- - [Discord.JS](https://discord.js.org)
+
+-   [Node](https://nodejs.org/en/)
+-   [Discord.JS](https://discord.js.org)
 
 ## 🔧 Configure:
+
 This table outlines what the configuration settings are in `config.json`.
 
 | Config Option                |                               Description                                |                            Example                            |
@@ -30,11 +35,12 @@ This table outlines what the configuration settings are in `config.json`.
 | `activity => twitchUsername` |          Twitch Username for the bot to show when above is true          |                         `DanBennett`                          |
 | `activity => game`           |                        Game playing in bot status                        |                `PlayerUnknown's BattleGrounds`                |
 
-
 ## 🚀 Usage:
+
 ```shell
 $ node . # I'll script this later.
 ```
 
 ## 📄 License:
+
 GPL-3.0 © [Dan Bennett](https://github.com/DanBennettUK/CustomBotJS/blob/master/LICENSE)
