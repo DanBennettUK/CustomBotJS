@@ -24,7 +24,7 @@ exports.run = async (client, message, args) => {
 
 	// Set up the message as an embed, ready to post
 	const squadVoteMessage = {
-		color: 3447003,
+		color: 0x3366ff,
 		title: 'Vote for squad size!',
 		description: 'Please vote on the squad size for the next game',
 		fields: [
@@ -53,7 +53,7 @@ exports.run = async (client, message, args) => {
 		squad_sizes_selected = default_squad_sizes;
 		console.log('squad_sizes_selected 0 = ' + squad_sizes_selected);
 		try {
-			await host_channel
+			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
 					await embedMessage.react(emojiCharacters[1]);
