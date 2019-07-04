@@ -1,18 +1,19 @@
 {
-  "name": "custombotjs",
-  "version": "0.0.1",
-  "description": "A Discord Bot for organising PUBG Custom Games",
-  "main": "index.js",
-  "scripts": {
-    "test": "node ."
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DanBennettUK/CustomBotJS"
-  },
-  "author": "Dan Bennett",
-  "license": "GPL-3.0",
-  "dependencies": {
-    "discord.js": "^11.5.1"
-  }
+    "name": "custombotjs",
+    "version": "0.0.1",
+    "description": "A Discord Bot for organising PUBG Custom Games",
+    "main": "index.js",
+    "scripts": {
+        "test": "node . && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/DanBennettUK/CustomBotJS"
+    },
+    "author": "Dan Bennett",
+    "license": "GPL-3.0",
+    "dependencies": {
+        "discord.js": "^11.5.1",
+        "enmap": "^5.0.0"
+    }
 }
