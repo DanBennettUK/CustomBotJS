@@ -1,137 +1,106 @@
 exports.run = async (client, message, args) => {
-	if (message.channel.id === client.config.host_channel_id) {
-		const host_channel = client.channels.get(client.config.host_channel_id);
-		const time = client.config.default_timer;
-		const reactionArray = [];
-		const reactionCountsArray = [];
-		const emojiCharacters = require('../emojiCharacters.js');
-		const emojiList = [
-			'0️⃣',
-			'1️⃣',
-			'2️⃣',
-			'3️⃣',
-			'4️⃣',
-			'5️⃣',
-			'6️⃣',
-			'7️⃣',
-			'8️⃣',
-			'9️⃣',
-			'🔟',
-		];
-		let squad_vote_message;
+	if (message.channel.id !== client.config.host_channel_id) {
+		// If the command isn't ran in the host channel, do nothing.
+		return;
+	}
+	console.log(args);
+	const message_squad_sizes = args;
+	const emojiCharacters = require('../emojiCharacters.js');
+	const host_channel = client.channels.get(client.config.host_channel_id);
+	const games_channel = client.channels.get(client.config.games_channel_id);
+	let default_squad_sizes;
+	let squad_sizes_selected;
+	let error_message;
 
-		if (!args.length) {
-			message.channel.send(
-				`You didn't provide squad sizes, ${
-					message.author
-				}! Using the defaults...`
-			);
-			(squad_vote_message = 'Vote for the squad size for the next game!'),
-			host_channel
-				.send(squad_vote_message)
-				.then(async function(message) {
-					reactionArray.push = await message.react(
-						emojiCharacters[1]
-					);
-					console.log(emojiCharacters[1]);
-					reactionArray.push = await message.react(
-						emojiCharacters[2]
-					);
-					reactionArray.push = await message.react(
-						emojiCharacters[4]
-					);
-					reactionArray.push = await message.react(
-						emojiCharacters[8]
-					);
-					console.log(reactionCountsArray);
-				});
-		}
-		else {
-			(squad_vote_message = 'Vote for the squad size for the next game!'),
-			host_channel
-				.send(squad_vote_message)
-				.then(async function(message) {
-					reactionArray[0] = await message.react(
-						emojiCharacters[args[0]]
-					);
-					reactionArray[1] = await message.react(
-						emojiCharacters[args[1]]
-					);
-					reactionArray[2] = await message.react(
-						emojiCharacters[args[2]]
-					);
-					reactionArray[3] = await message.react(
-						emojiCharacters[args[3]]
-					);
-					reactionArray[4] = await message.react(
-						emojiCharacters[args[4]]
-					);
-					reactionArray[5] = await message.react(
-						emojiCharacters[args[5]]
-					);
-					reactionArray[6] = await message.react(
-						emojiCharacters[args[6]]
-					);
-					reactionArray[7] = await message.react(
-						emojiCharacters[args[7]]
-					);
-					reactionArray[8] = await message.react(
-						emojiCharacters[args[8]]
-					);
-					reactionArray[9] = await message.react(
-						emojiCharacters[args[9]]
-					);
-				})
-				.catch(console.error);
-		}
-		if (time) {
-			host_channel.send(
-				`The vote has started and will last ${time} minute(s)`
-			);
-		}
-		if (time) {
-			setTimeout(() => {
-				// Re-fetch the message and get reaction counts
-				message.channel
-					.fetchMessage(message.id)
-					.then(async function(message) {
-						for (let i = 0; i < reactionArray.length; i++) {
-							reactionCountsArray[i] =
-								message.reactions.get(emojiCharacters[i])
-									.count - 1;
-						}
-
-						// Find winner(s)
-						let max = -Infinity,
-							indexMax = [];
-						for (let i = 0; i < reactionCountsArray.length; ++i) {
-							if (reactionCountsArray[i] > max) {
-								(max = reactionCountsArray[i]),
-								(indexMax = [i]);
-							}
-							else if (reactionCountsArray[i] === max) {
-								indexMax.push(i);
-							}
-						}
-
-						// Display winner(s)
-						console.log(reactionCountsArray); // Debugging votes
-						let winnersText = 'Winners?';
-						if (reactionCountsArray[indexMax[0]] == 0) {
-							winnersText = 'No one voted!';
-						}
-						else {
-							for (let i = 0; i < indexMax.length; i++) {
-								winnersText +=
-									emojiList[indexMax[i]] +
-									' (' +
-									reactionCountsArray[indexMax[i]] +
-									' vote(s))\n';
-							}
-						}
-						host_channel.send(winnersText);
-					});
-			}, time * 60 * 100);
+	// Range test
+	function test(number, range) {
+		range = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+		for (let i = 0; i < range.length; ++i) {
+			if (number < range[i]) {
+				return i;
+			}
 		}
 	}
+
+	// Set up the message as an embed, ready to post
+	const squadVoteMessage = {
+		color: 3447003,
+		title: 'Vote for squad size!',
+		description: 'Please vote on the squad size for the next game',
+		fields: [
+			{
+				name: 'Vote will close in:',
+				value: `${client.config.default_timer} minutes`,
+			},
+			{
+				name: `${squad_sizes_selected}`,
+				value: `${squad_sizes_selected}`,
+			},
+		],
+		timestamp: new Date(),
+		footer: {
+			icon_url: client.user.avatarURL,
+			text: '© DanBennett',
+		},
+	};
+
+	console.log('message_squad_sizes is = ') + message_squad_sizes;
+
+	if (message_squad_sizes.length == 0) {
+		// If the array is empty
+		default_squad_sizes = [1, 2, 4, 8];
+		squad_sizes_selected = default_squad_sizes;
+		console.log('squad_sizes_selected 0 = ' + squad_sizes_selected);
+		try {
+			await host_channel
+				.send({ embed: squadVoteMessage })
+				.then(async embedMessage => {
+					await embedMessage.react('1️⃣');
+					await embedMessage.react('2️⃣');
+					await embedMessage.react('4️⃣');
+					await embedMessage.react('8️⃣');
+				});
+		}
+		catch (error) {
+			console.log(`${error}`);
+		}
+	}
+	else if (message_squad_sizes[0] == 'all') {
+		// If the array is 'all'
+		squad_sizes_selected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+		console.log('squad_sizes_selected 1 = ' + squad_sizes_selected);
+		try {
+			await host_channel
+				.send({ embed: squadVoteMessage })
+				.then(async embedMessage => {
+					await embedMessage.react(emojiCharacters[1]);
+					await embedMessage.react(emojiCharacters[2]);
+					await embedMessage.react(emojiCharacters[3]);
+					await embedMessage.react(emojiCharacters[4]);
+					await embedMessage.react(emojiCharacters[5]);
+					await embedMessage.react(emojiCharacters[6]);
+					await embedMessage.react(emojiCharacters[7]);
+					await embedMessage.react(emojiCharacters[8]);
+					await embedMessage.react(emojiCharacters[9]);
+					await embedMessage.react(emojiCharacters[10]);
+				});
+		}
+		catch (error) {
+			console.log(`${error}`);
+		}
+	}
+	else if (isNaN(message_squad_sizes[0])) {
+		// If it's not a number...
+		error_message = 'Error: Please only use numbers!';
+		host_channel.send(error_message);
+		console.log('squad_sizes_selected 2 = ' + squad_sizes_selected);
+		return;
+	}
+	else {
+		// Check the array fits in the range we want
+		const squads_correct_range = test(message_squad_sizes);
+		console.log('Range is = ' + squads_correct_range);
+	}
+
+	// Post the message and set up the reactions
 };
