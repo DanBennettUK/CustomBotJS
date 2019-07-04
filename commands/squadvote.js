@@ -33,6 +33,7 @@ exports.run = async (client, message, args) => {
 				value: `${client.config.default_timer} minutes`,
 			},
 			{
+				// For Debugging. Remove later.
 				name: `${squad_sizes_selected}`,
 				value: `${squad_sizes_selected}`,
 			},
@@ -55,10 +56,10 @@ exports.run = async (client, message, args) => {
 			await host_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
-					await embedMessage.react('1️⃣');
-					await embedMessage.react('2️⃣');
-					await embedMessage.react('4️⃣');
-					await embedMessage.react('8️⃣');
+					await embedMessage.react(emojiCharacters[1]);
+					await embedMessage.react(emojiCharacters[2]);
+					await embedMessage.react(emojiCharacters[4]);
+					await embedMessage.react(emojiCharacters[8]);
 				});
 		}
 		catch (error) {
@@ -70,7 +71,7 @@ exports.run = async (client, message, args) => {
 		squad_sizes_selected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 		console.log('squad_sizes_selected 1 = ' + squad_sizes_selected);
 		try {
-			await host_channel
+			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
 					await embedMessage.react(emojiCharacters[1]);
