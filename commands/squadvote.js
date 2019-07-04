@@ -60,6 +60,28 @@ exports.run = async (client, message, args) => {
 					await embedMessage.react(emojiCharacters[2]);
 					await embedMessage.react(emojiCharacters[4]);
 					await embedMessage.react(emojiCharacters[8]);
+					setTimeout(function() {
+						const reactions = embedMessage.reactions.array();
+						let reactionID;
+						let maxCount = 0;
+						for (let i = 0; i < reactions.length; i++) {
+							if (reactions[i].count > maxCount) {
+								maxCount = reactions[i].count;
+								reactionID = i;
+							}
+						}
+						embedMessage.delete();
+						games_channel.send(
+							`${
+								reactions[reactionID]._emoji
+							} won the squad size vote!`
+						);
+						host_channel.send(
+							`${
+								reactions[reactionID]._emoji
+							} won the squad size vote!`
+						);
+					}, client.config.default_timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -84,6 +106,28 @@ exports.run = async (client, message, args) => {
 					await embedMessage.react(emojiCharacters[8]);
 					await embedMessage.react(emojiCharacters[9]);
 					await embedMessage.react(emojiCharacters[10]);
+					setTimeout(function() {
+						const reactions = embedMessage.reactions.array();
+						let reactionID;
+						let maxCount = 0;
+						for (let i = 0; i < reactions.length; i++) {
+							if (reactions[i].count > maxCount) {
+								maxCount = reactions[i].count;
+								reactionID = i;
+							}
+						}
+						embedMessage.delete();
+						games_channel.send(
+							`${
+								reactions[reactionID]._emoji
+							} won the squad size vote!`
+						);
+						host_channel.send(
+							`${
+								reactions[reactionID]._emoji
+							} won the squad size vote!`
+						);
+					}, client.config.default_timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -98,6 +142,7 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 	else {
+		// Picked squad sizes by host
 		// Check the array fits in the range we want
 		const squads_correct_range = test(message_squad_sizes);
 		console.log('Range is = ' + squads_correct_range);
