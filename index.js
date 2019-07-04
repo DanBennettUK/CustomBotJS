@@ -36,10 +36,21 @@ client.once('ready', () => {
 });
 
 // On connect do these:
-client.on('ready', () => {
-	client.user.setActivity(config.activity, {
-		type: 'PLAYING',
-	});
+client.on('ready', async () => {
+	console.log(`${client.user.username} is ready for action!`);
+	if (config.activity.streaming == true) {
+		client.user.setActivity(config.activity.game, {
+			url: `https://twitch.tv/${config.activity.twitchUsername}`,
+		});
+	}
+	else {
+		client.user.setActivity(config.activity.game, {
+			type: 'WATCHING',
+			// PLAYING, LISTENING, WATCHING
+		});
+		client.user.setStatus('dnd');
+		// dnd, idle, online, invisible
+	}
 });
 
 // Debug errors

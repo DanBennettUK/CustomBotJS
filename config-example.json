@@ -7,5 +7,9 @@
     "host_role_id": "",
     "version": "0.0.1",
     "default_timer": "2",
-    "activity": "how long until Dan get's angry and deletes me?"
+    "activity": {
+        "streaming": false,
+        "twitchUsername": "",
+        "game": ""
+    }
 }
