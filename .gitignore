@@ -65,3 +65,5 @@ config.json
 
 # Other
 .bot_invite_link
+.code-workspace
+.eslintrc.json
