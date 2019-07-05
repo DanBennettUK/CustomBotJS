@@ -3,8 +3,7 @@ exports.run = async (client, message, args) => {
 		// If the command isn't ran in the host channel, do nothing.
 		return;
 	}
-	console.log(args);
-	const perspective_vote = args;
+
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
@@ -37,8 +36,6 @@ exports.run = async (client, message, args) => {
 			text: `${footerText}`,
 		},
 	};
-
-	console.log('perspective_vote is = ') + perspective_vote;
 
 	try {
 		await games_channel

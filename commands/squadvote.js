@@ -50,13 +50,10 @@ exports.run = async (client, message, args) => {
 		},
 	};
 
-	console.log('message_squad_sizes is = ') + message_squad_sizes;
-
 	if (message_squad_sizes.length == 0) {
 		// If the array is empty
 		default_squad_sizes = [1, 2, 4, 8];
 		squad_sizes_selected = default_squad_sizes;
-		console.log('squad_sizes_selected 0 = ' + squad_sizes_selected);
 		try {
 			await games_channel
 				.send({ embed: squadVoteMessage })
@@ -108,7 +105,6 @@ exports.run = async (client, message, args) => {
 	else if (message_squad_sizes[0] == 'all') {
 		// If the array is 'all'
 		squad_sizes_selected = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-		console.log('squad_sizes_selected 1 = ' + squad_sizes_selected);
 		try {
 			await games_channel
 				.send({ embed: squadVoteMessage })
@@ -167,9 +163,9 @@ exports.run = async (client, message, args) => {
 		// If it's not a number...
 		error_message = 'Error: Please only use numbers!';
 		host_channel.send(error_message);
-		console.log('squad_sizes_selected 2 = ' + squad_sizes_selected);
 		return;
-	}
+	}	console.log(args);
+	const perspective_vote = args;
 	else {
 		// Picked squad sizes by host
 		// Check the array fits in the range we want
