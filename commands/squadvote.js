@@ -23,25 +23,30 @@ exports.run = async (client, message, args) => {
 	}
 
 	// Set up the message as an embed, ready to post
+	const title = 'Vote for squad size!';
+	const description = 'Please vote on the squad size for the next game';
+	const winValue = 'The winning squad size is:';
+	const footerText = '© DanBennett';
+
 	const squadVoteMessage = {
 		color: 0x3366ff,
-		title: 'Vote for squad size!',
-		description: 'Please vote on the squad size for the next game',
+		title: `${title}`,
+		description: `${description}`,
 		fields: [
 			{
-				name: 'Vote will close in:',
-				value: `${client.config.default_timer} minutes`,
+				name: 'Choose a reaction',
+				value:
+					'Click the reaction for the amount of players in each squad you want.',
 			},
 			{
-				// For Debugging. Remove later.
-				name: `${squad_sizes_selected}`,
-				value: `${squad_sizes_selected}`,
+				name: 'Vote will close in:',
+				value: `${client.config.default_timer} minute(s)`,
 			},
 		],
 		timestamp: new Date(),
 		footer: {
 			icon_url: client.user.avatarURL,
-			text: '© DanBennett',
+			text: `${footerText}`,
 		},
 	};
 
@@ -70,16 +75,28 @@ exports.run = async (client, message, args) => {
 								reactionID = i;
 							}
 						}
+						const squadResultEmoji = reactions[reactionID]._emoji;
+
+						const squadResult = {
+							color: 0x3366ff,
+							title: `${title}`,
+							fields: [
+								{
+									name: `${winValue}`,
+									value: `${squadResultEmoji}`,
+								},
+							],
+							timestamp: new Date(),
+							footer: {
+								icon_url: client.user.avatarURL,
+								text: `${footerText}`,
+							},
+						};
+
 						embedMessage.delete();
-						games_channel.send(
-							`${
-								reactions[reactionID]._emoji
-							} won the squad size vote!`
-						);
+						games_channel.send({ embed: squadResult });
 						host_channel.send(
-							`${
-								reactions[reactionID]._emoji
-							} won the squad size vote!`
+							`${winValue} ${reactions[reactionID]._emoji}`
 						);
 					}, client.config.default_timer * 60 * 1000);
 				});
@@ -116,16 +133,28 @@ exports.run = async (client, message, args) => {
 								reactionID = i;
 							}
 						}
+						const squadResultEmoji = reactions[reactionID]._emoji;
+
+						const squadResult = {
+							color: 0x3366ff,
+							title: `${title}`,
+							fields: [
+								{
+									name: `${winValue}`,
+									value: `${squadResultEmoji}`,
+								},
+							],
+							timestamp: new Date(),
+							footer: {
+								icon_url: client.user.avatarURL,
+								text: `${footerText}`,
+							},
+						};
+
 						embedMessage.delete();
-						games_channel.send(
-							`${
-								reactions[reactionID]._emoji
-							} won the squad size vote!`
-						);
+						games_channel.send({ embed: squadResult });
 						host_channel.send(
-							`${
-								reactions[reactionID]._emoji
-							} won the squad size vote!`
+							`${winValue} ${reactions[reactionID]._emoji}`
 						);
 					}, client.config.default_timer * 60 * 1000);
 				});
