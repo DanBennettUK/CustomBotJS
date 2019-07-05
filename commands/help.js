@@ -67,7 +67,7 @@ exports.run = async (client, message) => {
 						{
 							name: `\`${configPrefix}squadvote (sqv)\``,
 							value:
-								'Starts squadvote. \nUsage: `all` for 1-10 \nLeave blank for 1 2 4 8',
+								'Starts squadvote. \u200BUsage: `all` for 1-10 \u200BLeave blank for 1 2 4 8',
 							inline: true,
 						},
 						{
