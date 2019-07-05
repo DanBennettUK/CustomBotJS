@@ -164,8 +164,7 @@ exports.run = async (client, message, args) => {
 		error_message = 'Error: Please only use numbers!';
 		host_channel.send(error_message);
 		return;
-	}	console.log(args);
-	const perspective_vote = args;
+	}
 	else {
 		// Picked squad sizes by host
 		// Check the array fits in the range we want
