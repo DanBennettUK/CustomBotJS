@@ -67,7 +67,7 @@ exports.run = async (client, message) => {
 						{
 							name: `\`${configPrefix}squadvote (sqv)\``,
 							value:
-								'Starts squadvote. \u200BUsage: `all` for 1-10 \u200BLeave blank for 1 2 4 8',
+								'Starts squadvote. \nUsage: `all` for 1-10 \nLeave blank for 1 2 4 8',
 							inline: true,
 						},
 						{
@@ -83,6 +83,11 @@ exports.run = async (client, message) => {
 						{
 							name: `\`${configPrefix}mapvote\``,
 							value: 'Starts map vote',
+							inline: true,
+						},
+						{
+							name: `\`${configPrefix}clear\``,
+							value: `Clears bot messages from games channel \nUsage: \`all\` to remove all messages \nNumber of messages you want to delete \nExample: \`${configPrefix}clear 10\``,
 							inline: true,
 						},
 					],
