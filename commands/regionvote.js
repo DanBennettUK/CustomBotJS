@@ -19,7 +19,6 @@ exports.run = async (client, message, args) => {
 		color: 0x3366ff,
 		title: `${title}`,
 		description: `${description}`,
-		url: 'https://github.com/DanBennettUK/CustomBotJS',
 		fields: [
 			{
 				name: 'Choose a reaction',
