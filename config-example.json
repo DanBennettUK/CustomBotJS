@@ -11,5 +11,6 @@
         "streaming": false,
         "twitchUsername": "",
         "game": ""
-    }
+    },
+    "host_channel_messages": true
 }

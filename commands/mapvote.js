@@ -86,7 +86,9 @@ exports.run = async (client, message, args) => {
 
 					embedMessage.delete();
 					games_channel.send({ embed: mapResult });
-					host_channel.send({ embed: mapResult });
+					if (client.config.host_channel_messages === true) {
+						host_channel.send({ embed: mapResult });
+					}
 				}, client.config.default_timer * 60 * 1000);
 			});
 	}
