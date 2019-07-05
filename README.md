@@ -34,6 +34,7 @@ This table outlines what the configuration settings are in `config.json`.
 | `activity => streaming`      |                Show whether bot is live on Twitch or not                 |                            `false`                            |
 | `activity => twitchUsername` |          Twitch Username for the bot to show when above is true          |                         `DanBennett`                          |
 | `activity => game`           |                        Game playing in bot status                        |                `PlayerUnknown's BattleGrounds`                |
+| `host_channel_messages`      |     Choose whether results of votes are posted in the hosts channel      |                            `true`                             |
 
 ## 🚀 Usage:
 
