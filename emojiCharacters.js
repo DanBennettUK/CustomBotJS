@@ -45,4 +45,8 @@ module.exports = {
 	SEA: '🇸🇬',
 	OCE: '🇦🇺',
 	KR: '🇰🇷',
+	Erangel: '🏞',
+	Miramar: '🏜',
+	Sanhok: '🏝',
+	Vikendi: '🏔',
 };
