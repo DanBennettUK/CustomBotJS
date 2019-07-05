@@ -10,7 +10,10 @@ module.exports = (client, message) => {
 		.slice(client.config.prefix.length)
 		.trim()
 		.split(/ +/g);
-	const command = args.shift().toLowerCase();
+	let command = args.shift().toLowerCase();
+
+	// Command aliases
+	if (command === 'sqv') command = 'squadvote';
 
 	// Grab the command data from the client.commands Enmap
 	const cmd = client.commands.get(command);
