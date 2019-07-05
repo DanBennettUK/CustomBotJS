@@ -9,22 +9,25 @@ exports.run = async (client, message, args) => {
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
 
-	// Range test
-	function test(number, range) {
-		range = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-		for (let i = 0; i < range.length; ++i) {
-			if (number < range[i]) {
-				return i;
-			}
-		}
-	}
-
 	// Set up the message as an embed, ready to post
+	const title = 'Vote for region!';
+	const description = 'Please vote on the region for tonights games!';
+	const winValue = 'The winning region was:';
+	const footerText = '© DanBennett';
+
 	const regionVoteMessage = {
 		color: 0x3366ff,
-		title: 'Vote for region!',
-		description: 'Please vote on the region for tonights games!',
+		title: `${title}`,
+		description: `${description}`,
 		fields: [
+			{
+				name: 'Choose a reaction',
+				value: `${emojiCharacters['EU']} for Europe 
+				\n${emojiCharacters['NA']} for North America
+				\n${emojiCharacters['SEA']} for Southeast Asia
+				\n${emojiCharacters['OCE']} for Oceania
+				\n${emojiCharacters['KR']} for Korea/Japan`,
+			},
 			{
 				name: 'Vote will close in:',
 				value: `${client.config.default_timer} minutes`,
@@ -33,7 +36,7 @@ exports.run = async (client, message, args) => {
 		timestamp: new Date(),
 		footer: {
 			icon_url: client.user.avatarURL,
-			text: '© DanBennett',
+			text: `${footerText}`,
 		},
 	};
 
@@ -44,7 +47,10 @@ exports.run = async (client, message, args) => {
 			.send({ embed: regionVoteMessage })
 			.then(async embedMessage => {
 				await embedMessage.react(emojiCharacters['EU']);
-				await embedMessage.react(emojiCharacters['US']);
+				await embedMessage.react(emojiCharacters['NA']);
+				await embedMessage.react(emojiCharacters['SEA']);
+				await embedMessage.react(emojiCharacters['OCE']);
+				await embedMessage.react(emojiCharacters['KR']);
 				setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
@@ -55,12 +61,28 @@ exports.run = async (client, message, args) => {
 							reactionID = i;
 						}
 					}
+					const regionResultEmoji = reactions[reactionID]._emoji;
+
+					const regionResult = {
+						color: 0x3366ff,
+						title: `${title}`,
+						fields: [
+							{
+								name: `${winValue}`,
+								value: `${regionResultEmoji}`,
+							},
+						],
+						timestamp: new Date(),
+						footer: {
+							icon_url: client.user.avatarURL,
+							text: `${footerText}`,
+						},
+					};
+
 					embedMessage.delete();
-					games_channel.send(
-						`${reactions[reactionID]._emoji} won the region vote!`
-					);
+					games_channel.send({ embed: regionResult });
 					host_channel.send(
-						`${reactions[reactionID]._emoji} won the region vote!`
+						`${winValue} ${reactions[reactionID]._emoji}`
 					);
 				}, client.config.default_timer * 60 * 1000);
 			});
