@@ -32,6 +32,7 @@ exports.run = async (client, message, args) => {
 		color: 0x3366ff,
 		title: `${title}`,
 		description: `${description}`,
+		url: 'https://github.com/DanBennettUK/CustomBotJS',
 		fields: [
 			{
 				name: 'Choose a reaction',
@@ -78,7 +79,7 @@ exports.run = async (client, message, args) => {
 						const squadResultEmoji = reactions[reactionID]._emoji;
 
 						const squadResult = {
-							color: 0x3366ff,
+							color: 0x009900,
 							title: `${title}`,
 							fields: [
 								{
@@ -136,7 +137,7 @@ exports.run = async (client, message, args) => {
 						const squadResultEmoji = reactions[reactionID]._emoji;
 
 						const squadResult = {
-							color: 0x3366ff,
+							color: 0x009900,
 							title: `${title}`,
 							fields: [
 								{
