@@ -14,6 +14,8 @@ module.exports = (client, message) => {
 
 	// Command aliases
 	if (command === 'sqv') command = 'squadvote';
+	if (command === 'rv') command = 'regionvote';
+	if (command === 'pv') command = 'perspectivevote';
 
 	// Grab the command data from the client.commands Enmap
 	const cmd = client.commands.get(command);
