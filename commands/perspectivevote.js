@@ -52,6 +52,7 @@ exports.run = async (client, message, args) => {
 			.send({ embed: perspectiveVote })
 			.then(async embedMessage => {
 
+				//Checks if message is deleted
 				var checkIfDeleted = setInterval(function() {
 					if (embedMessage.deleted) {
 						clearTimeout(timeToVote);

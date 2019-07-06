@@ -15,7 +15,6 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the squad size for the next game';
 	const winText = 'The winning squad size is:';
 	const footerText = '© DanBennett';
-	var timer = client.config.default_timer;
 
 	// Function to compare two arrays
 	function containsAny(source, target) {
@@ -115,7 +114,7 @@ exports.run = async (client, message, args) => {
 								`${winText} ${reactions[reactionID]._emoji}`
 							);
 						}
-					}, timer * 60 * 1000);
+					}, client.config.default_timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -188,7 +187,7 @@ exports.run = async (client, message, args) => {
 								`${winText} ${reactions[reactionID]._emoji}`
 							);
 						}
-					}, timer * 60 * 1000);
+					}, client.config.default_timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -278,7 +277,7 @@ exports.run = async (client, message, args) => {
 									`${winText} ${reactions[reactionID]._emoji}`
 								);
 							}
-						}, timer * 60 * 1000);
+						}, client.config.default_timer * 60 * 1000);
 					});
 			}
 			catch (error) {
