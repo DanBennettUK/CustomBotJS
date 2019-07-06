@@ -94,7 +94,9 @@ exports.run = async (client, message) => {
                     timestamp: new Date(),
                     footer: {
                         icon_url: client.user.avatarURL,
-                        text: '© DanBennett',
+                        text: `© DanBennett - Version: ${
+                            client.config.version
+                        }`,
                     },
                 },
             });
