@@ -52,7 +52,7 @@ exports.run = async (client, message, args) => {
 		`${emojiCharacters['Miramar']} for Miramar`,
 		`${emojiCharacters['Sanhok']} for Sanhok`,
 		`${emojiCharacters['Vikendi']} for Vikendi`
-		]
+		];
 	}
 	var choices = mapChoices.join(`\n`);
 

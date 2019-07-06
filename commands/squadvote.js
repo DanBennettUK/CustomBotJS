@@ -15,6 +15,7 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the squad size for the next game';
 	const winText = 'The winning squad size is:';
 	const footerText = '© DanBennett';
+	var timer = client.config.default_timer;
 
 	// Function to compare two arrays
 	function containsAny(source, target) {
@@ -55,12 +56,21 @@ exports.run = async (client, message, args) => {
 			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
+
+					//Checks if message is deleted
+					var checkIfDeleted = setInterval(function() {
+						if (embedMessage.deleted) {
+							clearTimeout(timeToVote);
+							clearInterval(checkIfDeleted);
+						}
+					}, 1000);
 					for (let i = 0; i < squad_sizes.length; i++) {
 						await embedMessage.react(
 							emojiCharacters[squad_sizes[i]]
 						);
 					}
-					setTimeout(function() {
+					var timeToVote = setTimeout(function() {
+						
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
 						let maxCount = 0;
@@ -70,15 +80,25 @@ exports.run = async (client, message, args) => {
 								reactionID = i;
 							}
 						}
-						const squadResultEmoji = reactions[reactionID]._emoji;
-
+						
+						var draws = [];
+						for(var i = 0, j = 0; i < reactions.length; i++) {
+							if(reactions[i].count == maxCount) {
+								draws[j] = i;
+								j++;
+							}
+						}
+						if(draws.length > 1) {
+							reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+						}
+						
 						const squadResult = {
 							color: 0x009900,
 							title: `${title}`,
 							fields: [
 								{
 									name: `${winText}`,
-									value: `${squadResultEmoji}`,
+									value: `${reactions[reactionID]._emoji}`,
 								},
 							],
 							timestamp: new Date(),
@@ -95,7 +115,7 @@ exports.run = async (client, message, args) => {
 								`${winText} ${reactions[reactionID]._emoji}`
 							);
 						}
-					}, client.config.default_timer * 60 * 1000);
+					}, timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -109,12 +129,21 @@ exports.run = async (client, message, args) => {
 			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
+
+					//Checks if message is deleted
+					var checkIfDeleted = setInterval(function() {
+						if (embedMessage.deleted) {
+							clearTimeout(timeToVote);
+							clearInterval(checkIfDeleted);
+						}
+					}, 1000);
+
 					for (let i = 0; i < squad_sizes.length; i++) {
 						await embedMessage.react(
 							emojiCharacters[squad_sizes[i]]
 						);
 					}
-					setTimeout(function() {
+					var timeToVote = setTimeout(function() {
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
 						let maxCount = 0;
@@ -124,7 +153,17 @@ exports.run = async (client, message, args) => {
 								reactionID = i;
 							}
 						}
-						const squadResultEmoji = reactions[reactionID]._emoji;
+
+						var draws = [];
+						for(var i = 0, j = 0; i < reactions.length; i++) {
+							if(reactions[i].count == maxCount) {
+								draws[j] = i;
+								j++;
+							}
+						}
+						if(draws.length > 1) {
+							reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+						}						
 
 						const squadResult = {
 							color: 0x009900,
@@ -132,7 +171,7 @@ exports.run = async (client, message, args) => {
 							fields: [
 								{
 									name: `${winText}`,
-									value: `${squadResultEmoji}`,
+									value: `${reactions[reactionID]._emoji}`,
 								},
 							],
 							timestamp: new Date(),
@@ -149,7 +188,7 @@ exports.run = async (client, message, args) => {
 								`${winText} ${reactions[reactionID]._emoji}`
 							);
 						}
-					}, client.config.default_timer * 60 * 1000);
+					}, timer * 60 * 1000);
 				});
 		}
 		catch (error) {
@@ -180,12 +219,21 @@ exports.run = async (client, message, args) => {
 				await games_channel
 					.send({ embed: squadVoteMessage })
 					.then(async embedMessage => {
+						
+						//Checks if message is deleted
+						var checkIfDeleted = setInterval(function() {
+							if (embedMessage.deleted) {
+								clearTimeout(timeToVote);
+								clearInterval(checkIfDeleted);
+							}
+						}, 1000);
+
 						for (let i = 0; i < squad_sizes.length; i++) {
 							await embedMessage.react(
 								emojiCharacters[squad_sizes[i]]
 							);
 						}
-						setTimeout(function() {
+						var timeToVote = setTimeout(function() {
 							const reactions = embedMessage.reactions.array();
 							let reactionID;
 							let maxCount = 0;
@@ -196,8 +244,16 @@ exports.run = async (client, message, args) => {
 								}
 							}
 
-							const squadResultEmoji =
-								reactions[reactionID]._emoji;
+							var draws = [];
+							for(var i = 0, j = 0; i < reactions.length; i++) {
+								if(reactions[i].count == maxCount) {
+									draws[j] = i;
+									j++;
+								}
+							}
+							if(draws.length > 1) {
+								reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+							}
 
 							const squadResult = {
 								color: 0x009900,
@@ -205,7 +261,7 @@ exports.run = async (client, message, args) => {
 								fields: [
 									{
 										name: `${winText}`,
-										value: `${squadResultEmoji}`,
+										value: `${reactions[reactionID]._emoji}`,
 									},
 								],
 								timestamp: new Date(),
@@ -222,7 +278,7 @@ exports.run = async (client, message, args) => {
 									`${winText} ${reactions[reactionID]._emoji}`
 								);
 							}
-						}, client.config.default_timer * 60 * 1000);
+						}, timer * 60 * 1000);
 					});
 			}
 			catch (error) {

@@ -12,7 +12,54 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the region for tonights games!';
 	const winValue = 'The winning region was:';
 	const footerText = '© DanBennett';
+	var timer = client.config.default_timer;
+	var regionChoices = [];
 
+	if(args.length > 0) {
+		if(parseInt(args[args.length-1]) || args[args.length-1] == 0) {
+			if(args[args.length-1] > 0) {
+				timer = parseInt(args[args.length-1]);
+			}
+			args.splice((args.length - 1), 1);
+		}
+	}
+
+	if(args.length > 0 && args[0] !== `all`) {
+		if(args.length > 0)
+		var maps = args.map(function(word) {
+			return word.toLowerCase();
+		});
+		var i = 0;
+		if (maps.some(map => map.includes(`eu`))) {
+			regionChoices[i] = `${emojiCharacters['EU']} for Europe`;
+			i++;
+		}
+		if (maps.some(map => map.includes(`na`))) {
+			regionChoices[i] = `${emojiCharacters['NA']} for North America`;
+			i++;
+		}
+		if (maps.some(map => map.includes(`sea`))) {
+			regionChoices[i] = `${emojiCharacters['SEA']} for Southeast Asia`;
+			i++;
+		}
+		if (maps.some(map => map.includes(`oce`))) {
+			regionChoices[i] = `${emojiCharacters['OCE']} for Oceania`;
+			i++;
+		}
+		if (maps.some(map => map.includes(`kr`))) {
+			regionChoices[i] = `${emojiCharacters['KR']} for Korea/Japan`;
+		}
+	} else {
+		regionChoices = [
+		`${emojiCharacters['EU']} for Europe`, 
+		`${emojiCharacters['NA']} for North America`,
+		`${emojiCharacters['SEA']} for Southeast Asia`,
+		`${emojiCharacters['OCE']} for Oceania`,
+		`${emojiCharacters['KR']} for Korea/Japan`
+		];
+	}
+	var choices = regionChoices.join(`\n`);
+	
 	const regionVoteMessage = {
 		color: 0x3366ff,
 		title: `${title}`,
@@ -20,11 +67,7 @@ exports.run = async (client, message, args) => {
 		fields: [
 			{
 				name: 'Choose a reaction',
-				value: `${emojiCharacters['EU']} for Europe 
-				\n${emojiCharacters['NA']} for North America
-				\n${emojiCharacters['SEA']} for Southeast Asia
-				\n${emojiCharacters['OCE']} for Oceania
-				\n${emojiCharacters['KR']} for Korea/Japan`,
+				value: choices
 			},
 			{
 				name: 'Vote will close in:',
@@ -42,12 +85,41 @@ exports.run = async (client, message, args) => {
 		await games_channel
 			.send({ embed: regionVoteMessage })
 			.then(async embedMessage => {
-				await embedMessage.react(emojiCharacters['EU']);
-				await embedMessage.react(emojiCharacters['NA']);
-				await embedMessage.react(emojiCharacters['SEA']);
-				await embedMessage.react(emojiCharacters['OCE']);
-				await embedMessage.react(emojiCharacters['KR']);
-				setTimeout(function() {
+
+				//Checks if message is deleted
+				var checkIfDeleted = setInterval(function() {
+					if (embedMessage.deleted) {
+						clearTimeout(timeToVote);
+						clearInterval(checkIfDeleted);
+					}
+				}, 1000);
+
+				if(args.length > 0 && args[0] !== `all`) {
+					if (maps.some(map => map.includes(`eu`))) {
+						await embedMessage.react(emojiCharacters['EU']);
+					}
+					if (maps.some(map => map.includes(`na`))) {
+						await embedMessage.react(emojiCharacters['NA']);
+					}
+					if (maps.some(map => map.includes(`sea`))) {
+						await embedMessage.react(emojiCharacters['SEA']);
+					}
+					if (maps.some(map => map.includes(`oce`))) {
+						await embedMessage.react(emojiCharacters['OCE']);
+					}
+					if (maps.some(map => map.includes(`kr`))) {
+						await embedMessage.react(emojiCharacters['KR']);
+					}
+				}
+				else {
+					await embedMessage.react(emojiCharacters['EU']);
+					await embedMessage.react(emojiCharacters['NA']);
+					await embedMessage.react(emojiCharacters['SEA']);
+					await embedMessage.react(emojiCharacters['OCE']);
+					await embedMessage.react(emojiCharacters['KR']);
+				}
+
+				var timeToVote = setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
 					let maxCount = 0;
@@ -57,7 +129,17 @@ exports.run = async (client, message, args) => {
 							reactionID = i;
 						}
 					}
-					const regionResultEmoji = reactions[reactionID]._emoji;
+
+					var draws = [];
+					for(var i = 0, j = 0; i < reactions.length; i++) {
+						if(reactions[i].count == maxCount) {
+							draws[j] = i;
+							j++;
+						}
+					}
+					if(draws.length > 1) {
+						reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+					}
 
 					const regionResult = {
 						color: 0x009900,
@@ -65,7 +147,7 @@ exports.run = async (client, message, args) => {
 						fields: [
 							{
 								name: `${winValue}`,
-								value: `${regionResultEmoji}`,
+								value: `${reactions[reactionID]._emoji}`,
 							},
 						],
 						timestamp: new Date(),
@@ -82,7 +164,7 @@ exports.run = async (client, message, args) => {
 							`${winValue} ${reactions[reactionID]._emoji}`
 						);
 					}
-				}, client.config.default_timer * 60 * 1000);
+				}, timer * 60 * 1000);
 			});
 	}
 	catch (error) {
