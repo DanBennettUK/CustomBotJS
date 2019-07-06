@@ -4,7 +4,7 @@ Originally for /r/PUBATTLEGROUNDS aka PUBGReddit
 
 Based on [CustomsBot](https://github.com/Samwalton9/CustomsBot) by SamWalton.
 
-[![CodeFactor](https://www.codefactor.io/repository/github/danbennettuk/custombotjs/badge)](https://www.codefactor.io/repository/github/danbennettuk/custombotjs)
+[![CodeFactor](https://www.codefactor.io/repository/github/danbennettuk/custombotjs/badge?style=flat-square)](https://www.codefactor.io/repository/github/danbennettuk/custombotjs) [![dependencies Status](https://david-dm.org/DanBennettUK/CustomBotJS/status.svg?style=flat-square)](https://david-dm.org/DanBennettUK/CustomBotJS)
 
 <div align="center">
     <img src="./botlogo.png" />
