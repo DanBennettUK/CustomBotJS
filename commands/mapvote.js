@@ -20,6 +20,7 @@ exports.run = async (client, message, args) => {
 	const winValue = 'The winning map was:';
 	const footerText = '© DanBennett';
 	let mapChoices = [];
+	let maps;
 
 	if (args.length > 0) {
 		if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
@@ -32,7 +33,7 @@ exports.run = async (client, message, args) => {
 
 	if (args.length > 0 && args[0] !== 'all') {
 		if (args.length > 0) {
-			var maps = args.map(function(word) {
+			maps = args.map(function(word) {
 				return word.toLowerCase();
 			});
 		}
@@ -89,7 +90,7 @@ exports.run = async (client, message, args) => {
 			.send({ embed: mapVoteMessage })
 			.then(async embedMessage => {
 				// Checks if message is deleted
-				var checkIfDeleted = setInterval(function() {
+				const checkIfDeleted = setInterval(function() {
 					if (embedMessage.deleted) {
 						clearTimeout(timeToVote);
 						clearInterval(checkIfDeleted);
