@@ -30,13 +30,8 @@ fs.readdir('./commands/', (err, files) => {
 	});
 });
 
-// Post in console when ready
-client.once('ready', () => {
-	console.log('Ready!');
-});
-
 // On connect do these:
-client.on('ready', async () => {
+client.on('ready', () => {
 	console.log(`${client.user.username} is ready for action!`);
 	if (config.activity.streaming == true) {
 		client.user.setActivity(config.activity.game, {
