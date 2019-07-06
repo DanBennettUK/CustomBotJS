@@ -6,7 +6,7 @@
     "chat_channel_id": "",
     "host_role_id": "",
     "custom_role_id": "",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "default_timer": "2",
     "activity": {
         "streaming": false,
