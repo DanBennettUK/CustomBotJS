@@ -17,7 +17,6 @@ exports.run = async (client, message, args) => {
 	const title = 'Vote for squad size!';
 	const description = 'Please vote on the squad size for the next game';
 	const winText = 'The winning squad size is:';
-	const footerText = '© DanBennett';
 
 	// Function to compare two arrays
 	function containsAny(source, target) {
@@ -47,7 +46,7 @@ exports.run = async (client, message, args) => {
 		timestamp: new Date(),
 		footer: {
 			icon_url: client.user.avatarURL,
-			text: `${footerText}`,
+			
 		},
 	};
 
@@ -116,7 +115,6 @@ exports.run = async (client, message, args) => {
 							timestamp: new Date(),
 							footer: {
 								icon_url: client.user.avatarURL,
-								text: `${footerText}`,
 							},
 						};
 
@@ -199,7 +197,6 @@ exports.run = async (client, message, args) => {
 							timestamp: new Date(),
 							footer: {
 								icon_url: client.user.avatarURL,
-								text: `${footerText}`,
 							},
 						};
 
@@ -299,7 +296,6 @@ exports.run = async (client, message, args) => {
 								timestamp: new Date(),
 								footer: {
 									icon_url: client.user.avatarURL,
-									text: `${footerText}`,
 								},
 							};
 
