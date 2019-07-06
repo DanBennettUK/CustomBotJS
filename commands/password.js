@@ -25,7 +25,8 @@ exports.run = async (client, message, args) => {
     if (typeof serverPassword === 'undefined') {
         if (client.config.default_game_server_password !== '') {
             serverPassword = client.config.default_game_server_password;
-        } else {
+        }
+        else {
             console.error('1');
             raiseError = true;
         }
@@ -33,7 +34,8 @@ exports.run = async (client, message, args) => {
     if (typeof serverName === 'undefined') {
         if (client.config.default_game_server_name !== '') {
             serverName = client.config.default_game_server_name;
-        } else {
+        }
+        else {
             console.error('2');
             raiseError = true;
         }
@@ -41,7 +43,8 @@ exports.run = async (client, message, args) => {
 
     if (typeof timer === 'undefined') {
         timer = client.config.default_timer;
-    } else if (isNaN(timer)) {
+    }
+    else if (isNaN(timer)) {
         console.error('3');
         raiseError = true;
     }
@@ -54,23 +57,25 @@ exports.run = async (client, message, args) => {
                 {
                     name: 'One or more of your arguments are wrong',
                     value:
-                        "Ensure you follow the correct format: \n<password> [minutes] [servername] \nOptions in []'s are optional"
-                }
+                        'Ensure you follow the correct format: \n<password> [minutes] [servername] \nOptions in []\'s are optional',
+                },
             ],
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL
-            }
+                icon_url: client.user.avatarURL,
+            },
         };
         host_channel.send({ embed: error });
         return;
-    } else {
+    }
+    else {
         timeLeft = timer;
     }
 
     if (timer === '1') {
         timerText = 'minute';
-    } else {
+    }
+    else {
         timerText = 'minutes';
     }
 
@@ -80,17 +85,17 @@ exports.run = async (client, message, args) => {
         fields: [
             {
                 name: 'Server Name:',
-                value: `${serverName}`
+                value: `${serverName}`,
             },
             {
                 name: 'Password:',
-                value: `${serverPassword}`
-            }
+                value: `${serverPassword}`,
+            },
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL
-        }
+            icon_url: client.user.avatarURL,
+        },
     };
 
     const prePasswordMessage = {
@@ -99,20 +104,20 @@ exports.run = async (client, message, args) => {
         fields: [
             {
                 name: 'The password will be posted in:',
-                value: `${timeLeft} ${timerText}!`
-            }
+                value: `${timeLeft} ${timerText}!`,
+            },
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL
-        }
+            icon_url: client.user.avatarURL,
+        },
     };
 
     try {
         await games_channel
             .send({ embed: prePasswordMessage })
             .then(async embedMessage => {
-                //Checks if message is deleted
+                // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
                     if (embedMessage.deleted) {
                         clearTimeout(timeToVote);
@@ -143,7 +148,8 @@ exports.run = async (client, message, args) => {
                     }
                 }, timer * 60 * 1000);
             });
-    } catch (error) {
+    }
+    catch (error) {
         console.log(`${error}`);
     }
 };

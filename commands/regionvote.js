@@ -28,41 +28,43 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (args.length > 0 && args[0] !== `all`) {
-        if (args.length > 0)
+    if (args.length > 0 && args[0] !== 'all') {
+        if (args.length > 0) {
             maps = args.map(function(word) {
                 return word.toLowerCase();
             });
+        }
         let i = 0;
-        if (maps.some(map => map.includes(`eu`))) {
+        if (maps.some(map => map.includes('eu'))) {
             regionChoices[i] = `${emojiCharacters['EU']} for Europe`;
             i++;
         }
-        if (maps.some(map => map.includes(`na`))) {
+        if (maps.some(map => map.includes('na'))) {
             regionChoices[i] = `${emojiCharacters['NA']} for North America`;
             i++;
         }
-        if (maps.some(map => map.includes(`sea`))) {
+        if (maps.some(map => map.includes('sea'))) {
             regionChoices[i] = `${emojiCharacters['SEA']} for Southeast Asia`;
             i++;
         }
-        if (maps.some(map => map.includes(`oce`))) {
+        if (maps.some(map => map.includes('oce'))) {
             regionChoices[i] = `${emojiCharacters['OCE']} for Oceania`;
             i++;
         }
-        if (maps.some(map => map.includes(`kr`))) {
+        if (maps.some(map => map.includes('kr'))) {
             regionChoices[i] = `${emojiCharacters['KR']} for Korea/Japan`;
         }
-    } else {
+    }
+    else {
         regionChoices = [
             `${emojiCharacters['EU']} for Europe`,
             `${emojiCharacters['NA']} for North America`,
             `${emojiCharacters['SEA']} for Southeast Asia`,
             `${emojiCharacters['OCE']} for Oceania`,
-            `${emojiCharacters['KR']} for Korea/Japan`
+            `${emojiCharacters['KR']} for Korea/Japan`,
         ];
     }
-    let choices = regionChoices.join(`\n`);
+    const choices = regionChoices.join('\n');
 
     const regionVoteMessage = {
         color: 0x3366ff,
@@ -71,24 +73,24 @@ exports.run = async (client, message, args) => {
         fields: [
             {
                 name: 'Choose a reaction',
-                value: choices
+                value: choices,
             },
             {
                 name: 'Vote will close in:',
-                value: `${client.config.default_timer} minutes`
-            }
+                value: `${client.config.default_timer} minutes`,
+            },
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL
-        }
+            icon_url: client.user.avatarURL,
+        },
     };
 
     try {
         await games_channel
             .send({ embed: regionVoteMessage })
             .then(async embedMessage => {
-                //Checks if message is deleted
+                // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
                     if (embedMessage.deleted) {
                         clearTimeout(timeToVote);
@@ -96,23 +98,24 @@ exports.run = async (client, message, args) => {
                     }
                 }, 1000);
 
-                if (args.length > 0 && args[0] !== `all`) {
-                    if (maps.some(map => map.includes(`eu`))) {
+                if (args.length > 0 && args[0] !== 'all') {
+                    if (maps.some(map => map.includes('eu'))) {
                         await embedMessage.react(emojiCharacters['EU']);
                     }
-                    if (maps.some(map => map.includes(`na`))) {
+                    if (maps.some(map => map.includes('na'))) {
                         await embedMessage.react(emojiCharacters['NA']);
                     }
-                    if (maps.some(map => map.includes(`sea`))) {
+                    if (maps.some(map => map.includes('sea'))) {
                         await embedMessage.react(emojiCharacters['SEA']);
                     }
-                    if (maps.some(map => map.includes(`oce`))) {
+                    if (maps.some(map => map.includes('oce'))) {
                         await embedMessage.react(emojiCharacters['OCE']);
                     }
-                    if (maps.some(map => map.includes(`kr`))) {
+                    if (maps.some(map => map.includes('kr'))) {
                         await embedMessage.react(emojiCharacters['KR']);
                     }
-                } else {
+                }
+                else {
                     await embedMessage.react(emojiCharacters['EU']);
                     await embedMessage.react(emojiCharacters['NA']);
                     await embedMessage.react(emojiCharacters['SEA']);
@@ -150,7 +153,7 @@ exports.run = async (client, message, args) => {
                         }
                     }
 
-                    let draws = [];
+                    const draws = [];
                     for (let i = 0, j = 0; i < reactions.length; i++) {
                         if (reactions[i].count == maxCount) {
                             draws[j] = i;
@@ -172,13 +175,13 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: `${winValue}`,
-                                value: `${reactions[reactionID]._emoji}`
-                            }
+                                value: `${reactions[reactionID]._emoji}`,
+                            },
                         ],
                         timestamp: new Date(),
                         footer: {
-                            icon_url: client.user.avatarURL
-                        }
+                            icon_url: client.user.avatarURL,
+                        },
                     };
 
                     embedMessage.delete();
@@ -190,7 +193,8 @@ exports.run = async (client, message, args) => {
                     }
                 }, timer * 60 * 1000);
             });
-    } catch (error) {
+    }
+    catch (error) {
         console.log(`${error}`);
     }
 

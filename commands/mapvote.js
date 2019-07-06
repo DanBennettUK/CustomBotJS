@@ -28,36 +28,38 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (args.length > 0 && args[0] !== `all`) {
-        if (args.length > 0)
+    if (args.length > 0 && args[0] !== 'all') {
+        if (args.length > 0) {
             maps = args.map(function(word) {
                 return word.toLowerCase();
             });
+        }
         let i = 0;
-        if (maps.some(map => map.includes(`erangel`))) {
+        if (maps.some(map => map.includes('erangel'))) {
             mapChoices[i] = `${emojiCharacters['Erangel']} for Erangel`;
             i++;
         }
-        if (maps.some(map => map.includes(`miramar`))) {
+        if (maps.some(map => map.includes('miramar'))) {
             mapChoices[i] = `${emojiCharacters['Miramar']} for Miramar`;
             i++;
         }
-        if (maps.some(map => map.includes(`sanhok`))) {
+        if (maps.some(map => map.includes('sanhok'))) {
             mapChoices[i] = `${emojiCharacters['Sanhok']} for Sanhok`;
             i++;
         }
-        if (maps.some(map => map.includes(`vikendi`))) {
+        if (maps.some(map => map.includes('vikendi'))) {
             mapChoices[i] = `${emojiCharacters['Vikendi']} for Vikendi`;
         }
-    } else {
+    }
+    else {
         mapChoices = [
             `${emojiCharacters['Erangel']} for Erangel`,
             `${emojiCharacters['Miramar']} for Miramar`,
             `${emojiCharacters['Sanhok']} for Sanhok`,
-            `${emojiCharacters['Vikendi']} for Vikendi`
+            `${emojiCharacters['Vikendi']} for Vikendi`,
         ];
     }
-    let choices = mapChoices.join(`\n`);
+    const choices = mapChoices.join('\n');
 
     const mapVoteMessage = {
         color: 0x3366ff,
@@ -66,24 +68,24 @@ exports.run = async (client, message, args) => {
         fields: [
             {
                 name: 'Choose a reaction',
-                value: choices
+                value: choices,
             },
             {
                 name: 'Vote will close in:',
-                value: `${timer} minute(s)`
-            }
+                value: `${timer} minute(s)`,
+            },
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL
-        }
+            icon_url: client.user.avatarURL,
+        },
     };
 
     try {
         await games_channel
             .send({ embed: mapVoteMessage })
             .then(async embedMessage => {
-                //Checks if message is deleted
+                // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
                     if (embedMessage.deleted) {
                         clearTimeout(timeToVote);
@@ -91,20 +93,21 @@ exports.run = async (client, message, args) => {
                     }
                 }, 1000);
 
-                if (args.length > 0 && args[0] !== `all`) {
-                    if (maps.some(map => map.includes(`erangel`))) {
+                if (args.length > 0 && args[0] !== 'all') {
+                    if (maps.some(map => map.includes('erangel'))) {
                         await embedMessage.react(emojiCharacters['Erangel']);
                     }
-                    if (maps.some(map => map.includes(`miramar`))) {
+                    if (maps.some(map => map.includes('miramar'))) {
                         await embedMessage.react(emojiCharacters['Miramar']);
                     }
-                    if (maps.some(map => map.includes(`sanhok`))) {
+                    if (maps.some(map => map.includes('sanhok'))) {
                         await embedMessage.react(emojiCharacters['Sanhok']);
                     }
-                    if (maps.some(map => map.includes(`vikendi`))) {
+                    if (maps.some(map => map.includes('vikendi'))) {
                         await embedMessage.react(emojiCharacters['Vikendi']);
                     }
-                } else {
+                }
+                else {
                     await embedMessage.react(emojiCharacters['Erangel']);
                     await embedMessage.react(emojiCharacters['Miramar']);
                     await embedMessage.react(emojiCharacters['Sanhok']);
@@ -139,7 +142,7 @@ exports.run = async (client, message, args) => {
                             reactionID = i;
                         }
                     }
-                    let draws = [];
+                    const draws = [];
                     for (let i = 0, j = 0; i < reactions.length; i++) {
                         if (reactions[i].count == maxCount) {
                             draws[j] = i;
@@ -161,17 +164,17 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: 'Choices:',
-                                value: choices
+                                value: choices,
                             },
                             {
                                 name: `${winValue}`,
-                                value: `${mapChoices[reactionID]}`
-                            }
+                                value: `${mapChoices[reactionID]}`,
+                            },
                         ],
                         timestamp: new Date(),
                         footer: {
-                            icon_url: client.user.avatarURL
-                        }
+                            icon_url: client.user.avatarURL,
+                        },
                     };
 
                     embedMessage.delete();
@@ -181,7 +184,8 @@ exports.run = async (client, message, args) => {
                     }
                 }, timer * 60 * 1000);
             });
-    } catch (error) {
+    }
+    catch (error) {
         console.log(`${error}`);
     }
 

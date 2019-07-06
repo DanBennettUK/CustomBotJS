@@ -35,24 +35,24 @@ exports.run = async (client, message, args) => {
                 name: 'Choose a reaction',
                 value: `${emojiCharacters[1]} for FPP \n${
                     emojiCharacters[3]
-                } for TPP`
+                } for TPP`,
             },
             {
                 name: 'Vote will close in:',
-                value: `${timer} minutes`
-            }
+                value: `${timer} minutes`,
+            },
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL
-        }
+            icon_url: client.user.avatarURL,
+        },
     };
 
     try {
         await games_channel
             .send({ embed: perspectiveVote })
             .then(async embedMessage => {
-                //Checks if message is deleted
+                // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
                     if (embedMessage.deleted) {
                         clearTimeout(timeToVote);
@@ -91,7 +91,7 @@ exports.run = async (client, message, args) => {
                             reactionID = i;
                         }
                     }
-                    let draws = [];
+                    const draws = [];
                     for (let i = 0, j = 0; i < reactions.length; i++) {
                         if (reactions[i].count == maxCount) {
                             draws[j] = i;
@@ -114,13 +114,13 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: `${winValue}`,
-                                value: `${reactions[reactionID]._emoji}`
-                            }
+                                value: `${reactions[reactionID]._emoji}`,
+                            },
                         ],
                         timestamp: new Date(),
                         footer: {
-                            icon_url: client.user.avatarURL
-                        }
+                            icon_url: client.user.avatarURL,
+                        },
                     };
 
                     embedMessage.delete();
@@ -132,7 +132,8 @@ exports.run = async (client, message, args) => {
                     }
                 }, timer * 60 * 1000);
             });
-    } catch (error) {
+    }
+    catch (error) {
         console.log(`${error}`);
     }
 
