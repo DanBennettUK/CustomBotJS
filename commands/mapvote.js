@@ -117,6 +117,16 @@ exports.run = async (client, message, args) => {
 							reactionID = i;
 						}
 					}
+					var draws = [];
+					for(var i = 0, j = 0; i < reactions.length; i++) {
+						if(reactions[i].count == maxCount) {
+							draws[j] = i;
+							j++;
+						}
+					}
+					if(draws.length > 1) {
+						reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+					}
 
 					const mapResult = {
 						color: 0x009900,
