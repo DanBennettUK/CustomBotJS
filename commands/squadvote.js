@@ -75,7 +75,10 @@ exports.run = async (client, message, args) => {
 					if (client.config.custom_role_ping == true) {
 						await customRole.setMentionable(true, 'Role needs to be pinged')
 							.catch(console.error);
-						await games_channel.send(customRole + ' - get voting!');
+						await games_channel.send(customRole + ' - get voting!').then(msg => setTimeout(function() {
+							msg.delete();
+						}, client.config.default_timer * 60 * 1000))
+						.catch(console.error);
 						await customRole.setMentionable(false, 'Role no longer needs to be pinged')
 							.catch(console.error);
 					}
@@ -155,7 +158,10 @@ exports.run = async (client, message, args) => {
 					if (client.config.custom_role_ping == true) {
 						await customRole.setMentionable(true, 'Role needs to be pinged')
 							.catch(console.error);
-						await games_channel.send(customRole + ' - get voting!');
+						await games_channel.send(customRole + ' - get voting!').then(msg => setTimeout(function() {
+							msg.delete();
+						}, client.config.default_timer * 60 * 1000))
+						.catch(console.error);
 						await customRole.setMentionable(false, 'Role no longer needs to be pinged')
 							.catch(console.error);
 					}
@@ -252,7 +258,10 @@ exports.run = async (client, message, args) => {
 						if (client.config.custom_role_ping == true) {
 							await customRole.setMentionable(true, 'Role needs to be pinged')
 								.catch(console.error);
-							await games_channel.send(customRole + ' - get voting!');
+							await games_channel.send(customRole + ' - get voting!').then(msg => setTimeout(function() {
+								msg.delete();
+							}, client.config.default_timer * 60 * 1000))
+							.catch(console.error);
 							await customRole.setMentionable(false, 'Role no longer needs to be pinged')
 								.catch(console.error);
 						}
