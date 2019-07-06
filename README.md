@@ -4,7 +4,7 @@ Originally for /r/PUBATTLEGROUNDS aka PUBGReddit
 
 Based on [CustomsBot](https://github.com/Samwalton9/CustomsBot) by SamWalton.
 
-[![CodeFactor](https://www.codefactor.io/repository/github/danbennettuk/custombotjs/badge?style=flat-square)](https://www.codefactor.io/repository/github/danbennettuk/custombotjs) [![Depfu](https://badges.depfu.com/badges/1e44c8b8a9d9e49c2b6f6d0785371d69/overview.svg)](https://depfu.com/github/DanBennettUK/CustomBotJS?project_id=8443?style=flat-square) [![GitHub release](https://img.shields.io/github/release-pre/DanBennettUK/CustomBotJS.svg?style=flat-square)](https://github.com/DanBennettUK/CustomBotJS/releases) [![Buy Me A Beer](https://img.shields.io/badge/%24-Buy%20Me%20A%20Beer-663300.svg?style=flat-square)](https://www.buymeacoffee.com/danbennett)
+[![CodeFactor](https://www.codefactor.io/repository/github/danbennettuk/custombotjs/badge?style=flat-square)](https://www.codefactor.io/repository/github/danbennettuk/custombotjs) [![Depfu](https://badges.depfu.com/badges/1e44c8b8a9d9e49c2b6f6d0785371d69/overview.svg?style=flat-square)](https://depfu.com/github/DanBennettUK/CustomBotJS?project_id=8443) [![GitHub release](https://img.shields.io/github/release-pre/DanBennettUK/CustomBotJS.svg?style=flat-square)](https://github.com/DanBennettUK/CustomBotJS/releases) [![Buy Me A Beer](https://img.shields.io/badge/%24-Buy%20Me%20A%20Beer-663300.svg?style=flat-square)](https://www.buymeacoffee.com/danbennett)
 
 <div align="center">
     <img src="./botlogo.png" />
