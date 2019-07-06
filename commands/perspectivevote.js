@@ -5,9 +5,7 @@ exports.run = async (client, message, args) => {
 	}
 
 	// Get customRole for pinging later
-	const customRole = message.guild.roles.find(
-		findRole => findRole.id === client.config.custom_role_id
-	);
+	const customRole = message.guild.roles.get(client.config.custom_role_id);
 
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
@@ -18,6 +16,16 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the perspective for the next game!';
 	const winValue = 'The winning perspective was:';
 	const footerText = '© DanBennett';
+	let timer = client.config.default_timer;
+
+	if(args.length > 0) {
+		if(parseInt(args[args.length-1]) || args[args.length-1] == 0) {
+			if(args[args.length-1] > 0) {
+				timer = parseInt(args[args.length-1]);
+			}
+			args.splice((args.length - 1), 1);
+		}
+	}
 
 	const perspectiveVote = {
 		color: 0x3366ff,
@@ -32,7 +40,7 @@ exports.run = async (client, message, args) => {
 			},
 			{
 				name: 'Vote will close in:',
-				value: `${client.config.default_timer} minutes`,
+				value: `${timer} minutes`,
 			},
 		],
 		timestamp: new Date(),
@@ -46,23 +54,28 @@ exports.run = async (client, message, args) => {
 		await games_channel
 			.send({ embed: perspectiveVote })
 			.then(async embedMessage => {
+
+				//Checks if message is deleted
+				const checkIfDeleted = setInterval(function() {
+					if (embedMessage.deleted) {
+						clearTimeout(timeToVote);
+						clearInterval(checkIfDeleted);
+					}
+				}, 1000);
+
 				await embedMessage.react(emojiCharacters[1]);
 				await embedMessage.react(emojiCharacters[3]);
 				if (client.config.custom_role_ping == true) {
-					customRole
-						.setMentionable(true, 'Role needs to be pinged')
+					await customRole.setMentionable(true, 'Role needs to be pinged')
 						.catch(console.error);
-					games_channel.send(customRole + ' - get voting!');
-					setTimeout(function() {
-						customRole
-							.setMentionable(
-								false,
-								'Role no longer needs to be pinged'
-							)
-							.catch(console.error);
-					}, 20000);
+					await games_channel.send(customRole + ' - get voting!').then(msg => setTimeout(function() {
+						msg.delete();
+					}, timer * 60 * 1000))
+					.catch(console.error);
+					await customRole.setMentionable(false, 'Role no longer needs to be pinged')
+						.catch(console.error);
 				}
-				setTimeout(function() {
+				const timeToVote = setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
 					let maxCount = 0;
@@ -72,7 +85,16 @@ exports.run = async (client, message, args) => {
 							reactionID = i;
 						}
 					}
-					const perspectiveResultEmoji = reactions[reactionID]._emoji;
+					let draws = [];
+					for(let i = 0, j = 0; i < reactions.length; i++) {
+						if(reactions[i].count == maxCount) {
+							draws[j] = i;
+							j++;
+						}
+					}
+					if(draws.length > 1) {
+						reactionID = draws[Math.floor(Math.random() * Math.floor(draws.length))];
+					}
 
 					const perspectiveResult = {
 						color: 0x009900,
@@ -81,7 +103,7 @@ exports.run = async (client, message, args) => {
 						fields: [
 							{
 								name: `${winValue}`,
-								value: `${perspectiveResultEmoji}`,
+								value: `${reactions[reactionID]._emoji}`,
 							},
 						],
 						timestamp: new Date(),
@@ -98,7 +120,7 @@ exports.run = async (client, message, args) => {
 							`${winValue} ${reactions[reactionID]._emoji}`
 						);
 					}
-				}, client.config.default_timer * 60 * 1000);
+				}, timer * 60 * 1000);
 			});
 	}
 	catch (error) {

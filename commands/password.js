@@ -5,9 +5,7 @@ exports.run = async (client, message, args) => {
 	}
 
 	// Get customRole for pinging later
-	const customRole = message.guild.roles.find(
-		findRole => findRole.id === client.config.custom_role_id
-	);
+	const customRole = message.guild.roles.get(client.config.custom_role_id);
 
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
@@ -123,25 +121,25 @@ exports.run = async (client, message, args) => {
 		await games_channel
 			.send({ embed: prePasswordMessage })
 			.then(async embedMessage => {
-				setTimeout(function() {
+
+				//Checks if message is deleted
+				const checkIfDeleted = setInterval(function() {
+					if (embedMessage.deleted) {
+						clearTimeout(timeToVote);
+						clearInterval(checkIfDeleted);
+					}
+				}, 1000);
+
+				const timeToVote = setTimeout(async function() {
 					embedMessage.delete();
 
 					games_channel.send({ embed: passwordMessage });
 					if (client.config.custom_role_ping == true) {
-						customRole
-							.setMentionable(true, 'Role needs to be pinged')
+						await customRole.setMentionable(true, 'Role needs to be pinged')
 							.catch(console.error);
-						games_channel.send(
-							customRole + ' - the password is above!'
-						);
-						setTimeout(function() {
-							customRole
-								.setMentionable(
-									false,
-									'Role no longer needs to be pinged'
-								)
-								.catch(console.error);
-						}, 20000);
+						await games_channel.send(customRole + ' - the password is above!');
+						await customRole.setMentionable(false, 'Role no longer needs to be pinged')
+							.catch(console.error);
 					}
 					if (client.config.host_channel_messages === true) {
 						host_channel.send('Password has been posted!');
