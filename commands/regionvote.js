@@ -5,7 +5,7 @@ exports.run = async (client, message, args) => {
 	}
 
 	// Get customRole for pinging later
-	const customRole = message.guild.roles.find(client.config.custom_role_id);
+	const customRole = message.guild.roles.get(client.config.custom_role_id);
 
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
@@ -18,6 +18,7 @@ exports.run = async (client, message, args) => {
 	const footerText = '© DanBennett';
 	let timer = client.config.default_timer;
 	let regionChoices = [];
+	let maps;
 
 	if(args.length > 0) {
 		if(parseInt(args[args.length-1]) || args[args.length-1] == 0) {
@@ -30,7 +31,7 @@ exports.run = async (client, message, args) => {
 
 	if(args.length > 0 && args[0] !== `all`) {
 		if(args.length > 0)
-		let maps = args.map(function(word) {
+		maps = args.map(function(word) {
 			return word.toLowerCase();
 		});
 		let i = 0;
@@ -124,16 +125,11 @@ exports.run = async (client, message, args) => {
 				}
 
 				if (client.config.custom_role_ping == true) {
-					customRole
-						.setMentionable(true, 'Role needs to be pinged')
+					await customRole.setMentionable(true, 'Role needs to be pinged')
 						.catch(console.error);
-					games_channel.send(customRole + ' - get voting!').then(
-						customRole
-							.setMentionable(
-								false,
-								'Role no longer needs to be pinged'
-							)
-							.catch(console.error))
+					await games_channel.send(customRole + ' - get voting!');
+					await customRole.setMentionable(false, 'Role no longer needs to be pinged')
+						.catch(console.error);
 				}
 				const timeToVote = setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
