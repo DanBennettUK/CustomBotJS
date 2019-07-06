@@ -5,9 +5,7 @@ exports.run = async (client, message, args) => {
 	}
 
 	// Get customRole for pinging later
-	const customRole = message.guild.roles.find(
-		findRole => findRole.id === client.config.custom_role_id
-	);
+	const customRole = message.guild.roles.find(client.config.custom_role_id);
 
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
