@@ -12,5 +12,6 @@
         "twitchUsername": "",
         "game": ""
     },
-    "host_channel_messages": true
+    "host_channel_messages": true,
+    "debug_enable": false
 }
