@@ -24,6 +24,8 @@ exports.run = async (client, message, args) => {
 		return result.length > 0;
 	}
 
+	const squads_range = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
 	const squadVoteMessage = {
 		color: 0x3366ff,
 		title: `${title}`,
@@ -48,14 +50,16 @@ exports.run = async (client, message, args) => {
 
 	if (message_squad_sizes.length == 0) {
 		// If the array is empty, only vote for 1, 2, 4 or 8.
+		const squad_sizes = ['1', '2', '4', '8'];
 		try {
 			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
-					await embedMessage.react(emojiCharacters[1]);
-					await embedMessage.react(emojiCharacters[2]);
-					await embedMessage.react(emojiCharacters[4]);
-					await embedMessage.react(emojiCharacters[8]);
+					for (let i = 0; i < squad_sizes.length; i++) {
+						await embedMessage.react(
+							emojiCharacters[squad_sizes[i]]
+						);
+					}
 					setTimeout(function() {
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
@@ -100,20 +104,16 @@ exports.run = async (client, message, args) => {
 	}
 	else if (message_squad_sizes[0] == 'all') {
 		// If the array is 'all' - post up to 10
+		const squad_sizes = squads_range;
 		try {
 			await games_channel
 				.send({ embed: squadVoteMessage })
 				.then(async embedMessage => {
-					await embedMessage.react(emojiCharacters[1]);
-					await embedMessage.react(emojiCharacters[2]);
-					await embedMessage.react(emojiCharacters[3]);
-					await embedMessage.react(emojiCharacters[4]);
-					await embedMessage.react(emojiCharacters[5]);
-					await embedMessage.react(emojiCharacters[6]);
-					await embedMessage.react(emojiCharacters[7]);
-					await embedMessage.react(emojiCharacters[8]);
-					await embedMessage.react(emojiCharacters[9]);
-					await embedMessage.react(emojiCharacters[10]);
+					for (let i = 0; i < squad_sizes.length; i++) {
+						await embedMessage.react(
+							emojiCharacters[squad_sizes[i]]
+						);
+					}
 					setTimeout(function() {
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
@@ -165,18 +165,7 @@ exports.run = async (client, message, args) => {
 	else {
 		// Picked squad sizes by host
 		// Check the array fits in the range we want
-		const squads_range = [
-			'1',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9',
-			'10',
-		];
+
 		const squads_correct_range = containsAny(
 			squads_range,
 			message_squad_sizes
@@ -186,13 +175,14 @@ exports.run = async (client, message, args) => {
 			host_channel.send('A number is out of range');
 		}
 		else {
+			const squad_sizes = message_squad_sizes;
 			try {
 				await games_channel
 					.send({ embed: squadVoteMessage })
 					.then(async embedMessage => {
-						for (let i = 0; i < message_squad_sizes.length; i++) {
+						for (let i = 0; i < squad_sizes.length; i++) {
 							await embedMessage.react(
-								emojiCharacters[message_squad_sizes[i]]
+								emojiCharacters[squad_sizes[i]]
 							);
 						}
 						setTimeout(function() {
