@@ -17,6 +17,7 @@ module.exports = (client, message) => {
 	if (command === 'rv') command = 'regionvote';
 	if (command === 'pv') command = 'perspectivevote';
 	if (command === 'mv') command = 'mapvote';
+	if (command === 'pwd') command = 'password';
 
 	// Grab the command data from the client.commands Enmap
 	const cmd = client.commands.get(command);

@@ -3,6 +3,12 @@ exports.run = async (client, message, args) => {
 		// If the command isn't ran in the host channel, do nothing.
 		return;
 	}
+
+	// Get customRole for pinging later
+	const customRole = message.guild.roles.find(
+		findRole => findRole.id === client.config.custom_role_id
+	);
+
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
@@ -12,8 +18,8 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the region for tonights games!';
 	const winValue = 'The winning region was:';
 	const footerText = '© DanBennett';
-	var timer = client.config.default_timer;
-	var regionChoices = [];
+	let timer = client.config.default_timer;
+	let regionChoices = [];
 
 	if(args.length > 0) {
 		if(parseInt(args[args.length-1]) || args[args.length-1] == 0) {
@@ -26,10 +32,10 @@ exports.run = async (client, message, args) => {
 
 	if(args.length > 0 && args[0] !== `all`) {
 		if(args.length > 0)
-		var maps = args.map(function(word) {
+		let maps = args.map(function(word) {
 			return word.toLowerCase();
 		});
-		var i = 0;
+		let i = 0;
 		if (maps.some(map => map.includes(`eu`))) {
 			regionChoices[i] = `${emojiCharacters['EU']} for Europe`;
 			i++;
@@ -58,7 +64,7 @@ exports.run = async (client, message, args) => {
 		`${emojiCharacters['KR']} for Korea/Japan`
 		];
 	}
-	var choices = regionChoices.join(`\n`);
+	let choices = regionChoices.join(`\n`);
 	
 	const regionVoteMessage = {
 		color: 0x3366ff,
@@ -87,7 +93,7 @@ exports.run = async (client, message, args) => {
 			.then(async embedMessage => {
 
 				//Checks if message is deleted
-				var checkIfDeleted = setInterval(function() {
+				let checkIfDeleted = setInterval(function() {
 					if (embedMessage.deleted) {
 						clearTimeout(timeToVote);
 						clearInterval(checkIfDeleted);
@@ -119,7 +125,19 @@ exports.run = async (client, message, args) => {
 					await embedMessage.react(emojiCharacters['KR']);
 				}
 
-				var timeToVote = setTimeout(function() {
+				if (client.config.custom_role_ping == true) {
+					customRole
+						.setMentionable(true, 'Role needs to be pinged')
+						.catch(console.error);
+					games_channel.send(customRole + ' - get voting!').then(
+						customRole
+							.setMentionable(
+								false,
+								'Role no longer needs to be pinged'
+							)
+							.catch(console.error))
+				}
+				let timeToVote = setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
 					let maxCount = 0;
@@ -130,8 +148,8 @@ exports.run = async (client, message, args) => {
 						}
 					}
 
-					var draws = [];
-					for(var i = 0, j = 0; i < reactions.length; i++) {
+					let draws = [];
+					for(let i = 0, j = 0; i < reactions.length; i++) {
 						if(reactions[i].count == maxCount) {
 							draws[j] = i;
 							j++;

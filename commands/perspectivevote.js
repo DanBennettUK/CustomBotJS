@@ -4,6 +4,11 @@ exports.run = async (client, message, args) => {
 		return;
 	}
 
+	// Get customRole for pinging later
+	const customRole = message.guild.roles.find(
+		findRole => findRole.id === client.config.custom_role_id
+	);
+
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
@@ -13,7 +18,7 @@ exports.run = async (client, message, args) => {
 	const description = 'Please vote on the perspective for the next game!';
 	const winValue = 'The winning perspective was:';
 	const footerText = '© DanBennett';
-	var timer = client.config.default_timer;
+	let timer = client.config.default_timer;
 
 	if(args.length > 0) {
 		if(parseInt(args[args.length-1]) || args[args.length-1] == 0) {
@@ -53,7 +58,7 @@ exports.run = async (client, message, args) => {
 			.then(async embedMessage => {
 
 				//Checks if message is deleted
-				var checkIfDeleted = setInterval(function() {
+				let checkIfDeleted = setInterval(function() {
 					if (embedMessage.deleted) {
 						clearTimeout(timeToVote);
 						clearInterval(checkIfDeleted);
@@ -62,7 +67,19 @@ exports.run = async (client, message, args) => {
 
 				await embedMessage.react(emojiCharacters[1]);
 				await embedMessage.react(emojiCharacters[3]);
-				var timeToVote = setTimeout(function() {
+				if (client.config.custom_role_ping == true) {
+					customRole
+						.setMentionable(true, 'Role needs to be pinged')
+						.catch(console.error);
+					games_channel.send(customRole + ' - get voting!').then(
+						customRole
+							.setMentionable(
+								false,
+								'Role no longer needs to be pinged'
+							)
+							.catch(console.error))
+				}
+				let timeToVote = setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
 					let maxCount = 0;
@@ -72,8 +89,8 @@ exports.run = async (client, message, args) => {
 							reactionID = i;
 						}
 					}
-					var draws = [];
-					for(var i = 0, j = 0; i < reactions.length; i++) {
+					let draws = [];
+					for(let i = 0, j = 0; i < reactions.length; i++) {
 						if(reactions[i].count == maxCount) {
 							draws[j] = i;
 							j++;
