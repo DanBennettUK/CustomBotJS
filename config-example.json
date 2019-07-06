@@ -5,6 +5,7 @@
     "games_channel_id": "",
     "chat_channel_id": "",
     "host_role_id": "",
+    "custom_role_id": "",
     "version": "0.0.1",
     "default_timer": "2",
     "activity": {
@@ -12,6 +13,9 @@
         "twitchUsername": "",
         "game": ""
     },
+    "default_game_server_name": "",
+    "default_game_server_password": "",
     "host_channel_messages": true,
+    "custom_role_ping": true,
     "debug_enable": false
 }
