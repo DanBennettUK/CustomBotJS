@@ -60,7 +60,7 @@ exports.run = async (client, message, args) => {
 				.then(async embedMessage => {
 
 					//Checks if message is deleted
-					let checkIfDeleted = setInterval(function() {
+					const checkIfDeleted = setInterval(function() {
 						if (embedMessage.deleted) {
 							clearTimeout(timeToVote);
 							clearInterval(checkIfDeleted);
@@ -84,7 +84,7 @@ exports.run = async (client, message, args) => {
 								)
 								.catch(console.error))
 					}
-					let timeToVote = setTimeout(function() {
+					const timeToVote = setTimeout(function() {
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
 						let maxCount = 0;
@@ -145,7 +145,7 @@ exports.run = async (client, message, args) => {
 				.then(async embedMessage => {
 
 					//Checks if message is deleted
-					let checkIfDeleted = setInterval(function() {
+					const checkIfDeleted = setInterval(function() {
 						if (embedMessage.deleted) {
 							clearTimeout(timeToVote);
 							clearInterval(checkIfDeleted);
@@ -169,7 +169,7 @@ exports.run = async (client, message, args) => {
 								)
 								.catch(console.error))
 					}
-					let timeToVote = setTimeout(function() {
+					const timeToVote = setTimeout(function() {
 						const reactions = embedMessage.reactions.array();
 						let reactionID;
 						let maxCount = 0;
@@ -247,7 +247,7 @@ exports.run = async (client, message, args) => {
 					.then(async embedMessage => {
 						
 						//Checks if message is deleted
-						let checkIfDeleted = setInterval(function() {
+						const checkIfDeleted = setInterval(function() {
 							if (embedMessage.deleted) {
 								clearTimeout(timeToVote);
 								clearInterval(checkIfDeleted);
@@ -271,7 +271,7 @@ exports.run = async (client, message, args) => {
 									)
 									.catch(console.error))
 						}
-						let timeToVote = setTimeout(function() {
+						const timeToVote = setTimeout(function() {
 							const reactions = embedMessage.reactions.array();
 							let reactionID;
 							let maxCount = 0;

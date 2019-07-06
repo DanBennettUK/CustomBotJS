@@ -121,7 +121,16 @@ exports.run = async (client, message, args) => {
 		await games_channel
 			.send({ embed: prePasswordMessage })
 			.then(async embedMessage => {
-				setTimeout(function() {
+
+				//Checks if message is deleted
+				const checkIfDeleted = setInterval(function() {
+					if (embedMessage.deleted) {
+						clearTimeout(timeToVote);
+						clearInterval(checkIfDeleted);
+					}
+				}, 1000);
+
+				const timeToVote = setTimeout(function() {
 					embedMessage.delete();
 
 					games_channel.send({ embed: passwordMessage });
@@ -142,7 +151,7 @@ exports.run = async (client, message, args) => {
 					if (client.config.host_channel_messages === true) {
 						host_channel.send('Password has been posted!');
 					}
-				}, timer * 60 * 100);
+				}, timer * 60 * 1000);
 			});
 	}
 	catch (error) {
