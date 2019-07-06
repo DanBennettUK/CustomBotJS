@@ -3,6 +3,12 @@ exports.run = async (client, message, args) => {
 		// If the command isn't ran in the host channel, do nothing.
 		return;
 	}
+
+	// Get customRole for pinging later
+	const customRole = message.guild.roles.find(
+		findRole => findRole.id === client.config.custom_role_id
+	);
+
 	const emojiCharacters = require('../emojiCharacters.js');
 	const host_channel = client.channels.get(client.config.host_channel_id);
 	const games_channel = client.channels.get(client.config.games_channel_id);
@@ -47,6 +53,20 @@ exports.run = async (client, message, args) => {
 				await embedMessage.react(emojiCharacters['SEA']);
 				await embedMessage.react(emojiCharacters['OCE']);
 				await embedMessage.react(emojiCharacters['KR']);
+				if (client.config.custom_role_ping == true) {
+					customRole
+						.setMentionable(true, 'Role needs to be pinged')
+						.catch(console.error);
+					games_channel.send(customRole + ' - get voting!');
+					setTimeout(function() {
+						customRole
+							.setMentionable(
+								false,
+								'Role no longer needs to be pinged'
+							)
+							.catch(console.error);
+					}, 20000);
+				}
 				setTimeout(function() {
 					const reactions = embedMessage.reactions.array();
 					let reactionID;
