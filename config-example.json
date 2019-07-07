@@ -4,9 +4,10 @@
     "host_channel_id": "",
     "games_channel_id": "",
     "chat_channel_id": "",
+    "subscriber_channel_id": "",
     "host_role_id": "",
     "custom_role_id": "",
-    "version": "0.0.2",
+    "subscriber_role_id": "",
     "default_timer": "2",
     "activity": {
         "streaming": false,
@@ -17,5 +18,6 @@
     "default_game_server_password": "",
     "host_channel_messages": true,
     "custom_role_ping": true,
+    "version": "0.0.2",
     "debug_enable": false
 }

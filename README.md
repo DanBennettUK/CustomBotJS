@@ -28,9 +28,10 @@ This table outlines what the configuration settings are in `config.json`.
 | `host_channel_id`              |                       ID token of the hosts Discord channel                       |                       `40972350972635`                        |
 | `games_channel_id`             |     ID token of the Discord channel where votes and passwords will be posted      |                       `40972350972635`                        |
 | `chat_channel_id`              |                 ID token of the Discord channel used for chatting                 |                       `40972350972635`                        |
+| `subscriber_channel_id`        |             ID token of the Discord channel used for subscribers only             |                       `40972350972635`                        |
 | `host_role_id`                 |                        ID token of the hosts Discord role                         |                       `40972350972635`                        |
 | `custom_role_id`               |             ID token of the Custom games Discord role for mentioning              |                       `40972350972635`                        |
-| `version`                      |                     Version of the bot. Should be left as is                      |                            `0.0.1`                            |
+| `subscriber_role_id`           | ID token of the Subscribers Discord role for mentioning separate to normal users  |                       `40972350972635`                        |
 | `default_timer`                |                     Default time in minutes for timers to use                     |                              `2`                              |
 | `activity => streaming`        |                     Show whether bot is live on Twitch or not                     |                            `false`                            |
 | `activity => twitchUsername`   |              Twitch Username for the bot to show when above is true               |                         `DanBennett`                          |
@@ -39,6 +40,7 @@ This table outlines what the configuration settings are in `config.json`.
 | `default_game_server_password` |   Default Custom Game Server Password (can be overridden by `password` command)   |                            `true`                             |
 | `host_channel_messages`        |          Choose whether results of votes are posted in the hosts channel          |                            `true`                             |
 | `custom_role_ping`             | Choose whether the Custom role set by `custom_role_id` should be pinged/mentioned |                            `true`                             |
+| `version`                      |                     Version of the bot. Should be left as is                      |                            `0.0.1`                            |
 | `debug_enable`                 |                     Enable or Disable debugging (false = off)                     |                            `false`                            |
 
 ## 🚀 Usage:

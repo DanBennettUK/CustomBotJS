@@ -6,9 +6,14 @@ exports.run = async (client, message, args) => {
 
     // Get customRole for pinging later
     const customRole = message.guild.roles.get(client.config.custom_role_id);
-
+    const subscriberRole = message.guild.roles.get(
+        client.config.subscriber_role_id
+    );
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
+    const subscriber_channel = client.channels.get(
+        client.config.subscriber_channel_id
+    );
     const title = 'Custom Game Server Details';
 
     let serverPassword = args[0];
@@ -115,6 +120,20 @@ exports.run = async (client, message, args) => {
     };
 
     try {
+        if (subscriber_channel != '') {
+            await subscriber_channel.send({
+                embed: passwordMessage,
+            });
+            await subscriberRole
+                .setMentionable(true, 'Role needs to be pinged')
+                .catch(console.error);
+            await subscriber_channel.send(
+                subscriberRole + ' - the password is above!'
+            );
+            await subscriberRole
+                .setMentionable(false, 'Role no longer needs to be pinged')
+                .catch(console.error);
+        }
         await games_channel
             .send({ embed: prePasswordMessage })
             .then(async embedMessage => {
