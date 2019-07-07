@@ -61,7 +61,6 @@ exports.run = async (client, message, args) => {
             timestamp: new Date(),
             footer: {
                 icon_url: client.user.avatarURL,
-                text: `${footerText}`,
             },
         };
         host_channel.send({ embed: clearMessage });
