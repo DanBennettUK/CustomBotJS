@@ -8,6 +8,7 @@
     "host_role_id": "",
     "custom_role_id": "",
     "subscriber_role_id": "",
+    "voice_channel_emoji": "🛠",
     "default_timer": "2",
     "activity": {
         "streaming": false,
