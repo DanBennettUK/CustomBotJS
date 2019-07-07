@@ -15,6 +15,10 @@ exports.run = async (client, message, args) => {
         }
     }
 
+    if (isNaN(args)) {
+        host_channel.send(`'${args}' is not a number!`);
+    }
+
     if (timer === '1') {
         timerText = 'minute';
     }
