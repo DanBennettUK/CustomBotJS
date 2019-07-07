@@ -93,6 +93,11 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
+                            name: `\`${configPrefix}countdown [minutes]\``,
+                            value: 'Starts a countdown. [minutes] is optional.',
+                            inline: false,
+                        },
+                        {
                             name: `\`${configPrefix}clear\``,
                             value: `Clears bot messages from games channel \nUsage: \`all\` to remove all messages \nNumber of messages you want to delete \nExample: \`${configPrefix}clear 10\``,
                             inline: false,
