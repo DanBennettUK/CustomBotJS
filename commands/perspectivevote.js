@@ -16,6 +16,7 @@ exports.run = async (client, message, args) => {
     const description = 'Please vote on the perspective for the next game!';
     const winValue = 'The winning perspective was:';
     let timer = client.config.default_timer;
+    let timerText;
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
@@ -24,6 +25,13 @@ exports.run = async (client, message, args) => {
             }
             args.splice(args.length - 1, 1);
         }
+    }
+
+    if (timer === '1') {
+        timerText = 'minute';
+    }
+    else {
+        timerText = 'minutes';
     }
 
     const perspectiveVote = {
@@ -39,7 +47,7 @@ exports.run = async (client, message, args) => {
             },
             {
                 name: 'Vote will close in:',
-                value: `${timer} minutes`,
+                value: `${timer} ${timerText}`,
             },
         ],
         timestamp: new Date(),

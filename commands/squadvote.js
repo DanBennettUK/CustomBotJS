@@ -11,12 +11,14 @@ exports.run = async (client, message, args) => {
     const emojiCharacters = require('../emojiCharacters.js');
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
+    const timer = client.config.default_timer;
     let error_message;
 
     // Set up the message as an embed, ready to post
     const title = 'Vote for squad size!';
     const description = 'Please vote on the squad size for the next game';
     const winText = 'The winning squad size is:';
+    let timerText;
 
     // Function to compare two arrays
     function containsAny(source, target) {
@@ -27,6 +29,13 @@ exports.run = async (client, message, args) => {
     }
 
     const squads_range = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
+
+    if (timer === '1') {
+        timerText = 'minute';
+    }
+    else {
+        timerText = 'minutes';
+    }
 
     const squadVoteMessage = {
         color: 0x3366ff,
@@ -40,7 +49,7 @@ exports.run = async (client, message, args) => {
             },
             {
                 name: 'Vote will close in:',
-                value: `${client.config.default_timer} minute(s)`,
+                value: `${timer} ${timerText}`,
             },
         ],
         timestamp: new Date(),

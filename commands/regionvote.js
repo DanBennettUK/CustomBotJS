@@ -18,6 +18,7 @@ exports.run = async (client, message, args) => {
     let timer = client.config.default_timer;
     let regionChoices = [];
     let maps;
+    let timerText;
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
@@ -26,6 +27,13 @@ exports.run = async (client, message, args) => {
             }
             args.splice(args.length - 1, 1);
         }
+    }
+
+    if (timer === '1') {
+        timerText = 'minute';
+    }
+    else {
+        timerText = 'minutes';
     }
 
     if (args.length > 0 && args[0] !== 'all') {
@@ -77,7 +85,7 @@ exports.run = async (client, message, args) => {
             },
             {
                 name: 'Vote will close in:',
-                value: `${client.config.default_timer} minutes`,
+                value: `${timer} ${timerText}`,
             },
         ],
         timestamp: new Date(),

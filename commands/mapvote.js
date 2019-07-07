@@ -11,6 +11,7 @@ exports.run = async (client, message, args) => {
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
     let timer = client.config.default_timer;
+    let timerText;
 
     // Set up the message as an embed, ready to post
     const title = 'Vote for map!';
@@ -26,6 +27,13 @@ exports.run = async (client, message, args) => {
             }
             args.splice(args.length - 1, 1);
         }
+    }
+
+    if (timer === '1') {
+        timerText = 'minute';
+    }
+    else {
+        timerText = 'minutes';
     }
 
     if (args.length > 0 && args[0] !== 'all') {
@@ -72,7 +80,7 @@ exports.run = async (client, message, args) => {
             },
             {
                 name: 'Vote will close in:',
-                value: `${timer} minute(s)`,
+                value: `${timer} ${timerText}`,
             },
         ],
         timestamp: new Date(),
