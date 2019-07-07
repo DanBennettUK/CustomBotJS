@@ -11,24 +11,21 @@ exports.run = async (client, message, args) => {
     const games_channel = client.channels.get(client.config.games_channel_id);
     const title = 'Custom Game Server Details';
 
-    console.error('Password is: ' + args[0]);
-    console.error('Timer is: ' + args[1]);
-    console.error('ServerName is: ' + args[2]);
-
     let serverPassword = args[0];
     let timer = args[1];
     let serverName = args[2];
     let raiseError = false;
     let timeLeft;
     let timerText;
+    let missingText = '';
 
     if (typeof serverPassword === 'undefined') {
         if (client.config.default_game_server_password !== '') {
             serverPassword = client.config.default_game_server_password;
         }
         else {
-            console.error('1');
             raiseError = true;
+            missingText = missingText + 'Password is missing!\n';
         }
     }
     if (typeof serverName === 'undefined') {
@@ -36,8 +33,8 @@ exports.run = async (client, message, args) => {
             serverName = client.config.default_game_server_name;
         }
         else {
-            console.error('2');
             raiseError = true;
+            missingText = missingText + 'Server Name is missing!\n';
         }
     }
 
@@ -45,8 +42,8 @@ exports.run = async (client, message, args) => {
         timer = client.config.default_timer;
     }
     else if (isNaN(timer)) {
-        console.error('3');
         raiseError = true;
+        missingText = missingText + 'Minutes is missing or not a number!\n';
     }
 
     if (raiseError === true) {
@@ -57,7 +54,11 @@ exports.run = async (client, message, args) => {
                 {
                     name: 'One or more of your arguments are wrong',
                     value:
-                        'Ensure you follow the correct format: \n<password> [minutes] [servername] \nOptions in []\'s are optional',
+                        'Ensure you follow the correct format: \n<password> [minutes] [servername] \nOptions in []\'s are only optional if a default is set',
+                },
+                {
+                    name: 'Errors:',
+                    value: missingText,
                 },
             ],
             timestamp: new Date(),
