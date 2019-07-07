@@ -57,38 +57,38 @@ exports.run = async (client, message) => {
                         {
                             name: `\`${configPrefix}help\``,
                             value: 'lists all commands',
-                            inline: true,
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}ping\``,
                             value: 'checks Discord API response',
-                            inline: true,
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}squadvote (sqv)\``,
                             value:
-                                'Starts squadvote. \nUsage: `all` for 1-10 \nLeave blank for 1 2 4 8',
-                            inline: true,
+                                'Starts squadvote. \nUsage: `all` for 1-10 \nLeave blank for 1 2 4 8 \nChoose your own (e.g. `squadvote 3 4 6 8`)',
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}perspectivevote (pv)\``,
                             value: 'Starts perspective vote.',
-                            inline: true,
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}regionvote (rv)\``,
                             value: 'Starts region vote',
-                            inline: true,
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}mapvote\``,
                             value: 'Starts map vote',
-                            inline: true,
+                            inline: false,
                         },
                         {
                             name: `\`${configPrefix}clear\``,
                             value: `Clears bot messages from games channel \nUsage: \`all\` to remove all messages \nNumber of messages you want to delete \nExample: \`${configPrefix}clear 10\``,
-                            inline: true,
+                            inline: false,
                         },
                     ],
                     timestamp: new Date(),
