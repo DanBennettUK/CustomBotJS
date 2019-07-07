@@ -6,7 +6,6 @@ exports.run = async (client, message, args) => {
 
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
-    const footerText = '© DanBennett';
     let clearMessage;
 
     if (args[0] === 'all') {
@@ -24,7 +23,6 @@ exports.run = async (client, message, args) => {
                         timestamp: new Date(),
                         footer: {
                             icon_url: client.user.avatarURL,
-                            text: `${footerText}`,
                         },
                     }),
                     host_channel.send({ embed: clearMessage })
@@ -47,7 +45,6 @@ exports.run = async (client, message, args) => {
                         timestamp: new Date(),
                         footer: {
                             icon_url: client.user.avatarURL,
-                            text: `${footerText}`,
                         },
                     }),
                     host_channel.send({ embed: clearMessage })
