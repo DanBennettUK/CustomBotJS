@@ -65,24 +65,31 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}squadvote (sqv)\``,
+                            name: `\`${configPrefix}squadvote (sqv) <sizes>\``,
                             value:
                                 'Starts squadvote. \nUsage: `all` for 1-10 \nLeave blank for 1 2 4 8 \nChoose your own (e.g. `squadvote 3 4 6 8`)',
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}perspectivevote (pv)\``,
-                            value: 'Starts perspective vote.',
+                            name: `\`${configPrefix}perspectivevote (pv) [minutes]\``,
+                            value:
+                                'Starts perspective vote. [minutes] is optional.',
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}regionvote (rv)\``,
-                            value: 'Starts region vote',
+                            name: `\`${configPrefix}regionvote (rv) [minutes]\``,
+                            value: 'Starts region vote. [minutes] is optional.',
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}mapvote\``,
-                            value: 'Starts map vote',
+                            name: `\`${configPrefix}mapvote [minutes]\``,
+                            value: 'Starts map vote. [minutes] is optional.',
+                            inline: false,
+                        },
+                        {
+                            name: `\`${configPrefix}startgame [minutes]\``,
+                            value:
+                                'Starts a countdown for the game to start. [minutes] is optional.',
                             inline: false,
                         },
                         {
