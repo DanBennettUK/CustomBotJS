@@ -10,9 +10,11 @@ Based on [CustomsBot](https://github.com/Samwalton9/CustomsBot) by SamWalton.
 [![Depfu](https://img.shields.io/depfu/DanBennettUK/CustomBotJS.svg?style=for-the-badge)](https://depfu.com/github/DanBennettUK/CustomBotJS?project_id=8443)
 [![GitHub release](https://img.shields.io/github/release-pre/DanBennettUK/CustomBotJS.svg?style=for-the-badge)](https://github.com/DanBennettUK/CustomBotJS/releases)
 [![Buy Me A Beer](https://img.shields.io/badge/donate-buy%20me%20a%20beer-orange.svg?style=for-the-badge)](https://www.buymeacoffee.com/danbennett)
+[![Twitter](https://img.shields.io/twitter/follow/DanBennett.svg?color=blue&style=for-the-badge)](https://www.twitter.com/danbennett)
 
 <div align="center">
     <img src="./botlogo.png" />
+</div>
 </div>
 
 ## 📋 Requirements:
