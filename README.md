@@ -55,7 +55,7 @@ This table outlines what the configuration settings are in `config.json`.
 ## 🚀 Usage:
 
 ```shell
-$ node . # I'll script this later.
+$ node . # I'll script this later..
 ```
 
 ## 📄 License:
