@@ -13,7 +13,7 @@
     "activity": {
         "twitch_client_id": "",
         "twitchUsername": "",
-        "message": "See #custom-games-info for info"
+        "message": ""
     },
     "default_game_server_name": "",
     "default_game_server_password": "",
