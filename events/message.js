@@ -2,10 +2,11 @@ module.exports = (client, message) => {
     // Ignore all bots
     if (message.author.bot) return;
 
-    // Ignore messages not starting with the prefix (in config.json)
-    if (message.content.indexOf(client.config.prefix) !== 0) return;
     if (message.channel.type !== ('dm' || 'group')) {
         // If the message is a DM or GroupDM, return.
+
+        // Ignore messages not starting with the prefix (in config.json)
+        if (message.content.indexOf(client.config.prefix) !== 0) return;
         // Our standard argument/command name definition.
         const args = message.content
             .slice(client.config.prefix.length)
@@ -30,5 +31,16 @@ module.exports = (client, message) => {
 
         // Run the command
         cmd.run(client, message, args);
+    } else {
+        const directMessageEmbed = {
+            color: 0x3366ff,
+            title: `Info`,
+            description: client.config.directMessage.join(`\n`),
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+            }
+        };
+        message.channel.send({ embed: directMessageEmbed });
     }
 };
