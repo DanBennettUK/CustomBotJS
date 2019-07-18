@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
         timerText = 'minutes';
     }
 
-    warmodewepChoices = [
+    const warmodewepChoices = [
         `${emojiCharacters[1]} for Default Weapons`,
         `${emojiCharacters[2]} for Bomb Kit (Throwables)`,
         `${emojiCharacters[3]} for VSS Kit`,
