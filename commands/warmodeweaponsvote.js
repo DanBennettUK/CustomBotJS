@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
     // Set up the message as an embed, ready to post
     const title = 'Vote for War Mode Weapons!';
     const description = 'Please vote on the weapons for the next warmode game!';
-    const winValue = 'The winning weapons were:';
+    const winValue = 'The winning weapon choice was:';
     let timer = client.config.default_timer;
     let timerText;
 
@@ -34,6 +34,16 @@ exports.run = async (client, message, args) => {
         timerText = 'minutes';
     }
 
+    warmodewepChoices = [
+        `${emojiCharacters[1]} for Default Weapons`,
+        `${emojiCharacters[2]} for Bomb Kit (Throwables)`,
+        `${emojiCharacters[3]} for VSS Kit`,
+        `${emojiCharacters[4]} for OP Kit (Crate Weapons)`,
+        `${emojiCharacters[5]} for Sniper Kit`,
+    ];
+
+    const choices = warmodewepChoices.join('\n');
+
     const warmodewepsVote = {
         color: 0x3366ff,
         title: `${title}`,
@@ -41,15 +51,7 @@ exports.run = async (client, message, args) => {
         fields: [
             {
                 name: 'Choose a reaction',
-                value: `${emojiCharacters[1]} for Default Weapons \n${
-                    emojiCharacters[2]
-                } for Bomb Kit (Throwables)\n${
-                    emojiCharacters[3]
-                } for VSS Kit\n${
-                    emojiCharacters[4]
-                } for OP Kit (Crate Weapons)\n${
-                    emojiCharacters[5]
-                } for Sniper Kit`,
+                value: choices,
             },
             {
                 name: 'Vote will close in:',
@@ -130,6 +132,10 @@ exports.run = async (client, message, args) => {
                         description: '',
                         fields: [
                             {
+                                name: 'Choices:',
+                                value: choices,
+                            },
+                            {
                                 name: `${winValue}`,
                                 value: `${reactions[reactionID]._emoji}`,
                             },
@@ -143,11 +149,9 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: warmodewepsResult });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(
-                            `${winValue} ${reactions[reactionID]._emoji}`
-                        );
+                        host_channel.send({ embed: warmodewepsResult });
                     }
-                }, timer * 60 * 1000);
+                }, timer * 60 * 100);
             });
     }
     catch (error) {
