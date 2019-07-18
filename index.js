@@ -157,32 +157,34 @@ client.on('raw', async event => {
     }
 });
 client.on('messageReactionAdd', (messageReaction, user) => {
-    const roleID = config.custom_role_id;
-    const role = messageReaction.message.guild.roles.find(
-        role => role.id === roleID
-    );
-
-    if (role) {
-        const member = messageReaction.message.guild.members.find(
-            member => member.id === user.id
+    if (messageReaction.message.id === config.role_message_id) {
+        const roleID = config.custom_role_id;
+        const role = messageReaction.message.guild.roles.find(
+            role => role.id === roleID
         );
-        if (member) {
-            member.addRole(role.id);
+        if (role) {
+            const member = messageReaction.message.guild.members.find(
+                member => member.id === user.id
+            );
+            if (member) {
+                member.addRole(role.id);
+            }
         }
     }
 });
 client.on('messageReactionRemove', (messageReaction, user) => {
-    const roleID = config.custom_role_id;
-    const role = messageReaction.message.guild.roles.find(
-        role => role.id === roleID
-    );
-
-    if (role) {
-        const member = messageReaction.message.guild.members.find(
-            member => member.id === user.id
+    if (messageReaction.message.id === config.role_message_id) {
+        const roleID = config.custom_role_id;
+        const role = messageReaction.message.guild.roles.find(
+            role => role.id === roleID
         );
-        if (member) {
-            member.removeRole(role.id);
+        if (role) {
+            const member = messageReaction.message.guild.members.find(
+                member => member.id === user.id
+            );
+            if (member) {
+                member.removeRole(role.id);
+            }
         }
     }
 });
