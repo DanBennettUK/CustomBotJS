@@ -3,6 +3,13 @@ const Enmap = require('enmap');
 const fs = require('fs');
 const config = require('./config.json');
 const client = new Discord.Client();
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+const $ = require('jquery')(window);
 client.commands = new Discord.Collection();
 
 // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
@@ -33,19 +40,68 @@ fs.readdir('./commands/', (err, files) => {
 // On connect do these:
 client.on('ready', () => {
     console.log(`${client.user.username} is ready for action!`);
-    if (config.activity.streaming == true) {
-        client.user.setActivity(config.activity.game, {
-            url: `https://twitch.tv/${config.activity.twitchUsername}`,
+
+    $.ajax({ 
+        dataType:'json',
+        url:`https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
+        headers: {
+            'Client-ID': config.activity.twitch_client_id
+          },
+        success:function (channel) {
+            if (channel.data.length > 0) {
+                client.user.setActivity(channel.data[0].title, {
+                    url: `https://twitch.tv/${config.activity.twitchUsername}`,
+                })
+            } else {
+                client.user.setActivity(config.activity.message, {
+                    type: 'WATCHING',
+                    // PLAYING, LISTENING, WATCHING
+                });
+                client.user.setStatus('dnd');
+                // dnd, idle, online, invisible
+            }
+        },
+        error:function () {
+            client.user.setActivity(config.activity.message, {
+                type: 'WATCHING',
+                // PLAYING, LISTENING, WATCHING
+            });
+            client.user.setStatus('dnd');
+            // dnd, idle, online, invisible
+        }
+    });
+
+    setInterval (function () {
+        $.ajax({ 
+            dataType:'json',
+            url:`https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
+            headers: {
+                'Client-ID': config.activity.twitch_client_id
+              },
+            success:function (channel) {
+                if (channel.data.length > 0) {
+                    client.user.setActivity(channel.data[0].title, {
+                        url: `https://twitch.tv/${config.activity.twitchUsername}`,
+                    })
+                } else {
+                    client.user.setActivity(config.activity.message, {
+                        type: 'WATCHING',
+                        // PLAYING, LISTENING, WATCHING
+                    });
+                    client.user.setStatus('dnd');
+                    // dnd, idle, online, invisible
+                }
+            },
+            error:function () {
+                client.user.setActivity(config.activity.message, {
+                    type: 'WATCHING',
+                    // PLAYING, LISTENING, WATCHING
+                });
+                client.user.setStatus('dnd');
+                // dnd, idle, online, invisible
+            }
         });
-    }
-    else {
-        client.user.setActivity(config.activity.game, {
-            type: 'WATCHING',
-            // PLAYING, LISTENING, WATCHING
-        });
-        client.user.setStatus('dnd');
-        // dnd, idle, online, invisible
-    }
+    }, 30000);
 });
 
 // Debug errors

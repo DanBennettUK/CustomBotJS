@@ -11,9 +11,9 @@
     "voice_channel_emoji": "🛠",
     "default_timer": "2",
     "activity": {
-        "streaming": false,
+        "twitch_client_id": "",
         "twitchUsername": "",
-        "game": ""
+        "message": ""
     },
     "default_game_server_name": "",
     "default_game_server_password": "",
