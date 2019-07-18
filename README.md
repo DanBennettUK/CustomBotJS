@@ -39,12 +39,14 @@ This table outlines what the configuration settings are in `config.json`.
 | `subscriber_channel_id`        |               ID token of the Discord channel used for subscribers only                |                       `40972350972635`                        |
 | `host_role_id`                 |                           ID token of the hosts Discord role                           |                       `40972350972635`                        |
 | `custom_role_id`               |                ID token of the Custom games Discord role for mentioning                |                       `40972350972635`                        |
+| `bot_role_id`                  |                     ID token of the bot so it knows it's identity                      |                       `40972350972635`                        |
 | `subscriber_role_id`           |    ID token of the Subscribers Discord role for mentioning separate to normal users    |                       `40972350972635`                        |
+| `role_message_id`              |           ID of the message used to add or remove roles via reaction clicks            |                       `40972350972635`                        |
 | `voice_channel_emoji`          | Emoji that voice channels start with, for the bot to set user limit for with `vclimit` |                       `40972350972635`                        |
 | `default_timer`                |                       Default time in minutes for timers to use                        |                              `2`                              |
-| `activity => streaming`        |                       Show whether bot is live on Twitch or not                        |                            `false`                            |
-| `activity => twitchUsername`   |                 Twitch Username for the bot to show when above is true                 |                         `DanBennett`                          |
-| `activity => game`             |                               Game playing in bot status                               |                `PlayerUnknown's BattleGrounds`                |
+| `activity => twitch_client_id` |                       Twitch API key for checking Twitch status                        |                            `false`                            |
+| `activity => twitchUsername`   |                  Twitch Username for the bot to check when streaming                   |                         `DanBennett`                          |
+| `activity => message`          |                   Default activity message to use when not streaming                   |                `PlayerUnknown's BattleGrounds`                |
 | `default_game_server_name`     |       Default Custom Game Server Name (can be overridden by `password` command)        |                            `true`                             |
 | `default_game_server_password` |     Default Custom Game Server Password (can be overridden by `password` command)      |                            `true`                             |
 | `host_channel_messages`        |            Choose whether results of votes are posted in the hosts channel             |                            `true`                             |
