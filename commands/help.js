@@ -87,6 +87,12 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
+                            name: `\`${configPrefix}warmodeweaponsvote (wmwv) [minutes]\``,
+                            value:
+                                'Starts warmode weapons vote. [minutes] is optional.',
+                            inline: false,
+                        },
+                        {
                             name: `\`${configPrefix}startgame [minutes]\``,
                             value:
                                 'Starts a countdown for the game to start. [minutes] is optional.',

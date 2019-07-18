@@ -1,11 +1,11 @@
-
 module.exports = (client, message) => {
     // Ignore all bots
     if (message.author.bot) return;
 
     // Ignore messages not starting with the prefix (in config.json)
     if (message.content.indexOf(client.config.prefix) !== 0) return;
-    if (message.channel.type !== (`dm` || `group`)) { //If the message is a DM or GroupDM, return.
+    if (message.channel.type !== ('dm' || 'group')) {
+        // If the message is a DM or GroupDM, return.
         // Our standard argument/command name definition.
         const args = message.content
             .slice(client.config.prefix.length)
@@ -19,6 +19,7 @@ module.exports = (client, message) => {
         if (command === 'pv') command = 'perspectivevote';
         if (command === 'mv') command = 'mapvote';
         if (command === 'pwd') command = 'password';
+        if (command === 'wmwv') command = 'warmodeweaponsvote';
         if (command === 'setvoicelimit') command = 'vclimit';
 
         // Grab the command data from the client.commands Enmap
