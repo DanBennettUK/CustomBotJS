@@ -157,7 +157,7 @@ client.on('raw', async event => {
     }
 });
 client.on('messageReactionAdd', (messageReaction, user) => {
-    const roleID = config.subscriber_role_id;
+    const roleID = config.custom_role_id;
     const role = messageReaction.message.guild.roles.find(
         role => role.id === roleID
     );
@@ -172,7 +172,7 @@ client.on('messageReactionAdd', (messageReaction, user) => {
     }
 });
 client.on('messageReactionRemove', (messageReaction, user) => {
-    const roleID = config.subscriber_role_id;
+    const roleID = config.custom_role_id;
     const role = messageReaction.message.guild.roles.find(
         role => role.id === roleID
     );
