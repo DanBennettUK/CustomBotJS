@@ -9,7 +9,7 @@ const { window } = new JSDOM();
 const { document } = (new JSDOM('')).window;
 global.document = document;
 
-const $ = jQuery = require('jquery')(window);
+const $ = require('jquery')(window);
 client.commands = new Discord.Collection();
 
 // We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
@@ -41,27 +41,50 @@ fs.readdir('./commands/', (err, files) => {
 client.on('ready', () => {
     console.log(`${client.user.username} is ready for action!`);
 
-    client.user.setActivity(`See #custom-games-info for info`, {
-        type: 'WATCHING',
-        // PLAYING, LISTENING, WATCHING
+    $.ajax({ 
+        dataType:'json',
+        url:`https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
+        headers: {
+            'Client-ID': config.activity.twitch_client_id
+          },
+        success:function (channel) {
+            if (channel.data.length > 0) {
+                client.user.setActivity(channel.data[0].title, {
+                    url: `https://twitch.tv/${config.activity.twitchUsername}`,
+                })
+            } else {
+                client.user.setActivity(config.activity.message, {
+                    type: 'WATCHING',
+                    // PLAYING, LISTENING, WATCHING
+                });
+                client.user.setStatus('dnd');
+                // dnd, idle, online, invisible
+            }
+        },
+        error:function () {
+            client.user.setActivity(config.activity.message, {
+                type: 'WATCHING',
+                // PLAYING, LISTENING, WATCHING
+            });
+            client.user.setStatus('dnd');
+            // dnd, idle, online, invisible
+        }
     });
-    client.user.setStatus('dnd');
-    // dnd, idle, online, invisible
 
-    setInterval(function () {
+    setInterval (function () {
         $.ajax({ 
             dataType:'json',
             url:`https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
             headers: {
                 'Client-ID': config.activity.twitch_client_id
               },
-            success:function(channel) { 
-                if (channel.data[0].type === `live`) {
+            success:function (channel) {
+                if (channel.data.length > 0) {
                     client.user.setActivity(channel.data[0].title, {
                         url: `https://twitch.tv/${config.activity.twitchUsername}`,
                     })
                 } else {
-                    client.user.setActivity(`See #custom-games-info for info`, {
+                    client.user.setActivity(config.activity.message, {
                         type: 'WATCHING',
                         // PLAYING, LISTENING, WATCHING
                     });
@@ -69,8 +92,8 @@ client.on('ready', () => {
                     // dnd, idle, online, invisible
                 }
             },
-            error:function() {
-                client.user.setActivity(`See #custom-games-info for info`, {
+            error:function () {
+                client.user.setActivity(config.activity.message, {
                     type: 'WATCHING',
                     // PLAYING, LISTENING, WATCHING
                 });
