@@ -1,6 +1,6 @@
 {
     "name": "custombotjs",
-    "version": "0.0.1",
+    "version": "1.0.2",
     "description": "A Discord Bot for organising PUBG Custom Games",
     "main": "index.js",
     "scripts": {
