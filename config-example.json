@@ -4,10 +4,11 @@
     "host_channel_id": "",
     "games_channel_id": "",
     "chat_channel_id": "",
-    "subscriber_channel_id": "",
     "host_role_id": "",
     "custom_role_id": "",
+    "bot_id": "",
     "subscriber_role_id": "",
+    "role_message_id": "",
     "voice_channel_emoji": "🛠",
     "default_timer": "2",
     "activity": {
@@ -18,7 +19,7 @@
     "default_game_server_name": "",
     "default_game_server_password": "",
     "host_channel_messages": true,
-    "custom_role_ping": true,
+    "custom_role_ping": false,
     "version": "0.0.2",
     "debug_enable": false
 }
