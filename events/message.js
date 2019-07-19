@@ -5,14 +5,23 @@ module.exports = (client, message) => {
     if (message.channel.type !== ('dm' || 'group')) {
         // If the message is a DM or GroupDM, return.
 
+        if (message.channel.id !== client.config.host_channel_id) {
+            // If the command isn't ran in the host channel, do nothing.
+            return;
+        }
         // Ignore messages not starting with the prefix (in config.json)
         if (message.content.indexOf(client.config.prefix) !== 0) return;
         // Our standard argument/command name definition.
-        const args = message.content
+        let args = message.content
             .slice(client.config.prefix.length)
             .trim()
             .split(/ +/g);
-        let command = args.shift().toLowerCase();
+
+        args.forEach(function(arg, i) {
+            args[i] = arg.toLowerCase();
+        });
+
+        let command = args.shift();
 
         // Command aliases
         if (command === 'sqv') command = 'squadvote';
@@ -20,8 +29,9 @@ module.exports = (client, message) => {
         if (command === 'pv') command = 'perspectivevote';
         if (command === 'mv') command = 'mapvote';
         if (command === 'pwd') command = 'password';
-        if (command === 'wmwv') command = 'warmodeweaponsvote';
+        if (['wmw', 'wmwv'].includes(command)) command = 'warmodeweaponsvote';
         if (command === 'setvoicelimit') command = 'vclimit';
+        if (['wmg', 'wmgv'].includes(command)) command = 'warmodegametypevote';
 
         // Grab the command data from the client.commands Enmap
         const cmd = client.commands.get(command);

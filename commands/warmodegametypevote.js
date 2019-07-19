@@ -1,68 +1,50 @@
 exports.run = async (client, message, args) => {
-
-    // Get customRole for pinging later
-    const customRole = message.guild.roles.get(client.config.custom_role_id);
-
-    const emojiCharacters = require('../emojiCharacters.js');
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
-
-    // Set up the message as an embed, ready to post
-    const title = 'Vote for War Mode Weapons!';
-    const description = 'Please vote on the weapons for the next warmode game!';
-    const winValue = 'The winning weapon choice was:';
-    let timer = client.config.default_timer;
+    const customRole = message.guild.roles.get(client.config.custom_role_id);
+    const emojiCharacters = require('../emojiCharacters.js');
     let timerText;
+    let timer = client.config.default_timer;
+
+    const title = 'Vote for game type!';
+    const description = 'Please vote on the game type for the next game!';
+    const winValue = 'The winning game type was:';
+
 
     if (args.length > 0) {
-        if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
-            if (args[args.length - 1] > 0) {
-                timer = parseInt(args[args.length - 1]);
-            }
-            args.splice(args.length - 1, 1);
-        }
+        timer = args[0];
     }
 
-    if (timer === '1') {
-        timerText = 'minute';
-    }
-    else {
-        timerText = 'minutes';
-    }
+    if (timer === '1') timerText = 'minute';
+    else timerText = 'minutes';
 
-    const warmodewepChoices = [
-        `${emojiCharacters[1]} for Default Weapons`,
-        `${emojiCharacters[2]} for Bomb Kit (Throwables)`,
-        `${emojiCharacters[3]} for VSS Kit`,
-        `${emojiCharacters[4]} for OP Kit (Crate Weapons)`,
-        `${emojiCharacters[5]} for Sniper Kit`,
-    ];
+    const choices = 
+    `${emojiCharacters['WarMode']} for War Mode
+    ${emojiCharacters['Conquest']} for War Mode Conquest`;
 
-    const choices = warmodewepChoices.join('\n');
-
-    const warmodewepsVote = {
+    const warmodeGametypeMessage = {
         color: 0x3366ff,
         title: `${title}`,
         description: `${description}`,
         fields: [
             {
                 name: 'Choose a reaction',
-                value: choices,
+                value: choices
             },
             {
                 name: 'Vote will close in:',
-                value: `${timer} ${timerText}`,
-            },
+                value: `${timer} ${timerText}`
+            }
         ],
         timestamp: new Date(),
         footer: {
             icon_url: client.user.avatarURL,
-        },
+        }
     };
 
     try {
         await games_channel
-            .send({ embed: warmodewepsVote })
+            .send({ embed: warmodeGametypeMessage })
             .then(async embedMessage => {
                 // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
@@ -71,12 +53,8 @@ exports.run = async (client, message, args) => {
                         clearInterval(checkIfDeleted);
                     }
                 }, 1000);
-
-                await embedMessage.react(emojiCharacters[1]);
-                await embedMessage.react(emojiCharacters[2]);
-                await embedMessage.react(emojiCharacters[3]);
-                await embedMessage.react(emojiCharacters[4]);
-                await embedMessage.react(emojiCharacters[5]);
+                await embedMessage.react(emojiCharacters['WarMode']);
+                await embedMessage.react(emojiCharacters['Conquest']);
                 if (client.config.custom_role_ping == true) {
                     await customRole
                         .setMentionable(true, 'Role needs to be pinged')
@@ -122,10 +100,9 @@ exports.run = async (client, message, args) => {
                             ];
                     }
 
-                    const warmodewepsResult = {
+                    const gametypeResult = {
                         color: 0x009900,
                         title: `${title}`,
-                        description: '',
                         fields: [
                             {
                                 name: 'Choices:',
@@ -133,7 +110,7 @@ exports.run = async (client, message, args) => {
                             },
                             {
                                 name: `${winValue}`,
-                                value: `${reactions[reactionID]._emoji}`,
+                                value: `${reactions[reactionID].emoji}`,
                             },
                         ],
                         timestamp: new Date(),
@@ -143,14 +120,14 @@ exports.run = async (client, message, args) => {
                     };
 
                     embedMessage.delete();
-                    games_channel.send({ embed: warmodewepsResult });
+                    games_channel.send({ embed: gametypeResult });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send({ embed: warmodewepsResult });
+                        host_channel.send({ embed: gametypeResult });
                     }
                 }, timer * 60 * 1000);
             });
-    }
-    catch (error) {
-        console.log(`${error}`);
-    }
-};
+        } 
+        catch (error) {
+            console.log(`${error}`);
+        }
+}

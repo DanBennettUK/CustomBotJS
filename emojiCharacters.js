@@ -49,4 +49,7 @@ module.exports = {
     Miramar: '🏜',
     Sanhok: '🏝',
     Vikendi: '🏔',
+    Jackal: '🌄',
+    WarMode: '🔫',
+    Conquest: '⛳'
 };

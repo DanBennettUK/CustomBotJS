@@ -82,15 +82,21 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}mapvote [minutes]\``,
+                            name: `\`${configPrefix}mapvote (mv) [minutes]\``,
                             value: 'Starts map vote. [minutes] is optional.',
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}warmodeweaponsvote (wmwv) [minutes]\``,
+                            name: `\`${configPrefix}warmodeweaponsvote (wmwv/wmv) [minutes]\``,
                             value:
                                 'Starts warmode weapons vote. [minutes] is optional.',
                             inline: false,
+                        },
+                        {
+                            name: `\`${configPrefix}warmodegametypevote (wmgv/wmg) [minutes]\``,
+                            value:
+                                'Starts warmode game type vote. [minutes] is optional.',
+                            inline: false
                         },
                         {
                             name: `\`${configPrefix}startgame [minutes]\``,
