@@ -5,7 +5,8 @@ module.exports = (client, message) => {
     if (message.channel.type !== ('dm' || 'group')) {
         // If the message is a DM or GroupDM, return.
 
-        if (message.channel.id !== client.config.host_channel_id) {
+        if (message.channel.id !== client.config.host_channel_id &&
+            message.content !== `${client.config.prefix}hello`) {
             // If the command isn't ran in the host channel, do nothing.
             return;
         }
