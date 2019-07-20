@@ -5,11 +5,6 @@ module.exports = (client, message) => {
     if (message.channel.type !== ('dm' || 'group')) {
         // If the message is a DM or GroupDM, return.
 
-        if (message.channel.id !== client.config.host_channel_id &&
-            message.content !== `${client.config.prefix}hello`) {
-            // If the command isn't ran in the host channel, do nothing.
-            return;
-        }
         // Ignore messages not starting with the prefix (in config.json)
         if (message.content.indexOf(client.config.prefix) !== 0) return;
         // Our standard argument/command name definition.
