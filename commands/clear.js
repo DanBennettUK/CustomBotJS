@@ -9,7 +9,7 @@ exports.run = async (client, message, args) => {
             .fetchMessages({ limit: 100 })
             .then(async collected => {
                 const botMsg = collected.filter(
-                    m => m.author.id == client.config.bot_id
+                    m => m.author.id == client.user.id
                 );
                 await games_channel.bulkDelete(botMsg, true).then(
                     (clearMessage = {

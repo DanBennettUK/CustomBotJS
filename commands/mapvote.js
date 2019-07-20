@@ -80,6 +80,14 @@ exports.run = async (client, message, args) => {
                     mapChoices[i] = `${emojiCharacters['Jackal']} for Camp Jackal`;
                 }
             }
+        } 
+        else {
+            mapChoices = [
+                `${emojiCharacters['Erangel']} for Erangel`,
+                `${emojiCharacters['Miramar']} for Miramar`,
+                `${emojiCharacters['Sanhok']} for Sanhok`,
+                `${emojiCharacters['Vikendi']} for Vikendi`,
+            ];
         }
     }
     else {
@@ -163,6 +171,12 @@ exports.run = async (client, message, args) => {
                                 await embedMessage.react(emojiCharacters['Jackal']);
                             }
                         }
+                    } 
+                    else {
+                        await embedMessage.react(emojiCharacters['Erangel']);
+                        await embedMessage.react(emojiCharacters['Miramar']);
+                        await embedMessage.react(emojiCharacters['Sanhok']);
+                        await embedMessage.react(emojiCharacters['Vikendi']);
                     }
                 }
                 else {

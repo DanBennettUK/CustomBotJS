@@ -51,5 +51,14 @@ module.exports = {
     Vikendi: '🏔',
     Jackal: '🌄',
     WarMode: '🔫',
-    Conquest: '⛳'
+    Conquest: '⛳',
+    Sunny: '🌤',
+    Rainy: '🌧',
+    Clear: '☀',
+    Sunset: '🌇',
+    Foggy: '🌁',
+    Overcast: '🌦',
+    Sunrise: '🌅',
+    Snowy: '❄',
+    Moonlight: '🌃'
 };
