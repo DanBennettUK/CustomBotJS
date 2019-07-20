@@ -15,6 +15,10 @@ exports.run = async (client, message, args) => {
     let regionChoices = [];
     let timerText;
 
+    args.forEach(function(arg, i) {
+        args[i] = arg.toLowerCase();
+    });
+
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
             if (args[args.length - 1] > 0) {

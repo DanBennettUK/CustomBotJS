@@ -15,6 +15,10 @@ exports.run = async (client, message, args) => {
     const winValue = 'The winning weather was:';
     let weatherChoices = [];
 
+    args.forEach(function(arg, i) {
+        args[i] = arg.toLowerCase();
+    });
+
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
             if (args[args.length - 1] > 0) {
@@ -70,7 +74,7 @@ exports.run = async (client, message, args) => {
                 weatherChoices[i] = `${emojiCharacters['Moonlight']} for Moonlight`;
             }
         }
-        if (args[0] === 'erangel') {
+        else if (args[0] === 'erangel') {
             weatherChoices = [
                 `${emojiCharacters['Sunny']} for Sunny`,
                 `${emojiCharacters['Rainy']} for Rainy`,
@@ -80,7 +84,7 @@ exports.run = async (client, message, args) => {
                 `${emojiCharacters['Overcast']} for Overcast`
             ];
         }
-        if (args[0] === 'miramar') {
+        else if (args[0] === 'miramar') {
             weatherChoices = [
                 `${emojiCharacters['Sunny']} for Sunny`,
                 `${emojiCharacters['Sunrise']} for Sunrise`,
@@ -90,7 +94,7 @@ exports.run = async (client, message, args) => {
                 `${emojiCharacters['Overcast']} for Overcast`
             ];
         }
-        if (args[0] === 'sanhok') {
+        else if (args[0] === 'sanhok') {
             weatherChoices = [
                 `${emojiCharacters['Sunny']} for Sunny`,
                 `${emojiCharacters['Rainy']} for Rainy`,
@@ -98,7 +102,7 @@ exports.run = async (client, message, args) => {
                 `${emojiCharacters['Overcast']} for Overcast`
             ];
         }
-        if (args[0] === 'vikendi') {
+        else if (args[0] === 'vikendi') {
             weatherChoices = [
                 `${emojiCharacters['Sunny']} for Sunny`,
                 `${emojiCharacters['Moonlight']} for Moonlight`,
@@ -195,7 +199,7 @@ exports.run = async (client, message, args) => {
                             await embedMessage.react(emojiCharacters['Snowy']);
                         }
                     }
-                    if (args[0] === 'erangel') {
+                    else if (args[0] === 'erangel') {
                         await embedMessage.react(emojiCharacters['Sunny']);
                         await embedMessage.react(emojiCharacters['Rainy']);
                         await embedMessage.react(emojiCharacters['Clear']);
@@ -203,7 +207,7 @@ exports.run = async (client, message, args) => {
                         await embedMessage.react(emojiCharacters['Foggy']);
                         await embedMessage.react(emojiCharacters['Overcast']);
                     }
-                    if (args[0] === 'miramar') {
+                    else if (args[0] === 'miramar') {
                         await embedMessage.react(emojiCharacters['Sunny']);
                         await embedMessage.react(emojiCharacters['Sunrise']);
                         await embedMessage.react(emojiCharacters['Sunset']);
@@ -211,13 +215,13 @@ exports.run = async (client, message, args) => {
                         await embedMessage.react(emojiCharacters['Foggy']);
                         await embedMessage.react(emojiCharacters['Overcast']);
                     }
-                    if (args[0] === 'sanhok') {
+                    else if (args[0] === 'sanhok') {
                         await embedMessage.react(emojiCharacters['Sunny']);
                         await embedMessage.react(emojiCharacters['Rainy']);
                         await embedMessage.react(emojiCharacters['Foggy']);
                         await embedMessage.react(emojiCharacters['Overcast']);
                     }
-                    if (args[0] === 'vikendi') {
+                    else if (args[0] === 'vikendi') {
                         await embedMessage.react(emojiCharacters['Sunny']);
                         await embedMessage.react(emojiCharacters['Moonlight']);
                         await embedMessage.react(emojiCharacters['Snowy']);

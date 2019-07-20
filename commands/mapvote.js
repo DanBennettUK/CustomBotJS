@@ -15,6 +15,10 @@ exports.run = async (client, message, args) => {
     const winValue = 'The winning map was:';
     let mapChoices = [];
 
+    args.forEach(function(arg, i) {
+        args[i] = arg.toLowerCase();
+    });
+
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
             if (args[args.length - 1] > 0) {
@@ -50,7 +54,7 @@ exports.run = async (client, message, args) => {
                 mapChoices[i] = `${emojiCharacters['Vikendi']} for Vikendi`;
             }
         }
-        if (args[0] === 'warmode') {
+        else if (args[0] === 'warmode') {
             if (!args.some(map => ['erangel', 'miramar', 'sanhok', 'vikendi'].includes(map))) {
                 mapChoices = [
                     `${emojiCharacters['Erangel']} for Erangel`,
@@ -147,7 +151,7 @@ exports.run = async (client, message, args) => {
                             await embedMessage.react(emojiCharacters['Vikendi']);
                         }
                     }
-                    if (args[0] === 'warmode') {
+                    else if (args[0] === 'warmode') {
                         if (!args.some(map => ['erangel', 'miramar', 'sanhok', 'vikendi'].includes(map))) {
                             await embedMessage.react(emojiCharacters['Erangel']);
                             await embedMessage.react(emojiCharacters['Miramar']);

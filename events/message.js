@@ -17,11 +17,7 @@ module.exports = (client, message) => {
             .trim()
             .split(/ +/g);
 
-        args.forEach(function(arg, i) {
-            args[i] = arg.toLowerCase();
-        });
-
-        let command = args.shift();
+        let command = args.shift().toLowerCase();
 
         // Command aliases
         if (command === 'sqv') command = 'squadvote';
@@ -29,9 +25,9 @@ module.exports = (client, message) => {
         if (command === 'pv') command = 'perspectivevote';
         if (command === 'mv') command = 'mapvote';
         if (command === 'pwd') command = 'password';
-        if (['wmw', 'wmwv'].includes(command)) command = 'warmodeweaponsvote';
+        if (command === 'wmwv') command = 'warmodeweaponsvote';
         if (command === 'setvoicelimit') command = 'vclimit';
-        if (['wmg', 'wmgv'].includes(command)) command = 'warmodegametypevote';
+        if (command === 'wmgv') command = 'warmodegametypevote';
         if (command == 'wv') command = 'weathervote';
 
         // Grab the command data from the client.commands Enmap
