@@ -82,13 +82,13 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}mapvote (mv) [minutes]\``,
-                            value: 'Starts map vote. [minutes] is optional.',
+                            name: `\`${configPrefix}mapvote (mv) [warmode (wm)] <maps> [minutes]\``,
+                            value: 'Starts map vote. \nUsage: leave blank or `all` for all maps \nChoose your own maps (e.g. `mapvote erangel miramar`) \nuse [warmode] to add Camp Jackal to the map pool \n[minutes] is optional.',
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}weathervote (wv) [minutes]\``,
-                            value: 'Starts weather vote. [minutes] is optional.',
+                            name: `\`${configPrefix}weathervote (wv) [map] [minutes]\``,
+                            value: 'Starts weather vote. \nUsage: leave blank or `all` for all weather \nEnter a map for all weather available to the map \nChoose your own (e.g. `weathervote sunny rainy foggy`) \n[minutes] is optional.',
                             inline: false,
                         },
                         {
