@@ -1,4 +1,10 @@
 exports.run = async (client, message) => {
+
+    if (message.channel.id !== client.config.host_channel_id) {
+        // If the command isn't ran in the host channel, do nothing.
+        return;
+    }
+    
     const configPrefix = client.config.prefix;
 
     if (
@@ -82,8 +88,13 @@ exports.run = async (client, message) => {
                             inline: false,
                         },
                         {
-                            name: `\`${configPrefix}mapvote [minutes]\``,
-                            value: 'Starts map vote. [minutes] is optional.',
+                            name: `\`${configPrefix}mapvote (mv) [warmode (wm)] <maps> [minutes]\``,
+                            value: 'Starts map vote. \nUsage: leave blank or `all` for all maps \nChoose your own maps (e.g. `mapvote erangel miramar`) \nuse [warmode] to add Camp Jackal to the map pool \n[minutes] is optional.',
+                            inline: false,
+                        },
+                        {
+                            name: `\`${configPrefix}weathervote (wv) [map] [minutes]\``,
+                            value: 'Starts weather vote. \nUsage: leave blank or `all` for all weather \nEnter a map for all weather available to the map \nChoose your own (e.g. `weathervote sunny rainy foggy`) \n[minutes] is optional.',
                             inline: false,
                         },
                         {
@@ -91,6 +102,12 @@ exports.run = async (client, message) => {
                             value:
                                 'Starts warmode weapons vote. [minutes] is optional.',
                             inline: false,
+                        },
+                        {
+                            name: `\`${configPrefix}warmodegametypevote (wmgv) [minutes]\``,
+                            value:
+                                'Starts warmode game type vote. [minutes] is optional.',
+                            inline: false
                         },
                         {
                             name: `\`${configPrefix}startgame [minutes]\``,
@@ -119,9 +136,7 @@ exports.run = async (client, message) => {
                     timestamp: new Date(),
                     footer: {
                         icon_url: client.user.avatarURL,
-                        text: `© DanBennett - Version: ${
-                            client.config.version
-                        }`,
+                        text: `© DanBennett - Version: ${client.version}`,
                     },
                 },
             });

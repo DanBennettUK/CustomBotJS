@@ -49,4 +49,16 @@ module.exports = {
     Miramar: '🏜',
     Sanhok: '🏝',
     Vikendi: '🏔',
+    Jackal: '🌄',
+    WarMode: '🔫',
+    Conquest: '⛳',
+    Sunny: '🌤',
+    Rainy: '🌧',
+    Clear: '☀',
+    Sunset: '🌇',
+    Foggy: '🌁',
+    Overcast: '🌦',
+    Sunrise: '🌅',
+    Snowy: '❄',
+    Moonlight: '🌃'
 };

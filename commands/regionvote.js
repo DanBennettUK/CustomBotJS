@@ -1,4 +1,5 @@
 exports.run = async (client, message, args) => {
+
     if (message.channel.id !== client.config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
@@ -17,8 +18,11 @@ exports.run = async (client, message, args) => {
     const winValue = 'The winning region was:';
     let timer = client.config.default_timer;
     let regionChoices = [];
-    let maps;
     let timerText;
+
+    args.forEach(function(arg, i) {
+        args[i] = arg.toLowerCase();
+    });
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
@@ -37,29 +41,24 @@ exports.run = async (client, message, args) => {
     }
 
     if (args.length > 0 && args[0] !== 'all') {
-        if (args.length > 0) {
-            maps = args.map(function(word) {
-                return word.toLowerCase();
-            });
-        }
         let i = 0;
-        if (maps.some(map => map.includes('eu'))) {
+        if (args.some(region => region.includes('eu'))) {
             regionChoices[i] = `${emojiCharacters['EU']} for Europe`;
             i++;
         }
-        if (maps.some(map => map.includes('na'))) {
+        if (args.some(region => region.includes('na'))) {
             regionChoices[i] = `${emojiCharacters['NA']} for North America`;
             i++;
         }
-        if (maps.some(map => map.includes('sea'))) {
+        if (args.some(region => region.includes('sea'))) {
             regionChoices[i] = `${emojiCharacters['SEA']} for Southeast Asia`;
             i++;
         }
-        if (maps.some(map => map.includes('oce'))) {
+        if (args.some(region => region.includes('oce'))) {
             regionChoices[i] = `${emojiCharacters['OCE']} for Oceania`;
             i++;
         }
-        if (maps.some(map => map.includes('kr'))) {
+        if (args.some(region => region.includes('kr'))) {
             regionChoices[i] = `${emojiCharacters['KR']} for Korea/Japan`;
         }
     }
@@ -107,19 +106,19 @@ exports.run = async (client, message, args) => {
                 }, 1000);
 
                 if (args.length > 0 && args[0] !== 'all') {
-                    if (maps.some(map => map.includes('eu'))) {
+                    if (args.some(region => region.includes('eu'))) {
                         await embedMessage.react(emojiCharacters['EU']);
                     }
-                    if (maps.some(map => map.includes('na'))) {
+                    if (args.some(region => region.includes('na'))) {
                         await embedMessage.react(emojiCharacters['NA']);
                     }
-                    if (maps.some(map => map.includes('sea'))) {
+                    if (args.some(region => region.includes('sea'))) {
                         await embedMessage.react(emojiCharacters['SEA']);
                     }
-                    if (maps.some(map => map.includes('oce'))) {
+                    if (args.some(region => region.includes('oce'))) {
                         await embedMessage.react(emojiCharacters['OCE']);
                     }
-                    if (maps.some(map => map.includes('kr'))) {
+                    if (args.some(region => region.includes('kr'))) {
                         await embedMessage.react(emojiCharacters['KR']);
                     }
                 }

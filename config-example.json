@@ -20,6 +20,6 @@
     "default_game_server_password": "",
     "host_channel_messages": true,
     "custom_role_ping": false,
-    "version": "1.0.1",
-    "debug_enable": false
+    "debug_enable": false,
+    "directMessage": []
 }

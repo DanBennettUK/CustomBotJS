@@ -51,7 +51,6 @@ This table outlines what the configuration settings are in `config.json`.
 | `default_game_server_password` |     Default Custom Game Server Password (can be overridden by `password` command)      |                            `true`                             |
 | `host_channel_messages`        |            Choose whether results of votes are posted in the hosts channel             |                            `true`                             |
 | `custom_role_ping`             |   Choose whether the Custom role set by `custom_role_id` should be pinged/mentioned    |                            `true`                             |
-| `version`                      |                        Version of the bot. Should be left as is                        |                            `0.0.1`                            |
 | `debug_enable`                 |                       Enable or Disable debugging (false = off)                        |                            `false`                            |
 
 ## 🚀 Usage:

@@ -1,4 +1,5 @@
 exports.run = async (client, message, args) => {
+
     if (message.channel.id !== client.config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;

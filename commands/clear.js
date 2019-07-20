@@ -1,4 +1,5 @@
 exports.run = async (client, message, args) => {
+
     if (message.channel.id !== client.config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
@@ -13,7 +14,7 @@ exports.run = async (client, message, args) => {
             .fetchMessages({ limit: 100 })
             .then(async collected => {
                 const botMsg = collected.filter(
-                    m => m.author.id == client.config.bot_id
+                    m => m.author.id == client.user.id
                 );
                 await games_channel.bulkDelete(botMsg, true).then(
                     (clearMessage = {
