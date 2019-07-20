@@ -1,4 +1,10 @@
 exports.run = async (client, message, args) => {
+
+    if (message.channel.id !== client.config.host_channel_id) {
+        // If the command isn't ran in the host channel, do nothing.
+        return;
+    }
+    
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
     const customRole = message.guild.roles.get(client.config.custom_role_id);
