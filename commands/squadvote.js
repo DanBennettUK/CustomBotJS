@@ -146,6 +146,31 @@ exports.run = async (client, message, args) => {
                                 `${winText} ${reactions[reactionID]._emoji}`
                             );
                         }
+
+                        let channelSize;
+                        let winReaction = reactions[reactionID]._emoji.name;
+
+                        squad_sizes.forEach(size => {
+                            if (winReaction == emojiCharacters[size]) {
+                                channelSize = parseInt(size);
+                                return;
+                            }
+                        });
+                            
+                        client.channels.forEach(channel => {
+                            if (channel.type == 'voice') {
+                                if (
+                                    channel.name.startsWith(client.config.voice_channel_emoji)
+                                ) {
+                                    try {
+                                        channel.setUserLimit(channelSize).catch(console.error);
+                                    }
+                                    catch (errorlog) {
+                                        console.log(`${errorlog}`);
+                                    }
+                                }
+                            }
+                        });
                     }, client.config.default_timer * 60 * 1000);
                 });
         }
