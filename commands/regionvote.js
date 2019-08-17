@@ -194,9 +194,7 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: regionResult });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(
-                            `${winValue} ${reactions[reactionID]._emoji}`
-                        );
+                        host_channel.send({ embed: regionResult });
                     }
                 }, timer * 60 * 1000);
             });

@@ -24,7 +24,7 @@ module.exports = (client, message) => {
         if (command === 'wmwv') command = 'warmodeweaponsvote';
         if (command === 'setvoicelimit') command = 'vclimit';
         if (command === 'wmgv') command = 'warmodegametypevote';
-        if (command == 'wv') command = 'weathervote';
+        if (command === 'wv') command = 'weathervote';
 
         // Grab the command data from the client.commands Enmap
         const cmd = client.commands.get(command);
