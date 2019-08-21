@@ -190,7 +190,7 @@ client.on('messageReactionRemove', (messageReaction, user) => {
 });
 
 // Current bot version
-client.version = '1.0.2';
+client.version = '1.0.4';
 
 // Debug errors
 if (config.debug_enable === true) {
