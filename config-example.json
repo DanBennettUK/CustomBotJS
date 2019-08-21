@@ -4,6 +4,7 @@
     "host_channel_id": "",
     "games_channel_id": "",
     "chat_channel_id": "",
+    "subscriber_channel_id": "",
     "host_role_id": "",
     "custom_role_id": "",
     "bot_id": "",
