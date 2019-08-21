@@ -15,7 +15,8 @@
     "activity": {
         "twitch_client_id": "",
         "twitchUsername": "",
-        "message": ""
+        "message": "",
+        "status": "online"
     },
     "default_game_server_name": "",
     "default_game_server_password": "",

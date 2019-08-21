@@ -47,6 +47,7 @@ This table outlines what the configuration settings are in `config.json`.
 | `activity => twitch_client_id` |                       Twitch API key for checking Twitch status                        |                            `false`                            |
 | `activity => twitchUsername`   |                  Twitch Username for the bot to check when streaming                   |                         `DanBennett`                          |
 | `activity => message`          |                   Default activity message to use when not streaming                   |                `PlayerUnknown's BattleGrounds`                |
+| `activity => status`           |                   Default activity status to use when not streaming                    |               `online` `dnd` `idle` `invisible`               |
 | `default_game_server_name`     |       Default Custom Game Server Name (can be overridden by `password` command)        |                            `true`                             |
 | `default_game_server_password` |     Default Custom Game Server Password (can be overridden by `password` command)      |                            `true`                             |
 | `host_channel_messages`        |            Choose whether results of votes are posted in the hosts channel             |                            `true`                             |
