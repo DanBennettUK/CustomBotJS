@@ -23,5 +23,5 @@
     "host_channel_messages": true,
     "custom_role_ping": false,
     "debug_enable": false,
-    "directMessage": []
+    "directMessage": ["I am a bot!"]
 }
