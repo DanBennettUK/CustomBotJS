@@ -70,7 +70,7 @@ client.on('ready', () => {
                 type: 'WATCHING',
                 // PLAYING, LISTENING, WATCHING
             });
-            client.user.setStatus('dnd');
+            client.user.setStatus(config.activity.status);
             // dnd, idle, online, invisible
         },
     });
@@ -97,7 +97,7 @@ client.on('ready', () => {
                         type: 'WATCHING',
                         // PLAYING, LISTENING, WATCHING
                     });
-                    client.user.setStatus('dnd');
+                    client.user.setStatus(config.activity.status);
                     // dnd, idle, online, invisible
                 }
             },
@@ -106,7 +106,7 @@ client.on('ready', () => {
                     type: 'WATCHING',
                     // PLAYING, LISTENING, WATCHING
                 });
-                client.user.setStatus('dnd');
+                client.user.setStatus(config.activity.status);
                 // dnd, idle, online, invisible
             },
         });
