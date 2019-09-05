@@ -167,7 +167,7 @@ exports.run = async (client, message, args) => {
                             draws.push(i);
                         }
                     });
-                    console.log(draws);
+                    console.log(`Draws: ${draws}\n`);
                     if (draws.length > 1) {
                         reactionID =
                             draws[
