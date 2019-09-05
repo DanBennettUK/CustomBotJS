@@ -166,14 +166,6 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: weatherVoteMessage })
             .then(async embedMessage => {
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-
                 if (args.length > 0) {
                     if (!['all', 'erangel', 'miramar', 'sanhok', 'vikendi'].includes(args[0])) {
                         if (args.some(weather => weather.includes('sunny'))) {
@@ -327,6 +319,13 @@ exports.run = async (client, message, args) => {
                         host_channel.send({ embed: weatherResult });
                     }
                 }, timer * 60 * 1000);
+                // Checks if message is deleted
+                const checkIfDeleted = setInterval(function() {
+                    if (embedMessage.deleted) {
+                        clearTimeout(timeToVote);
+                        clearInterval(checkIfDeleted);
+                    }
+                }, 1000);
             });
     } catch (error) {
         console.log(`${error}`);
