@@ -150,7 +150,7 @@ exports.run = async (client, message, args) => {
                         .catch(console.error);
                 }
                 const timeToVote = setTimeout(function() {
-                    const reactions = embedMessage.reactions.array();
+                    const reactions = embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
                     reactions.some((r, i) => {
@@ -176,6 +176,7 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
+                    const winReact = reactions.find(r => r.emoji == reactionID);
 
                     const regionResult = {
                         color: 0x009900,
@@ -183,7 +184,7 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: `${winValue}`,
-                                value: `${reactions[reactionID]._emoji}`,
+                                value: `${winReact.emoji}`,
                             },
                         ],
                         timestamp: new Date(),

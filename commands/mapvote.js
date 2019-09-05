@@ -214,7 +214,7 @@ exports.run = async (client, message, args) => {
                         .catch(console.error);
                 }
                 const timeToVote = setTimeout(function() {
-                    const reactions = embedMessage.reactions.array();
+                    const reactions = embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
                     reactions.some((r, i) => {
@@ -240,6 +240,7 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
+                    const winReact = reactions.find(r => r.emoji == reactionID);
 
                     const mapResult = {
                         color: 0x009900,
@@ -251,7 +252,7 @@ exports.run = async (client, message, args) => {
                             },
                             {
                                 name: `${winValue}`,
-                                value: `${mapChoices[reactionID]}`,
+                                value: `${winReact.emoji}`,
                             },
                         ],
                         timestamp: new Date(),
@@ -265,7 +266,7 @@ exports.run = async (client, message, args) => {
                     if (client.config.host_channel_messages === true) {
                         host_channel.send({ embed: mapResult });
                     }
-                }, 5000);//timer * 60 * 1000);
+                }, timer * 60 * 1000);
             });
     }
     catch (error) {

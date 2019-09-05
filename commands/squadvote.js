@@ -98,7 +98,7 @@ exports.run = async (client, message, args) => {
                             .catch(console.error);
                     }
                     const timeToVote = setTimeout(function() {
-                        const reactions = embedMessage.reactions.array();
+                        const reactions = embedMessage.reactions;
                         let reactionID;
                         let maxCount = 0;
                         reactions.some((r, i) => {
@@ -124,6 +124,7 @@ exports.run = async (client, message, args) => {
                                     )
                                 ];
                         }
+                        const winReact = reactions.find(r => r.emoji == reactionID);
 
                         const squadResult = {
                             color: 0x009900,
@@ -131,7 +132,7 @@ exports.run = async (client, message, args) => {
                             fields: [
                                 {
                                     name: `${winText}`,
-                                    value: `${reactions[reactionID]._emoji}`,
+                                    value: `${winReact.emoji}`,
                                 },
                             ],
                             timestamp: new Date(),
@@ -144,12 +145,12 @@ exports.run = async (client, message, args) => {
                         games_channel.send({ embed: squadResult });
                         if (client.config.host_channel_messages === true) {
                             host_channel.send(
-                                `${winText} ${reactions[reactionID]._emoji}`
+                                `${winText} ${winReact.emoji}`
                             );
                         }
 
                         let channelSize;
-                        let winReaction = reactions[reactionID]._emoji.name;
+                        let winReaction = winReact.emoji.name;
 
                         squad_sizes.forEach(size => {
                             if (winReaction == emojiCharacters[size]) {
@@ -173,7 +174,7 @@ exports.run = async (client, message, args) => {
                             }
                         });
                         host_channel.send(`Voice limit set to ${channelSize}`);
-                    }, client.config.default_timer * 60 * 100);
+                    }, client.config.default_timer * 60 * 1000);
                 });
         }
         catch (error) {
