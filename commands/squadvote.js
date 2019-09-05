@@ -101,20 +101,21 @@ exports.run = async (client, message, args) => {
                         const reactions = embedMessage.reactions.array();
                         let reactionID;
                         let maxCount = 0;
-                        for (let i = 0; i < reactions.length; i++) {
-                            if (reactions[i].count > maxCount) {
-                                maxCount = reactions[i].count;
+                        reactions.some((r, i) => {
+                            console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                            if (r.count > maxCount) {
+                                maxCount = r.count;
                                 reactionID = i;
                             }
-                        }
-
-                        const draws = [];
-                        for (let i = 0, j = 0; i < reactions.length; i++) {
-                            if (reactions[i].count == maxCount) {
-                                draws[j] = i;
-                                j++;
+                        });
+                        let draws = [];
+                        reactions.some((r, i) => {
+                            console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                            if (r.count == maxCount) {
+                                draws.push(i);
                             }
-                        }
+                        });
+                        console.log(draws);
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
@@ -171,7 +172,8 @@ exports.run = async (client, message, args) => {
                                 }
                             }
                         });
-                    }, client.config.default_timer * 60 * 1000);
+                        host_channel.send(`Voice limit set to ${channelSize}`);
+                    }, client.config.default_timer * 60 * 100);
                 });
         }
         catch (error) {
