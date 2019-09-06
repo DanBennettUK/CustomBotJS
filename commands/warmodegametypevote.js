@@ -18,10 +18,10 @@ exports.run = async (client, message, args) => {
 
 
     if (args.length > 0) {
-        timer = args[0];
+        timer = parseInt(args[0]);
     }
 
-    if (timer === '1') timerText = 'minute';
+    if (timer == 1) timerText = 'minute';
     else timerText = 'minutes';
 
     const choices = 

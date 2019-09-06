@@ -33,7 +33,7 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {

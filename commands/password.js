@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
     const title = 'Custom Game Server Details';
 
     let serverPassword = args[0];
-    let timer = args[1];
+    let timer = parseInt(args[1]);
     let serverName = args[2];
     let raiseError = false;
     let timeLeft;
@@ -79,7 +79,7 @@ exports.run = async (client, message, args) => {
         timeLeft = timer;
     }
 
-    if (timer === '1') {
+    if (timer == '1') {
         timerText = 'minute';
     }
     else {

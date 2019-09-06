@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
         if (args[0] === 'wm') args[0] = 'warmode';
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
