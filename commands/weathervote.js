@@ -269,16 +269,16 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some(async (r, i) => {
-                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.some((r, i) => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
                         if (r.count > maxCount) {
-                            maxCount = await r.count;
+                            maxCount = r.count;
                             reactionID = i;
                         }
                     });
                     let draws = [];
                     reactions.some((r, i) => {
-                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
                         if (r.count == maxCount) {
                             draws.push(i);
                         }
