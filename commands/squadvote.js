@@ -65,13 +65,6 @@ exports.run = async (client, message, args) => {
             await games_channel
                 .send({ embed: squadVoteMessage })
                 .then(async embedMessage => {
-                    // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
-                        if (embedMessage.deleted) {
-                            clearTimeout(timeToVote);
-                            clearInterval(checkIfDeleted);
-                        }
-                    }, 1000);
                     for (let i = 0; i < squad_sizes.length; i++) {
                         await embedMessage.react(
                             emojiCharacters[squad_sizes[i]]
@@ -98,23 +91,24 @@ exports.run = async (client, message, args) => {
                             .catch(console.error);
                     }
                     const timeToVote = setTimeout(function() {
-                        const reactions = embedMessage.reactions.array();
+                        const reactions = embedMessage.reactions;
                         let reactionID;
                         let maxCount = 0;
-                        for (let i = 0; i < reactions.length; i++) {
-                            if (reactions[i].count > maxCount) {
-                                maxCount = reactions[i].count;
+                        reactions.some((r, i) => {
+                            console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                            if (r.count > maxCount) {
+                                maxCount = r.count;
                                 reactionID = i;
                             }
-                        }
-
-                        const draws = [];
-                        for (let i = 0, j = 0; i < reactions.length; i++) {
-                            if (reactions[i].count == maxCount) {
-                                draws[j] = i;
-                                j++;
+                        });
+                        let draws = [];
+                        reactions.some((r, i) => {
+                            console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                            if (r.count == maxCount) {
+                                draws.push(i);
                             }
-                        }
+                        });
+                        console.log(`Draws: ${draws}\n`);
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
@@ -123,6 +117,7 @@ exports.run = async (client, message, args) => {
                                     )
                                 ];
                         }
+                        const winReact = reactions.find(r => r.emoji == reactionID);
 
                         const squadResult = {
                             color: 0x009900,
@@ -130,7 +125,7 @@ exports.run = async (client, message, args) => {
                             fields: [
                                 {
                                     name: `${winText}`,
-                                    value: `${reactions[reactionID]._emoji}`,
+                                    value: `${winReact.emoji}`,
                                 },
                             ],
                             timestamp: new Date(),
@@ -143,12 +138,12 @@ exports.run = async (client, message, args) => {
                         games_channel.send({ embed: squadResult });
                         if (client.config.host_channel_messages === true) {
                             host_channel.send(
-                                `${winText} ${reactions[reactionID]._emoji}`
+                                `${winText} ${winReact.emoji}`
                             );
                         }
 
                         let channelSize;
-                        let winReaction = reactions[reactionID]._emoji.name;
+                        let winReaction = winReact.emoji.name;
 
                         squad_sizes.forEach(size => {
                             if (winReaction == emojiCharacters[size]) {
@@ -171,7 +166,15 @@ exports.run = async (client, message, args) => {
                                 }
                             }
                         });
+                        host_channel.send(`Voice limit set to ${channelSize}`);
                     }, client.config.default_timer * 60 * 1000);
+                    // Checks if message is deleted
+                    const checkIfDeleted = setInterval(function() {
+                        if (embedMessage.deleted) {
+                            clearTimeout(timeToVote);
+                            clearInterval(checkIfDeleted);
+                        }
+                    }, 1000);
                 });
         }
         catch (error) {

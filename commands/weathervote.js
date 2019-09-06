@@ -166,14 +166,6 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: weatherVoteMessage })
             .then(async embedMessage => {
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-
                 if (args.length > 0) {
                     if (!['all', 'erangel', 'miramar', 'sanhok', 'vikendi'].includes(args[0])) {
                         if (args.some(weather => weather.includes('sunny'))) {
@@ -274,22 +266,24 @@ exports.run = async (client, message, args) => {
                 }
                 
                 const timeToVote = setTimeout(function() {
-                    const reactions = embedMessage.reactions.array();
+                    const reactions = embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    for (let i = 0; i < reactions.length; i++) {
-                        if (reactions[i].count > maxCount) {
-                            maxCount = reactions[i].count;
+                    reactions.some((r, i) => {
+                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                        if (r.count > maxCount) {
+                            maxCount = r.count;
                             reactionID = i;
                         }
-                    }
-                    const draws = [];
-                    for (let i = 0, j = 0; i < reactions.length; i++) {
-                        if (reactions[i].count == maxCount) {
-                            draws[j] = i;
-                            j++;
+                    });
+                    let draws = [];
+                    reactions.some((r, i) => {
+                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                        if (r.count == maxCount) {
+                            draws.push(i);
                         }
-                    }
+                    });
+                    console.log(`Draws: ${draws}\n`);
                     if (draws.length > 1) {
                         reactionID =
                             draws[
@@ -298,6 +292,7 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
+                    const winReact = reactions.find(r => r.emoji == reactionID);
 
                     const weatherResult = {
                         color: 0x009900,
@@ -309,7 +304,7 @@ exports.run = async (client, message, args) => {
                             },
                             {
                                 name: `${winValue}`,
-                                value: `${reactions[reactionID].emoji}`,
+                                value: `${winReact.emoji}`,
                             },
                         ],
                         timestamp: new Date(),
@@ -324,6 +319,13 @@ exports.run = async (client, message, args) => {
                         host_channel.send({ embed: weatherResult });
                     }
                 }, timer * 60 * 1000);
+                // Checks if message is deleted
+                const checkIfDeleted = setInterval(function() {
+                    if (embedMessage.deleted) {
+                        clearTimeout(timeToVote);
+                        clearInterval(checkIfDeleted);
+                    }
+                }, 1000);
             });
     } catch (error) {
         console.log(`${error}`);

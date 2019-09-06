@@ -47,12 +47,6 @@ exports.run = async (client, message, args) => {
             .send({ embed: startGameEmbed })
             .then(async embedMessage => {
                 setTimeout(function() {
-                    // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
-                        if (embedMessage.deleted) {
-                            clearInterval(checkIfDeleted);
-                        }
-                    }, 1000);
                     const gameStartedEmbed = {
                         color: 0x009900,
                         title: `${gameStarted}`,
@@ -67,6 +61,12 @@ exports.run = async (client, message, args) => {
                         host_channel.send(`${gameStarted}`);
                     }
                 }, timer * 60 * 1000);
+                // Checks if message is deleted
+                const checkIfDeleted = setInterval(function() {
+                    if (embedMessage.deleted) {
+                        clearInterval(checkIfDeleted);
+                    }
+                }, 1000);
             });
     }
     catch (error) {

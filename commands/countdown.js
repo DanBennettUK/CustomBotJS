@@ -42,13 +42,7 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: countdownEmbed })
             .then(async embedMessage => {
-                setTimeout(function() {
-                    // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
-                        if (embedMessage.deleted) {
-                            clearInterval(checkIfDeleted);
-                        }
-                    }, 1000);
+                const countdownInterval = setTimeout(function() {
                     const countdownEndedEmbed = {
                         color: 0x009900,
                         title: `${countdownEndText}`,
@@ -62,8 +56,15 @@ exports.run = async (client, message, args) => {
                     if (client.config.host_channel_messages === true) {
                         host_channel.send(`${countdownEndText}`);
                     }
-                }, timer * 60 * 1000);
-            });
+                }, timer * 60 * 100);
+            // Checks if message is deleted
+            const checkIfDeleted = setInterval(function() {
+                if (embedMessage.deleted) {
+                    clearInterval(checkIfDeleted);
+                    clearTimeout(countdownInterval);
+                }
+            }, 1000);
+        });
     }
     catch (error) {
         console.log(`${error}`);

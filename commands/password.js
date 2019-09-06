@@ -138,14 +138,6 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: prePasswordMessage })
             .then(async embedMessage => {
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-
                 const timeToVote = setTimeout(async function() {
                     embedMessage.delete();
 
@@ -168,6 +160,13 @@ exports.run = async (client, message, args) => {
                         host_channel.send('Password has been posted!');
                     }
                 }, timer * 60 * 1000);
+                // Checks if message is deleted
+                const checkIfDeleted = setInterval(function() {
+                    if (embedMessage.deleted) {
+                        clearTimeout(timeToVote);
+                        clearInterval(checkIfDeleted);
+                    }
+                }, 1000);
             });
     }
     catch (error) {
