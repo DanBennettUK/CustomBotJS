@@ -82,20 +82,20 @@ exports.run = async (client, message, args) => {
                         )
                         .catch(console.error);
                 }
-                const timeToVote = setTimeout(function() {
-                    const reactions = embedMessage.reactions;
+                const timeToVote = setTimeout(async function() {
+                    const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                    reactions.some(async (r, i) => {
+                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
                         if (r.count > maxCount) {
-                            maxCount = r.count;
+                            maxCount = await r.count;
                             reactionID = i;
                         }
                     });
                     let draws = [];
                     reactions.some((r, i) => {
-                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`)
+                        console.log(`R:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
                         if (r.count == maxCount) {
                             draws.push(i);
                         }
