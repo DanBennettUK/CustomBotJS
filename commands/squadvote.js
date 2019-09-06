@@ -167,7 +167,7 @@ exports.run = async (client, message, args) => {
                             }
                         });
                         host_channel.send(`Voice limit set to ${channelSize}`);
-                    }, client.config.default_timer * 60 * 100);
+                    }, client.config.default_timer * 60 * 1000);
                     // Checks if message is deleted
                     const checkIfDeleted = setInterval(function() {
                         if (embedMessage.deleted) {
