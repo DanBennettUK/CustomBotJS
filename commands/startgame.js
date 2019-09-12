@@ -58,7 +58,7 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: gameStartedEmbed });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(`${gameStarted}`);
+                        host_channel.send({ embed: gameStartedEmbed });
                     }
                 }, timer * 60 * 1000);
                 // Checks if message is deleted

@@ -41,6 +41,7 @@ exports.run = async (client, message, args) => {
         `${emojiCharacters[3]} for VSS Kit`,
         `${emojiCharacters[4]} for OP Kit (Crate Weapons)`,
         `${emojiCharacters[5]} for Sniper Kit`,
+        `**NOTE:** Default Weapons => Can customize everything, others are preset`
     ];
 
     const choices = warmodewepChoices.join('\n');
@@ -97,18 +98,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -120,7 +121,24 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+
+                    switch(reactionID) {
+                        case emojiCharacters['1']:
+                            winReact = `${reactionID} for Default Weapons`;
+                            break;
+                        case emojiCharacters['2']:
+                            winReact = `${reactionID} for Bomb Kit (Throwables)`;
+                            break;
+                        case emojiCharacters['3']:
+                            winReact = `${reactionID} for VSS Kit`;
+                            break;
+                        case emojiCharacters['4']:
+                            winReact = `${reactionID} for OP Kit (Crate Weapons)`;
+                            break;
+                        case emojiCharacters['5']:
+                            winReact = `${reactionID} for Sniper Kit`;
+                    }
 
                     const warmodewepsResult = {
                         color: 0x009900,
@@ -128,13 +146,9 @@ exports.run = async (client, message, args) => {
                         description: '',
                         fields: [
                             {
-                                name: 'Choices:',
-                                value: choices,
-                            },
-                            {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
-                            },
+                                value: `${winReact}`,
+                            }
                         ],
                         timestamp: new Date(),
                         footer: {

@@ -54,7 +54,7 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: countdownEndedEmbed });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(`${countdownEndText}`);
+                        host_channel.send({ embed: countdownEndedEmbed });
                     }
                 }, timer * 60 * 1000);
             // Checks if message is deleted

@@ -77,18 +77,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -100,19 +100,23 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+                    
+                    switch(reactionID) {
+                        case emojiCharacters['WarMode']:
+                            winReact = `${reactionID} for War Mode`;
+                            break;
+                        case emojiCharacters['Conquest']:
+                            winReact = `${reactionID} for War Mode Conquest`;
+                    }
 
                     const gametypeResult = {
                         color: 0x009900,
                         title: `${title}`,
                         fields: [
                             {
-                                name: 'Choices:',
-                                value: choices,
-                            },
-                            {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
+                                value: `${winReact}`,
                             },
                         ],
                         timestamp: new Date(),

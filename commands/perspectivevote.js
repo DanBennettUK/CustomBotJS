@@ -86,18 +86,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -109,7 +109,14 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+                    switch(reactionID) {
+                        case emojiCharacters[1]:
+                            winReact = `${reactionID} for FPP`;
+                            break;
+                        case emojiCharacters[3]:
+                            winReact = `${reactionID} for TPP`;
+                    }
 
                     const perspectiveResult = {
                         color: 0x009900,
@@ -118,7 +125,7 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
+                                value: `${winReact}`,
                             },
                         ],
                         timestamp: new Date(),
@@ -130,9 +137,7 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: perspectiveResult });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(
-                            `${winValue} ${winReact.emoji}`
-                        );
+                        host_channel.send({ embed: perspectiveResult });
                     }
                 }, timer * 60 * 1000);
                 // Checks if message is deleted
