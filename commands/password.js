@@ -18,7 +18,7 @@ exports.run = async (client, message, args) => {
     const title = 'Custom Game Server Details';
 
     let serverPassword = args[0];
-    let timer = config.default_timer;
+    let timer = client.config.default_timer;
     let serverName = args[2];
     let raiseError = false;
     let timeLeft;
