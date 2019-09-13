@@ -31,6 +31,19 @@ exports.run = async (client, message, args) => {
             }
             args.splice(args.length - 1, 1);
         }
+        if (isNaN(timer)) {
+            const error = {
+                color: 0xff0000,
+                title: 'Error!',
+                description: 'Minutes is missing or not a number!',
+                timestamp: new Date(),
+                footer: {
+                    icon_url: client.user.avatarURL
+                }
+            };
+            host_channel.send({ embed: error });
+            return;
+        }
     }
 
     if (timer == 1) {
