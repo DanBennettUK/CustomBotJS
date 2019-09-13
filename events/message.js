@@ -20,7 +20,7 @@ module.exports = (client, message) => {
         if (command === 'rv') command = 'regionvote';
         if (command === 'pv') command = 'perspectivevote';
         if (command === 'mv') command = 'mapvote';
-        if (command === 'pwd') command = 'password';
+        if (command === 'pw') command = 'password';
         if (command === 'wmwv') command = 'warmodeweaponsvote';
         if (command === 'setvoicelimit') command = 'vclimit';
         if (command === 'wmgv') command = 'warmodegametypevote';

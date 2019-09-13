@@ -18,12 +18,20 @@ exports.run = async (client, message, args) => {
     const title = 'Custom Game Server Details';
 
     let serverPassword = args[0];
-    let timer = parseInt(args[1]);
+    let timer = client.config.default_timer;
     let serverName = args[2];
     let raiseError = false;
     let timeLeft;
     let timerText;
     let missingText = '';
+
+    if (args[1]) {
+        timer = parseInt(args[1]);
+        if (isNaN(timer)) {
+            raiseError = true;
+            missingText = missingText + 'Minutes is missing or not a number!\n';
+        }
+    }
 
     if (typeof serverPassword === 'undefined') {
         if (client.config.default_game_server_password !== '') {
@@ -42,14 +50,6 @@ exports.run = async (client, message, args) => {
             raiseError = true;
             missingText = missingText + 'Server Name is missing!\n';
         }
-    }
-
-    if (typeof timer === 'undefined') {
-        timer = client.config.default_timer;
-    }
-    else if (isNaN(timer)) {
-        raiseError = true;
-        missingText = missingText + 'Minutes is missing or not a number!\n';
     }
 
     if (raiseError === true) {
@@ -79,7 +79,7 @@ exports.run = async (client, message, args) => {
         timeLeft = timer;
     }
 
-    if (timer == '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
