@@ -47,6 +47,9 @@ exports.run = async (client, message, args) => {
         if (args.some(region => region.includes('na'))) {
             regionChoices.push(`${emojiCharacters['NA']} for North America`);
         }
+        if (args.some(region => region.includes('sa'))) {
+            regionChoices.push(`${emojiCharacters['SA']} for South America`);
+        }
         if (args.some(region => region.includes('asia'))) {
             regionChoices.push(`${emojiCharacters['ASIA']} for Asia`);
         }
@@ -64,6 +67,7 @@ exports.run = async (client, message, args) => {
         regionChoices = [
             `${emojiCharacters['EU']} for Europe`,
             `${emojiCharacters['NA']} for North America`,
+            `${emojiCharacters['SA']} for South America`,
             `${emojiCharacters['ASIA']} for Asia`,
             `${emojiCharacters['SEA']} for Southeast Asia`,
             `${emojiCharacters['OCE']} for Oceania`,
@@ -103,6 +107,9 @@ exports.run = async (client, message, args) => {
                     if (args.some(region => region.includes('na'))) {
                         await embedMessage.react(emojiCharacters['NA']);
                     }
+                    if (args.some(region => region.includes('sa'))) {
+                        await embedMessage.react(emojiCharacters['SA']);
+                    }
                     if (args.some(region => region.includes('asia'))) {
                         await embedMessage.react(emojiCharacters['ASIA']);
                     }
@@ -119,6 +126,7 @@ exports.run = async (client, message, args) => {
                 else {
                     await embedMessage.react(emojiCharacters['EU']);
                     await embedMessage.react(emojiCharacters['NA']);
+                    await embedMessage.react(emojiCharacters['SA']);
                     await embedMessage.react(emojiCharacters['ASIA']);
                     await embedMessage.react(emojiCharacters['SEA']);
                     await embedMessage.react(emojiCharacters['OCE']);
@@ -179,6 +187,9 @@ exports.run = async (client, message, args) => {
                             break;
                         case emojiCharacters['NA']:
                             winReact = `${reactionID} for North America`;
+                            break;
+                        case emojiCharacters['SA']:
+                            winReact = `${reactionID} for South America`;
                             break;
                         case emojiCharacters['ASIA']:
                             winReact = `${reactionID} for Asia`;
