@@ -33,7 +33,7 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
@@ -41,31 +41,34 @@ exports.run = async (client, message, args) => {
     }
 
     if (args.length > 0 && args[0] !== 'all') {
-        let i = 0;
         if (args.some(region => region.includes('eu'))) {
-            regionChoices[i] = `${emojiCharacters['EU']} for Europe`;
-            i++;
+            regionChoices.push(`${emojiCharacters['EU']} for Europe`);
         }
         if (args.some(region => region.includes('na'))) {
-            regionChoices[i] = `${emojiCharacters['NA']} for North America`;
-            i++;
+            regionChoices.push(`${emojiCharacters['NA']} for North America`);
+        }
+        if (args.some(region => region.includes('sa'))) {
+            regionChoices.push(`${emojiCharacters['SA']} for South America`);
+        }
+        if (args.some(region => region.includes('asia'))) {
+            regionChoices.push(`${emojiCharacters['ASIA']} for Asia`);
         }
         if (args.some(region => region.includes('sea'))) {
-            regionChoices[i] = `${emojiCharacters['SEA']} for Southeast Asia`;
-            i++;
+            regionChoices.push(`${emojiCharacters['SEA']} for Southeast Asia`);
         }
         if (args.some(region => region.includes('oce'))) {
-            regionChoices[i] = `${emojiCharacters['OCE']} for Oceania`;
-            i++;
+            regionChoices.push(`${emojiCharacters['OCE']} for Oceania`);
         }
         if (args.some(region => region.includes('kr'))) {
-            regionChoices[i] = `${emojiCharacters['KR']} for Korea/Japan`;
+            regionChoices.push(`${emojiCharacters['KR']} for Korea/Japan`);
         }
     }
     else {
         regionChoices = [
             `${emojiCharacters['EU']} for Europe`,
             `${emojiCharacters['NA']} for North America`,
+            `${emojiCharacters['SA']} for South America`,
+            `${emojiCharacters['ASIA']} for Asia`,
             `${emojiCharacters['SEA']} for Southeast Asia`,
             `${emojiCharacters['OCE']} for Oceania`,
             `${emojiCharacters['KR']} for Korea/Japan`,
@@ -104,6 +107,12 @@ exports.run = async (client, message, args) => {
                     if (args.some(region => region.includes('na'))) {
                         await embedMessage.react(emojiCharacters['NA']);
                     }
+                    if (args.some(region => region.includes('sa'))) {
+                        await embedMessage.react(emojiCharacters['SA']);
+                    }
+                    if (args.some(region => region.includes('asia'))) {
+                        await embedMessage.react(emojiCharacters['ASIA']);
+                    }
                     if (args.some(region => region.includes('sea'))) {
                         await embedMessage.react(emojiCharacters['SEA']);
                     }
@@ -117,6 +126,8 @@ exports.run = async (client, message, args) => {
                 else {
                     await embedMessage.react(emojiCharacters['EU']);
                     await embedMessage.react(emojiCharacters['NA']);
+                    await embedMessage.react(emojiCharacters['SA']);
+                    await embedMessage.react(emojiCharacters['ASIA']);
                     await embedMessage.react(emojiCharacters['SEA']);
                     await embedMessage.react(emojiCharacters['OCE']);
                     await embedMessage.react(emojiCharacters['KR']);
@@ -145,18 +156,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -168,7 +179,31 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+
+                    switch(reactionID) {
+                        case emojiCharacters['EU']:
+                            winReact = `${reactionID} for Europe`;
+                            break;
+                        case emojiCharacters['NA']:
+                            winReact = `${reactionID} for North America`;
+                            break;
+                        case emojiCharacters['SA']:
+                            winReact = `${reactionID} for South America`;
+                            break;
+                        case emojiCharacters['ASIA']:
+                            winReact = `${reactionID} for Asia`;
+                            break;
+                        case emojiCharacters['SEA']:
+                            winReact = `${reactionID} for Southeast Asia`;
+                            break;
+                        case emojiCharacters['OCE']:
+                            winReact = `${reactionID} for Oceania`;
+                            break;
+                        case emojiCharacters['KR']:
+                            winReact = `${reactionID} for Korea/Japan`;
+                            break;
+                    }
 
                     const regionResult = {
                         color: 0x009900,
@@ -176,7 +211,7 @@ exports.run = async (client, message, args) => {
                         fields: [
                             {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
+                                value: `${winReact}`,
                             },
                         ],
                         timestamp: new Date(),

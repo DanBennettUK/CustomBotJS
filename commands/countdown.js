@@ -21,7 +21,7 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
@@ -54,9 +54,9 @@ exports.run = async (client, message, args) => {
                     embedMessage.delete();
                     games_channel.send({ embed: countdownEndedEmbed });
                     if (client.config.host_channel_messages === true) {
-                        host_channel.send(`${countdownEndText}`);
+                        host_channel.send({ embed: countdownEndedEmbed });
                     }
-                }, timer * 60 * 100);
+                }, timer * 60 * 1000);
             // Checks if message is deleted
             const checkIfDeleted = setInterval(function() {
                 if (embedMessage.deleted) {

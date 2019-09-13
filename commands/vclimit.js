@@ -23,7 +23,7 @@ exports.run = async (client, message, args) => {
                 }
             }
         });
-        host_channel.send(`Voice limit set to ${args[0]}`);
+        host_channel.send(`:white_check_mark: Voice limit set to ${args[0]}`);
     }
     else if (isNaN(args[0])) {
         error = true;

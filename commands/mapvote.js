@@ -34,7 +34,7 @@ exports.run = async (client, message, args) => {
         if (args[0] === 'wm') args[0] = 'warmode';
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
@@ -42,21 +42,17 @@ exports.run = async (client, message, args) => {
     }
     if (args.length > 0) {
         if (args[0] !== 'all' && args[0] !== 'warmode') {
-            let i = 0;
             if (args.some(map => map.includes('erangel'))) {
-                mapChoices[i] = `${emojiCharacters['Erangel']} for Erangel`;
-                i++;
+                mapChoices.push(`${emojiCharacters['Erangel']} for Erangel`);
             }
             if (args.some(map => map.includes('miramar'))) {
-                mapChoices[i] = `${emojiCharacters['Miramar']} for Miramar`;
-                i++;
+                mapChoices.push(`${emojiCharacters['Miramar']} for Miramar`);
             }
             if (args.some(map => map.includes('sanhok'))) {
-                mapChoices[i] = `${emojiCharacters['Sanhok']} for Sanhok`;
-                i++;
+                mapChoices.push(`${emojiCharacters['Sanhok']} for Sanhok`);
             }
             if (args.some(map => map.includes('vikendi'))) {
-                mapChoices[i] = `${emojiCharacters['Vikendi']} for Vikendi`;
+                mapChoices.push(`${emojiCharacters['Vikendi']} for Vikendi`);
             }
         }
         else if (args[0] === 'warmode') {
@@ -69,24 +65,20 @@ exports.run = async (client, message, args) => {
                     `${emojiCharacters['Jackal']} for Camp Jackal`
                 ];
             } else {
-                let i = 0;
                 if (args.some(map => map.includes('erangel'))) {
-                    mapChoices[i] = `${emojiCharacters['Erangel']} for Erangel`;
-                    i++;
+                    mapChoices.push(`${emojiCharacters['Erangel']} for Erangel`);
                 }
                 if (args.some(map => map.includes('miramar'))) {
-                    mapChoices[i] = `${emojiCharacters['Miramar']} for Miramar`;
-                    i++;
+                    mapChoices.push(`${emojiCharacters['Miramar']} for Miramar`);
                 }
                 if (args.some(map => map.includes('sanhok'))) {
-                    mapChoices[i] = `${emojiCharacters['Sanhok']} for Sanhok`;
-                    i++;
+                    mapChoices.push(`${emojiCharacters['Sanhok']} for Sanhok`);
                 }
                 if (args.some(map => map.includes('vikendi'))) {
-                    mapChoices[i] = `${emojiCharacters['Vikendi']} for Vikendi`;
+                    mapChoices.push(`${emojiCharacters['Vikendi']} for Vikendi`);
                 }
                 if (args.some(map => map.includes('jackal'))) {
-                    mapChoices[i] = `${emojiCharacters['Jackal']} for Camp Jackal`;
+                    mapChoices.push(`${emojiCharacters['Jackal']} for Camp Jackal`);
                 }
             }
         } 
@@ -209,18 +201,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -232,19 +224,32 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+
+                    switch(reactionID) {
+                        case emojiCharacters['Erangel']:
+                            winReact = `${reactionID} for Erangel`;
+                            break;
+                        case emojiCharacters['Miramar']:
+                            winReact = `${reactionID} for Miramar`;
+                            break;
+                        case emojiCharacters['Sanhok']:
+                            winReact = `${reactionID} for Sanhok`;
+                            break;
+                        case emojiCharacters['Vikendi']:
+                            winReact = `${reactionID} for Vikendi`;
+                            break;
+                        case emojiCharacters['Jackal']:
+                            winReact = `${reactionID} for Camp Jackal`;
+                    }
 
                     const mapResult = {
                         color: 0x009900,
                         title: `${title}`,
                         fields: [
                             {
-                                name: 'Choices:',
-                                value: choices,
-                            },
-                            {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
+                                value: `${winReact}`,
                             },
                         ],
                         timestamp: new Date(),

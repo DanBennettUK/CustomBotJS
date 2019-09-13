@@ -33,7 +33,7 @@ exports.run = async (client, message, args) => {
         }
     }
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
@@ -42,41 +42,32 @@ exports.run = async (client, message, args) => {
 
     if (args.length > 0) {
         if (!['all', 'erangel', 'miramar', 'sanhok', 'vikendi'].includes(args[0])) {
-            let i = 0;
             if (args.some(weather => weather.includes('sunny'))) {
-                weatherChoices[i] = `${emojiCharacters['Sunny']} for Sunny`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Sunny']} for Sunny`);
             }
             if (args.some(weather => weather.includes('rainy'))) {
-                weatherChoices[i] = `${emojiCharacters['Rainy']} for Rainy`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Rainy']} for Rainy`);
             }
             if (args.some(weather => weather.includes('clear'))) {
-                weatherChoices[i] = `${emojiCharacters['Clear']} for Sunny Clear`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Clear']} for Sunny Clear`);
             }
             if (args.some(weather => weather.includes('sunset'))) {
-                weatherChoices[i] = `${emojiCharacters['Sunset']} for Sunset`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Sunset']} for Sunset`);
             }
             if (args.some(weather => weather.includes('foggy'))) {
-                weatherChoices[i] = `${emojiCharacters['Foggy']} for Foggy`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Foggy']} for Foggy`);
             }
             if (args.some(weather => weather.includes('overcast'))) {
-                weatherChoices[i] = `${emojiCharacters['Overcast']} for Overcast`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Overcast']} for Overcast`);
             }
             if (args.some(weather => weather.includes('sunrise'))) {
-                weatherChoices[i] = `${emojiCharacters['Sunrise']} for Sunrise`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Sunrise']} for Sunrise`);
             }
             if (args.some(weather => weather.includes('snowy'))) {
-                weatherChoices[i] = `${emojiCharacters['Snowy']} for Snowy`;
-                i++;
+                weatherChoices.push(`${emojiCharacters['Snowy']} for Snowy`);
             }
             if (args.some(weather => weather.includes('moonlight'))) {
-                weatherChoices[i] = `${emojiCharacters['Moonlight']} for Moonlight`;
+                weatherChoices.push(`${emojiCharacters['Moonlight']} for Moonlight`);
             }
         }
         else if (args[0] === 'erangel') {
@@ -269,18 +260,18 @@ exports.run = async (client, message, args) => {
                     const reactions = await embedMessage.reactions;
                     let reactionID;
                     let maxCount = 0;
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
-                            reactionID = i;
+                            reactionID = r.emoji.name;
                         }
                     });
                     let draws = [];
-                    reactions.some((r, i) => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                    reactions.forEach(r => {
+                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
-                            draws.push(i);
+                            draws.push(r.emoji.name);
                         }
                     });
                     console.log(`Draws: ${draws}\n`);
@@ -292,20 +283,45 @@ exports.run = async (client, message, args) => {
                                 )
                             ];
                     }
-                    const winReact = reactions.find(r => r.emoji == reactionID);
+                    let winReact;
+
+                    switch (reactionID) {
+                        case emojiCharacters['Sunny']:
+                            winReact = `${reactionID} for Sunny`;
+                            break;
+                        case emojiCharacters['Rainy']:
+                            winReact = `${reactionID} for Rainy`;
+                            break;
+                        case emojiCharacters['Clear']:
+                            winReact = `${reactionID} for Sunny Clear`;
+                            break;
+                        case emojiCharacters['Sunset']:
+                            winReact = `${reactionID} for Sunset`;
+                            break;
+                        case emojiCharacters['Foggy']:
+                            winReact = `${reactionID} for Foggy`;
+                            break;
+                        case emojiCharacters['Overcast']:
+                            winReact = `${reactionID} for Overcast`;
+                            break;
+                        case emojiCharacters['Sunrise']:
+                            winReact = `${reactionID} for Sunrise`;
+                            break;
+                        case emojiCharacters['Snowy']:
+                            winReact = `${reactionID} for Snowy`;
+                            break;
+                        case emojiCharacters['Moonlight']:
+                            winReact = `${reactionID} for Moonlight`;
+                    }
 
                     const weatherResult = {
                         color: 0x009900,
                         title: `${title}`,
                         fields: [
                             {
-                                name: 'Choices:',
-                                value: choices,
-                            },
-                            {
                                 name: `${winValue}`,
-                                value: `${winReact.emoji}`,
-                            },
+                                value: `${winReact}`,
+                            }
                         ],
                         timestamp: new Date(),
                         footer: {

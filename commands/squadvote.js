@@ -31,7 +31,7 @@ exports.run = async (client, message, args) => {
 
     const squads_range = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
-    if (timer === '1') {
+    if (timer == 1) {
         timerText = 'minute';
     }
     else {
@@ -94,18 +94,18 @@ exports.run = async (client, message, args) => {
                         const reactions = await embedMessage.reactions;
                         let reactionID;
                         let maxCount = 0;
-                        reactions.some((r, i) => {
-                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                        reactions.forEach(r => {
+                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                             if (r.count > maxCount) {
                                 maxCount = r.count;
-                                reactionID = i;
+                                reactionID = r.emoji.name;
                             }
                         });
                         let draws = [];
-                        reactions.some((r, i) => {
-                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji}\ncount:${r.count}\nmax:${maxCount}\ni:${i}\n`);
+                        reactions.forEach(r => {
+                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                             if (r.count == maxCount) {
-                                draws.push(i);
+                                draws.push(r.emoji.name);
                             }
                         });
                         console.log(`Draws: ${draws}\n`);
@@ -117,7 +117,7 @@ exports.run = async (client, message, args) => {
                                     )
                                 ];
                         }
-                        const winReact = reactions.find(r => r.emoji == reactionID);
+                        let winReact = reactionID;
 
                         const squadResult = {
                             color: 0x009900,
@@ -125,7 +125,7 @@ exports.run = async (client, message, args) => {
                             fields: [
                                 {
                                     name: `${winText}`,
-                                    value: `${winReact.emoji}`,
+                                    value: `${winReact}`,
                                 },
                             ],
                             timestamp: new Date(),
@@ -137,16 +137,13 @@ exports.run = async (client, message, args) => {
                         embedMessage.delete();
                         games_channel.send({ embed: squadResult });
                         if (client.config.host_channel_messages === true) {
-                            host_channel.send(
-                                `${winText} ${winReact.emoji}`
-                            );
+                            host_channel.send({ embed: squadResult });
                         }
 
                         let channelSize;
-                        let winReaction = winReact.emoji.name;
 
                         squad_sizes.forEach(size => {
-                            if (winReaction == emojiCharacters[size]) {
+                            if (winReact == emojiCharacters[size]) {
                                 channelSize = parseInt(size);
                                 return;
                             }
@@ -166,7 +163,7 @@ exports.run = async (client, message, args) => {
                                 }
                             }
                         });
-                        host_channel.send(`Voice limit set to ${channelSize}`);
+                        host_channel.send(`:white_check_mark: Voice limit set to ${channelSize}`);
                     }, client.config.default_timer * 60 * 1000);
                     // Checks if message is deleted
                     const checkIfDeleted = setInterval(function() {
