@@ -138,6 +138,9 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: mapVoteMessage })
             .then(async embedMessage => {
+                const filter = (reaction, user) => reaction.users.has(client.user.id);
+                const collector = embedMessage.createReactionCollector(filter);
+                //collector.on('collect', r => console.log(r));
                 if (args.length > 0) {
                     if (args[0] !== 'all' && args[0] !== 'warmode') {
                         if (args.some(map => map.includes('erangel'))) {
@@ -210,8 +213,7 @@ exports.run = async (client, message, args) => {
                         )
                         .catch(console.error);
                 }
-                const timeToVote = setTimeout(async function() {
-                    const reactions = await embedMessage.reactions;
+                collector.on('end', reactions => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
@@ -276,6 +278,9 @@ exports.run = async (client, message, args) => {
                     if (client.config.host_channel_messages === true) {
                         host_channel.send({ embed: mapResult });
                     }
+                });
+                const timeToVote = setTimeout(function() {
+                    collector.stop();
                 }, timer * 60 * 1000);
                 // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {

@@ -113,6 +113,9 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: regionVoteMessage })
             .then(async embedMessage => {
+                const filter = (reaction, user) => reaction.users.has(client.user.id);
+                const collector = embedMessage.createReactionCollector(filter);
+                //collector.on('collect', r => console.log(r));
                 if (args.length > 0 && args[0] !== 'all') {
                     if (args.some(region => region.includes('eu'))) {
                         await embedMessage.react(emojiCharacters['EU']);
@@ -165,8 +168,7 @@ exports.run = async (client, message, args) => {
                         )
                         .catch(console.error);
                 }
-                const timeToVote = setTimeout(async function() {
-                    const reactions = await embedMessage.reactions;
+                collector.on('end', reactions => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
@@ -238,6 +240,9 @@ exports.run = async (client, message, args) => {
                     if (client.config.host_channel_messages === true) {
                         host_channel.send({ embed: regionResult });
                     }
+                });
+                const timeToVote = setTimeout(async function() {
+                    collector.stop();
                 }, timer * 60 * 1000);
                 // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {

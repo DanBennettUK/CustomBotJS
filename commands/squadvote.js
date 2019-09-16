@@ -65,6 +65,9 @@ exports.run = async (client, message, args) => {
             await games_channel
                 .send({ embed: squadVoteMessage })
                 .then(async embedMessage => {
+                    const filter = (reaction, user) => reaction.users.has(client.user.id);
+                    const collector = embedMessage.createReactionCollector(filter);
+                    //collector.on('collect', r => console.log(r));
                     for (let i = 0; i < squad_sizes.length; i++) {
                         await embedMessage.react(
                             emojiCharacters[squad_sizes[i]]
@@ -90,8 +93,7 @@ exports.run = async (client, message, args) => {
                             )
                             .catch(console.error);
                     }
-                    const timeToVote = setTimeout(async function() {
-                        const reactions = await embedMessage.reactions;
+                    collector.on('end', reactions => {
                         let reactionID;
                         let maxCount = 0;
                         reactions.forEach(r => {
@@ -164,6 +166,9 @@ exports.run = async (client, message, args) => {
                             }
                         });
                         host_channel.send(`:white_check_mark: Voice limit set to ${channelSize}`);
+                    });
+                    const timeToVote = setTimeout(async function() {
+                        collector.stop();
                     }, client.config.default_timer * 60 * 1000);
                     // Checks if message is deleted
                     const checkIfDeleted = setInterval(function() {
