@@ -65,6 +65,9 @@ exports.run = async (client, message, args) => {
         await games_channel
             .send({ embed: warmodeGametypeMessage })
             .then(async embedMessage => {
+                const filter = (reaction, user) => reaction.users.has(client.user.id);
+                const collector = embedMessage.createReactionCollector(filter);
+                //collector.on('collect', r => console.log(r));
                 await embedMessage.react(emojiCharacters['WarMode']);
                 await embedMessage.react(emojiCharacters['Conquest']);
                 if (client.config.custom_role_ping == true) {
@@ -86,8 +89,7 @@ exports.run = async (client, message, args) => {
                         )
                         .catch(console.error);
                 }
-                const timeToVote = setTimeout(async function() {
-                    const reactions = await embedMessage.reactions;
+                collector.on('end', reactions => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
@@ -143,6 +145,9 @@ exports.run = async (client, message, args) => {
                     if (client.config.host_channel_messages === true) {
                         host_channel.send({ embed: gametypeResult });
                     }
+                });
+                const timeToVote = setTimeout(async function() {
+                    collector.stop();
                 }, timer * 60 * 1000);
                 // Checks if message is deleted
                 const checkIfDeleted = setInterval(function() {
