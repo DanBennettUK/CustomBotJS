@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 
     const title = 'Vote for game type!';
     const description = 'Please vote on the game type for the next game!';
-    const winValue = 'The winning game type was:';
+    const winValue = 'The winning game type is:';
 
 
     if (args.length > 0) {
@@ -67,7 +67,6 @@ exports.run = async (client, message, args) => {
             .then(async embedMessage => {
                 const filter = (reaction, user) => reaction.users.has(client.user.id);
                 const collector = embedMessage.createReactionCollector(filter);
-                //collector.on('collect', r => console.log(r));
                 await embedMessage.react(emojiCharacters['WarMode']);
                 await embedMessage.react(emojiCharacters['Conquest']);
                 if (client.config.custom_role_ping == true) {
@@ -93,7 +92,6 @@ exports.run = async (client, message, args) => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
                             reactionID = r.emoji.name;
@@ -101,12 +99,10 @@ exports.run = async (client, message, args) => {
                     });
                     let draws = [];
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
                             draws.push(r.emoji.name);
                         }
                     });
-                    console.log(`Draws: ${draws}\n`);
                     if (draws.length > 1) {
                         reactionID =
                             draws[

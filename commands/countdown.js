@@ -73,8 +73,8 @@ exports.run = async (client, message, args) => {
             // Checks if message is deleted
             const checkIfDeleted = setInterval(function() {
                 if (embedMessage.deleted) {
-                    clearInterval(checkIfDeleted);
                     clearTimeout(countdownInterval);
+                    clearInterval(checkIfDeleted);
                 }
             }, 1000);
         });

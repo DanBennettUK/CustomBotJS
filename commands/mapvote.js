@@ -17,7 +17,7 @@ exports.run = async (client, message, args) => {
     // Set up the message as an embed, ready to post
     const title = 'Vote for map!';
     const description = 'Please vote on the map for the next game!';
-    const winValue = 'The winning map was:';
+    const winValue = 'The winning map is:';
     let mapChoices = [];
 
     args.forEach(function(arg, i) {
@@ -140,7 +140,6 @@ exports.run = async (client, message, args) => {
             .then(async embedMessage => {
                 const filter = (reaction, user) => reaction.users.has(client.user.id);
                 const collector = embedMessage.createReactionCollector(filter);
-                //collector.on('collect', r => console.log(r));
                 if (args.length > 0) {
                     if (args[0] !== 'all' && args[0] !== 'warmode') {
                         if (args.some(map => map.includes('erangel'))) {
@@ -217,7 +216,6 @@ exports.run = async (client, message, args) => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
                             reactionID = r.emoji.name;
@@ -225,12 +223,10 @@ exports.run = async (client, message, args) => {
                     });
                     let draws = [];
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
                             draws.push(r.emoji.name);
                         }
                     });
-                    console.log(`Draws: ${draws}\n`);
                     if (draws.length > 1) {
                         reactionID =
                             draws[
