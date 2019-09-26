@@ -42,7 +42,7 @@ fs.readdir('./commands/', (err, files) => {
 client.on('ready', () => {
     console.log(`${client.user.username} is ready for action!`);
     const roleChannel = client.channels.get(config.role_channel_id);
-    roleChannel.fetchMessage(config.role_message_id).then(msg => msg.react('✅')).catch(console.error);
+    roleChannel.fetchMessage(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
 
     $.ajax({
         dataType: 'json',
@@ -116,35 +116,15 @@ client.on('ready', () => {
 });
 
 client.on('messageReactionAdd', (messageReaction, user) => {
-    if (messageReaction.message.id === config.role_message_id) {
-        const roleID = config.custom_role_id;
-        const role = messageReaction.message.guild.roles.find(
-            role => role.id === roleID
-        );
-        if (role) {
-            const member = messageReaction.message.guild.members.find(
-                member => member.id === user.id
-            );
-            if (member) {
-                member.addRole(role.id);
-            }
-        }
+    if (messageReaction.message.id === config.role_message_id && messageReaction.emoji.name == config.role_reaction_emoji) {
+        const guild = messageReaction.message.guild;
+        guild.member(user.id).addRole(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
     }
 });
 client.on('messageReactionRemove', (messageReaction, user) => {
-    if (messageReaction.message.id === config.role_message_id) {
-        const roleID = config.custom_role_id;
-        const role = messageReaction.message.guild.roles.find(
-            role => role.id === roleID
-        );
-        if (role) {
-            const member = messageReaction.message.guild.members.find(
-                member => member.id === user.id
-            );
-            if (member) {
-                member.removeRole(role.id);
-            }
-        }
+    if (messageReaction.message.id === config.role_message_id && messageReaction.emoji.name == config.role_reaction_emoji) {
+        const guild = messageReaction.message.guild;
+        guild.member(user.id).removeRole(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
     }
 });
 
