@@ -41,6 +41,8 @@ fs.readdir('./commands/', (err, files) => {
 // On connect do these:
 client.on('ready', () => {
     console.log(`${client.user.username} is ready for action!`);
+    const roleChannel = client.channels.get(config.role_channel_id);
+    roleChannel.fetchMessage(config.role_message_id).then(msg => msg.react('✅')).catch(console.error);
 
     $.ajax({
         dataType: 'json',
@@ -113,49 +115,6 @@ client.on('ready', () => {
     }, 30000);
 });
 
-client.on('raw', async event => {
-    const eventName = event.t;
-    if (eventName === 'MESSAGE_REACTION_ADD') {
-        if (event.d.message_id === config.role_message_id) {
-            const reactionChannel = client.channels.get(event.d.channel_id);
-            if (reactionChannel.messages.has(event.d.message_id)) {
-                return;
-            }
-            else {
-                reactionChannel
-                    .fetchMessage(event.d.message_id)
-                    .then(msg => {
-                        const msgReaction = msg.reactions.get(
-                            event.d.emoji.name
-                        );
-                        const user = client.users.get(event.d.user_id);
-                        client.emit('messageReactionAdd', msgReaction, user);
-                    })
-                    .catch(err => console.log(err));
-            }
-        }
-    }
-    else if (eventName === 'MESSAGE_REACTION_REMOVE') {
-        if (event.d.message_id === config.role_message_id) {
-            const reactionChannel = client.channels.get(event.d.channel_id);
-            if (reactionChannel.messages.has(event.d.message_id)) {
-                return;
-            }
-            else {
-                reactionChannel
-                    .fetchMessage(event.d.message_id)
-                    .then(msg => {
-                        const msgReaction = msg.reactions.get(
-                            event.d.emoji.name
-                        );
-                        const user = client.users.get(event.d.user_id);
-                        client.emit('messageReactionRemove', msgReaction, user);
-                    })
-                    .catch(err => console.log(err));
-            }
-        }
-    }
-});
 client.on('messageReactionAdd', (messageReaction, user) => {
     if (messageReaction.message.id === config.role_message_id) {
         const roleID = config.custom_role_id;
