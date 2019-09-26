@@ -115,19 +115,6 @@ client.on('ready', () => {
     }, 30000);
 });
 
-client.on('messageReactionAdd', (messageReaction, user) => {
-    if (messageReaction.message.id === config.role_message_id && messageReaction.emoji.name == config.role_reaction_emoji) {
-        const guild = messageReaction.message.guild;
-        guild.member(user.id).addRole(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
-    }
-});
-client.on('messageReactionRemove', (messageReaction, user) => {
-    if (messageReaction.message.id === config.role_message_id && messageReaction.emoji.name == config.role_reaction_emoji) {
-        const guild = messageReaction.message.guild;
-        guild.member(user.id).removeRole(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
-    }
-});
-
 // Current bot version
 client.version = '1.0.4';
 
