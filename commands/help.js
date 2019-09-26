@@ -132,6 +132,10 @@ exports.run = async (client, message) => {
                             value: `Clears bot messages from games channel \nUsage: \`all\` to remove all messages \nNumber of messages you want to delete \nExample: \`${configPrefix}clear 10\``,
                             inline: false,
                         },
+                        {
+                            name: `\`${configPrefix}custom [message]\``,
+                            value: `Pings the custom role and sends the provided message. \nExample: \`${configPrefix}custom get voting!\`\nResult: \`@Custom get voting!\` is posted in ${client.channels.get(client.config.games_channel_id)}`
+                        }
                     ],
                     timestamp: new Date(),
                     footer: {
