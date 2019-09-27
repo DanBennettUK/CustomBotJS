@@ -125,13 +125,13 @@ exports.run = async (client, message, args) => {
             await subscriber_channel.send({
                 embed: passwordMessage,
             });
-            await subscriberRole
+            await customRole
                 .setMentionable(true, 'Role needs to be pinged')
                 .catch(console.error);
             await subscriber_channel.send(
-                subscriberRole + ' - the password is above!'
+                customRole + ' - the password is above!'
             );
-            await subscriberRole
+            await customRole
                 .setMentionable(false, 'Role no longer needs to be pinged')
                 .catch(console.error);
         }
