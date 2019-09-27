@@ -324,20 +324,45 @@ exports.run = async (client, message, args) => {
                             winReact = `${reactionID} for Moonlight`;
                     }
 
-                    const weatherResult = {
-                        color: 0x009900,
-                        title: `${title}`,
-                        fields: [
-                            {
-                                name: `${winValue}`,
-                                value: `${winReact}`,
+                    let weatherResult;
+
+                    if (draws.length > 1) {
+                        weatherResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: 'Draws',
+                                    value: `${draws.join(' ')}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                    inline: true
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
                             }
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
+                        };
+                    } else {
+                        weatherResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    }
 
                     embedMessage.delete();
                     games_channel.send({ embed: weatherResult });

@@ -216,20 +216,45 @@ exports.run = async (client, message, args) => {
                             break;
                     }
 
-                    const regionResult = {
-                        color: 0x009900,
-                        title: `${title}`,
-                        fields: [
-                            {
-                                name: `${winValue}`,
-                                value: `${winReact}`,
-                            },
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
+                    let regionResult;
+
+                    if (draws.length > 1) {
+                        regionResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: 'Draws',
+                                    value: `${draws.join(' ')}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                    inline: true
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    } else {
+                        regionResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    }
 
                     embedMessage.delete();
                     games_channel.send({ embed: regionResult });

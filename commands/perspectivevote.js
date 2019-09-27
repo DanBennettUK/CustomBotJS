@@ -129,21 +129,47 @@ exports.run = async (client, message, args) => {
                             winReact = `${reactionID} for TPP`;
                     }
 
-                    const perspectiveResult = {
-                        color: 0x009900,
-                        title: `${title}`,
-                        description: '',
-                        fields: [
-                            {
-                                name: `${winValue}`,
-                                value: `${winReact}`,
-                            },
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
+                    let perspectiveResult;
+
+                    if (draws.length > 1) {
+                        perspectiveResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            description: '',
+                            fields: [
+                                {
+                                    name: 'Draws',
+                                    value: `${draws.join(' ')}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                    inline: true
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    } else {
+                        perspectiveResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            description: '',
+                            fields: [
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    }
 
                     embedMessage.delete();
                     games_channel.send({ embed: perspectiveResult });

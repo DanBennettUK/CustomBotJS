@@ -253,21 +253,44 @@ exports.run = async (client, message, args) => {
                         case emojiCharacters['Jackal']:
                             winReact = `${reactionID} for Camp Jackal`;
                     }
-
-                    const mapResult = {
-                        color: 0x009900,
-                        title: `${title}`,
-                        fields: [
-                            {
-                                name: `${winValue}`,
-                                value: `${winReact}`,
-                            },
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
+                    let mapResult;
+                    if (draws.length > 1) {
+                        mapResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: 'Draws',
+                                    value: `${draws.join(' ')}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                    inline: true
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };   
+                    } else {
+                        mapResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            fields: [
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    }
 
                     embedMessage.delete();
                     games_channel.send({ embed: mapResult });
