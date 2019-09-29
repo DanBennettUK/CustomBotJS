@@ -15,7 +15,7 @@ exports.run = async (client, message, args) => {
     // Set up the message as an embed, ready to post
     const title = 'Vote for War Mode Weapons!';
     const description = 'Please vote on the weapons for the next warmode game!';
-    const winValue = 'The winning weapon choice was:';
+    const winValue = 'The winning weapon choice is:';
     let timer = client.config.default_timer;
     let timerText;
 
@@ -85,7 +85,6 @@ exports.run = async (client, message, args) => {
             .then(async embedMessage => {
                 const filter = (reaction, user) => reaction.users.has(client.user.id);
                 const collector = embedMessage.createReactionCollector(filter);
-                //collector.on('collect', r => console.log(r));
                 await embedMessage.react(emojiCharacters[1]);
                 await embedMessage.react(emojiCharacters[2]);
                 await embedMessage.react(emojiCharacters[3]);
@@ -114,7 +113,6 @@ exports.run = async (client, message, args) => {
                     let reactionID;
                     let maxCount = 0;
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count > maxCount) {
                             maxCount = r.count;
                             reactionID = r.emoji.name;
@@ -122,12 +120,10 @@ exports.run = async (client, message, args) => {
                     });
                     let draws = [];
                     reactions.forEach(r => {
-                        console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                         if (r.count == maxCount) {
                             draws.push(r.emoji.name);
                         }
                     });
-                    console.log(`Draws: ${draws}\n`);
                     if (draws.length > 1) {
                         reactionID =
                             draws[
@@ -155,21 +151,47 @@ exports.run = async (client, message, args) => {
                             winReact = `${reactionID} for Sniper Kit`;
                     }
 
-                    const warmodewepsResult = {
-                        color: 0x009900,
-                        title: `${title}`,
-                        description: '',
-                        fields: [
-                            {
-                                name: `${winValue}`,
-                                value: `${winReact}`,
+                    let warmodewepsResult;
+
+                    if (draws.length > 1) {
+                        warmodewepsResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            description: '',
+                            fields: [
+                                {
+                                    name: 'Draws',
+                                    value: `${draws.join(' ')}`,
+                                    inline: true
+                                },
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                    inline: true
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
                             }
-                        ],
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
+                        };
+                    } else {
+                        warmodewepsResult = {
+                            color: 0x009900,
+                            title: `${title}`,
+                            description: '',
+                            fields: [
+                                {
+                                    name: `${winValue}`,
+                                    value: `${winReact}`,
+                                }
+                            ],
+                            timestamp: new Date(),
+                            footer: {
+                                icon_url: client.user.avatarURL,
+                            }
+                        };
+                    }
 
                     embedMessage.delete();
                     games_channel.send({ embed: warmodewepsResult });

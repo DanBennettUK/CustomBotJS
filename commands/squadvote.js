@@ -67,7 +67,6 @@ exports.run = async (client, message, args) => {
                 .then(async embedMessage => {
                     const filter = (reaction, user) => reaction.users.has(client.user.id);
                     const collector = embedMessage.createReactionCollector(filter);
-                    //collector.on('collect', r => console.log(r));
                     for (let i = 0; i < squad_sizes.length; i++) {
                         await embedMessage.react(
                             emojiCharacters[squad_sizes[i]]
@@ -97,7 +96,6 @@ exports.run = async (client, message, args) => {
                         let reactionID;
                         let maxCount = 0;
                         reactions.forEach(r => {
-                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                             if (r.count > maxCount) {
                                 maxCount = r.count;
                                 reactionID = r.emoji.name;
@@ -105,12 +103,10 @@ exports.run = async (client, message, args) => {
                         });
                         let draws = [];
                         reactions.forEach(r => {
-                            console.log(`MessageId:${embedMessage.id}\nR:${r.emoji.name}\ncount:${r.count}\nmax:${maxCount}\n`);
                             if (r.count == maxCount) {
                                 draws.push(r.emoji.name);
                             }
                         });
-                        console.log(`Draws: ${draws}\n`);
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
@@ -121,20 +117,45 @@ exports.run = async (client, message, args) => {
                         }
                         let winReact = reactionID;
 
-                        const squadResult = {
-                            color: 0x009900,
-                            title: `${title}`,
-                            fields: [
-                                {
-                                    name: `${winText}`,
-                                    value: `${winReact}`,
-                                },
-                            ],
-                            timestamp: new Date(),
-                            footer: {
-                                icon_url: client.user.avatarURL,
-                            },
-                        };
+                        let squadResult;
+
+                        if (draws.length > 1) {
+                            squadResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                fields: [
+                                    {
+                                        name: 'Draws',
+                                        value: `${draws.join(' ')}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: `${winText}`,
+                                        value: `${winReact}`,
+                                        inline: true
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        } else {
+                            squadResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                fields: [
+                                    {
+                                        name: `${winText}`,
+                                        value: `${winReact}`,
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        }
 
                         embedMessage.delete();
                         games_channel.send({ embed: squadResult });
