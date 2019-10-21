@@ -14,7 +14,7 @@ exports.run = async (client, message, args) => {
 
     // Set up the message as an embed, ready to post
     const title = 'Vote for region!';
-    const description = 'Please vote on the region for tonights games!';
+    const description = 'Please vote on the region for tonight\'s games!';
     const winValue = 'The winning region is:';
     let timer = client.config.default_timer;
     let regionChoices = [];
@@ -26,9 +26,7 @@ exports.run = async (client, message, args) => {
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
-            if (args[args.length - 1] > 0) {
-                timer = parseInt(args[args.length - 1]);
-            }
+            timer = parseInt(args[args.length - 1]);
             args.splice(args.length - 1, 1);
         }
         if (isNaN(timer)) {

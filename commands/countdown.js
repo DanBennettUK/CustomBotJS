@@ -14,9 +14,7 @@ exports.run = async (client, message, args) => {
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
-            if (args[args.length - 1] > 0) {
-                timer = parseInt(args[args.length - 1]);
-            }
+            timer = parseInt(args[args.length - 1]);
             args.splice(args.length - 1, 1);
         }
         if (isNaN(timer)) {

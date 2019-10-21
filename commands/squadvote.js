@@ -12,7 +12,7 @@ exports.run = async (client, message, args) => {
     const emojiCharacters = require('../emojiCharacters.js');
     const host_channel = client.channels.get(client.config.host_channel_id);
     const games_channel = client.channels.get(client.config.games_channel_id);
-    const timer = client.config.default_timer;
+    let timer = client.config.default_timer;
     let error_message;
 
     // Set up the message as an embed, ready to post
@@ -20,6 +20,11 @@ exports.run = async (client, message, args) => {
     const description = 'Please vote on the squad size for the next game';
     const winText = 'The winning squad size is:';
     let timerText;
+
+    if (/-[0-9]+/.test(args[args.length - 1])) {
+        timer = args[args.length - 1].replace('-', '');
+        args.splice(args.length - 1, 1);
+    }
 
     // Function to compare two arrays
     function containsAny(source, target) {
@@ -82,7 +87,7 @@ exports.run = async (client, message, args) => {
                             .then(msg =>
                                 setTimeout(function() {
                                     msg.delete();
-                                }, client.config.default_timer * 60 * 1000)
+                                }, timer * 60 * 1000)
                             )
                             .catch(console.error);
                         await customRole
@@ -190,7 +195,7 @@ exports.run = async (client, message, args) => {
                     });
                     const timeToVote = setTimeout(async function() {
                         collector.stop();
-                    }, client.config.default_timer * 60 * 1000);
+                    }, timer * 60 * 1000);
                     // Checks if message is deleted
                     const checkIfDeleted = setInterval(function() {
                         if (embedMessage.deleted) {
