@@ -39,35 +39,42 @@ exports.run = async (client, message, args) => {
             icon_url: client.user.avatarURL,
         },
     };
-
-    try {
-        await games_channel
-            .send({ embed: startGameEmbed })
-            .then(async embedMessage => {
-                setTimeout(function() {
-                    const gameStartedEmbed = {
-                        color: 0x009900,
-                        title: `${gameStarted}`,
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.avatarURL,
-                        },
-                    };
-                    embedMessage.delete();
-                    games_channel.send({ embed: gameStartedEmbed });
-                    if (client.config.host_channel_messages === true) {
-                        host_channel.send({ embed: gameStartedEmbed });
-                    }
-                }, timer * 60 * 1000);
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-            });
+    const gameStartedEmbed = {
+        color: 0x009900,
+        title: `${gameStarted}`,
+        timestamp: new Date(),
+        footer: {
+            icon_url: client.user.avatarURL,
+        }
+    };
+    if (timer == 0) {
+        games_channel.send({embed: gameStartedEmbed}).catch(console.error);
+        if (client.config.host_channel_messages === true) {
+            host_channel.send({ embed: gameStartedEmbed });
+        }
     }
-    catch (error) {
-        console.log(`${error}`);
+    else {
+        try {
+            await games_channel
+                .send({ embed: startGameEmbed })
+                .then(async embedMessage => {
+                    setTimeout(function() {
+                        embedMessage.delete();
+                        games_channel.send({ embed: gameStartedEmbed });
+                        if (client.config.host_channel_messages === true) {
+                            host_channel.send({ embed: gameStartedEmbed });
+                        }
+                    }, timer * 60 * 1000);
+                    // Checks if message is deleted
+                    const checkIfDeleted = setInterval(function() {
+                        if (embedMessage.deleted) {
+                            clearInterval(checkIfDeleted);
+                        }
+                    }, 1000);
+                });
+        }
+        catch (error) {
+            console.log(`${error}`);
+        }
     }
 };

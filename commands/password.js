@@ -119,12 +119,11 @@ exports.run = async (client, message, args) => {
             icon_url: client.user.avatarURL,
         },
     };
-
-    try {
+    if (timer == 0) {
         if (subscriber_channel != '') {
             await subscriber_channel.send({
                 embed: passwordMessage,
-            });
+            }).catch(console.error);
             await customRole
                 .setMentionable(true, 'Role needs to be pinged')
                 .catch(console.error);
@@ -135,41 +134,74 @@ exports.run = async (client, message, args) => {
                 .setMentionable(false, 'Role no longer needs to be pinged')
                 .catch(console.error);
         }
-        await games_channel
-            .send({ embed: prePasswordMessage })
-            .then(async embedMessage => {
-                const timeToVote = setTimeout(async function() {
-                    embedMessage.delete();
-
-                    games_channel.send({ embed: passwordMessage });
-                    if (client.config.custom_role_ping == true) {
-                        await customRole
-                            .setMentionable(true, 'Role needs to be pinged')
-                            .catch(console.error);
-                        await games_channel.send(
-                            customRole + ' - the password is above!'
-                        );
-                        await customRole
-                            .setMentionable(
-                                false,
-                                'Role no longer needs to be pinged'
-                            )
-                            .catch(console.error);
-                    }
-                    if (client.config.host_channel_messages === true) {
-                        host_channel.send('Password has been posted!');
-                    }
-                }, timer * 60 * 1000);
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-            });
+        await games_channel.send({
+            embed: passwordMessage,
+        }).catch(console.error);
+        await customRole
+            .setMentionable(true, 'Role needs to be pinged')
+            .catch(console.error);
+        await games_channel.send(
+            customRole + ' - the password is above!'
+        );
+        await customRole
+            .setMentionable(false, 'Role no longer needs to be pinged')
+            .catch(console.error);
+        if (client.config.host_channel_messages === true) {
+            host_channel.send('Password has been posted!');
+        }
     }
-    catch (error) {
-        console.log(`${error}`);
+    else {
+        try {
+            if (subscriber_channel != '') {
+                await subscriber_channel.send({
+                    embed: passwordMessage,
+                });
+                await customRole
+                    .setMentionable(true, 'Role needs to be pinged')
+                    .catch(console.error);
+                await subscriber_channel.send(
+                    customRole + ' - the password is above!'
+                );
+                await customRole
+                    .setMentionable(false, 'Role no longer needs to be pinged')
+                    .catch(console.error);
+            }
+            await games_channel
+                .send({ embed: prePasswordMessage })
+                .then(async embedMessage => {
+                    const timeToVote = setTimeout(async function() {
+                        embedMessage.delete();
+
+                        games_channel.send({ embed: passwordMessage });
+                        if (client.config.custom_role_ping == true) {
+                            await customRole
+                                .setMentionable(true, 'Role needs to be pinged')
+                                .catch(console.error);
+                            await games_channel.send(
+                                customRole + ' - the password is above!'
+                            );
+                            await customRole
+                                .setMentionable(
+                                    false,
+                                    'Role no longer needs to be pinged'
+                                )
+                                .catch(console.error);
+                        }
+                        if (client.config.host_channel_messages === true) {
+                            host_channel.send('Password has been posted!');
+                        }
+                    }, timer * 60 * 1000);
+                    // Checks if message is deleted
+                    const checkIfDeleted = setInterval(function() {
+                        if (embedMessage.deleted) {
+                            clearTimeout(timeToVote);
+                            clearInterval(checkIfDeleted);
+                        }
+                    }, 1000);
+                });
+        }
+        catch (error) {
+            console.log(`${error}`);
+        }
     }
 };

@@ -51,11 +51,10 @@ exports.run = async (client, message, args) => {
         `${emojiCharacters[2]} for Bomb Kit (Throwables)`,
         `${emojiCharacters[3]} for VSS Kit`,
         `${emojiCharacters[4]} for OP Kit (Crate Weapons)`,
-        `${emojiCharacters[5]} for Sniper Kit`,
-        `**NOTE:** Default Weapons => Can customize everything, others are preset`
+        `${emojiCharacters[5]} for Sniper Kit`        
     ];
 
-    const choices = warmodewepChoices.join('\n');
+    const choices = `${warmodewepChoices.join('\n')}\n**NOTE:** Default Weapons => Can customize everything, others are preset`;
 
     const warmodewepsVote = {
         color: 0x3366ff,
@@ -76,140 +75,168 @@ exports.run = async (client, message, args) => {
             icon_url: client.user.avatarURL,
         },
     };
-
-    try {
-        await games_channel
-            .send({ embed: warmodewepsVote })
-            .then(async embedMessage => {
-                const filter = (reaction, user) => reaction.users.has(client.user.id);
-                const collector = embedMessage.createReactionCollector(filter);
-                await embedMessage.react(emojiCharacters[1]);
-                await embedMessage.react(emojiCharacters[2]);
-                await embedMessage.react(emojiCharacters[3]);
-                await embedMessage.react(emojiCharacters[4]);
-                await embedMessage.react(emojiCharacters[5]);
-                if (client.config.custom_role_ping == true) {
-                    await customRole
-                        .setMentionable(true, 'Role needs to be pinged')
-                        .catch(console.error);
-                    await games_channel
-                        .send(customRole + ' - get voting!')
-                        .then(msg =>
-                            setTimeout(function() {
-                                msg.delete();
-                            }, timer * 60 * 1000)
-                        )
-                        .catch(console.error);
-                    await customRole
-                        .setMentionable(
-                            false,
-                            'Role no longer needs to be pinged'
-                        )
-                        .catch(console.error);
+    if (timer == 0) {
+        const ramdomeWarmodeWeaponChoices = {
+            color: 0x3366ff,
+            title: `Random War Mode weapon selection`,
+            description: `The War Mode weapon kit for the next game will be randomly selected`,
+            fields: [
+                {
+                    name: 'Choices',
+                    value: choices,
+                    inline: true
+                },
+                {
+                    name: 'Selection',
+                    value: warmodewepChoices[Math.floor(Math.random() * Math.floor(warmodewepChoices.length))],
+                    inline: true
                 }
-                collector.on('end', reactions => {
-                    let reactionID;
-                    let maxCount = 0;
-                    reactions.forEach(r => {
-                        if (r.count > maxCount) {
-                            maxCount = r.count;
-                            reactionID = r.emoji.name;
+            ],
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+            }
+        };
+        games_channel.send({ embed: ramdomeWarmodeWeaponChoices }).catch(console.error);
+        if (client.config.host_channel_messages === true) {
+            host_channel.send({ embed: ramdomeWarmodeWeaponChoices }).catch(console.error);
+        }
+    }  
+    else {
+        try {
+            await games_channel
+                .send({ embed: warmodewepsVote })
+                .then(async embedMessage => {
+                    const filter = (reaction, user) => reaction.users.has(client.user.id);
+                    const collector = embedMessage.createReactionCollector(filter);
+                    await embedMessage.react(emojiCharacters[1]);
+                    await embedMessage.react(emojiCharacters[2]);
+                    await embedMessage.react(emojiCharacters[3]);
+                    await embedMessage.react(emojiCharacters[4]);
+                    await embedMessage.react(emojiCharacters[5]);
+                    if (client.config.custom_role_ping == true) {
+                        await customRole
+                            .setMentionable(true, 'Role needs to be pinged')
+                            .catch(console.error);
+                        await games_channel
+                            .send(customRole + ' - get voting!')
+                            .then(msg =>
+                                setTimeout(function() {
+                                    msg.delete();
+                                }, timer * 60 * 1000)
+                            )
+                            .catch(console.error);
+                        await customRole
+                            .setMentionable(
+                                false,
+                                'Role no longer needs to be pinged'
+                            )
+                            .catch(console.error);
+                    }
+                    collector.on('end', reactions => {
+                        let reactionID;
+                        let maxCount = 0;
+                        reactions.forEach(r => {
+                            if (r.count > maxCount) {
+                                maxCount = r.count;
+                                reactionID = r.emoji.name;
+                            }
+                        });
+                        let draws = [];
+                        reactions.forEach(r => {
+                            if (r.count == maxCount) {
+                                draws.push(r.emoji.name);
+                            }
+                        });
+                        if (draws.length > 1) {
+                            reactionID =
+                                draws[
+                                    Math.floor(
+                                        Math.random() * Math.floor(draws.length)
+                                    )
+                                ];
+                        }
+                        let winReact;
+
+                        switch(reactionID) {
+                            case emojiCharacters['1']:
+                                winReact = `${reactionID} for Default Weapons`;
+                                break;
+                            case emojiCharacters['2']:
+                                winReact = `${reactionID} for Bomb Kit (Throwables)`;
+                                break;
+                            case emojiCharacters['3']:
+                                winReact = `${reactionID} for VSS Kit`;
+                                break;
+                            case emojiCharacters['4']:
+                                winReact = `${reactionID} for OP Kit (Crate Weapons)`;
+                                break;
+                            case emojiCharacters['5']:
+                                winReact = `${reactionID} for Sniper Kit`;
+                        }
+
+                        let warmodewepsResult;
+
+                        if (draws.length > 1) {
+                            warmodewepsResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                description: '',
+                                fields: [
+                                    {
+                                        name: 'Draws',
+                                        value: `${draws.join(' ')}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: `${winValue}`,
+                                        value: `${winReact}`,
+                                        inline: true
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        } else {
+                            warmodewepsResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                description: '',
+                                fields: [
+                                    {
+                                        name: `${winValue}`,
+                                        value: `${winReact}`,
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        }
+
+                        embedMessage.delete();
+                        games_channel.send({ embed: warmodewepsResult });
+                        if (client.config.host_channel_messages === true) {
+                            host_channel.send({ embed: warmodewepsResult });
                         }
                     });
-                    let draws = [];
-                    reactions.forEach(r => {
-                        if (r.count == maxCount) {
-                            draws.push(r.emoji.name);
+                    const timeToVote = setTimeout(async function() {
+                        collector.stop();
+                    }, timer * 60 * 1000);
+                    // Checks if message is deleted
+                    const checkIfDeleted = setInterval(function() {
+                        if (embedMessage.deleted) {
+                            clearTimeout(timeToVote);
+                            clearInterval(checkIfDeleted);
                         }
-                    });
-                    if (draws.length > 1) {
-                        reactionID =
-                            draws[
-                                Math.floor(
-                                    Math.random() * Math.floor(draws.length)
-                                )
-                            ];
-                    }
-                    let winReact;
-
-                    switch(reactionID) {
-                        case emojiCharacters['1']:
-                            winReact = `${reactionID} for Default Weapons`;
-                            break;
-                        case emojiCharacters['2']:
-                            winReact = `${reactionID} for Bomb Kit (Throwables)`;
-                            break;
-                        case emojiCharacters['3']:
-                            winReact = `${reactionID} for VSS Kit`;
-                            break;
-                        case emojiCharacters['4']:
-                            winReact = `${reactionID} for OP Kit (Crate Weapons)`;
-                            break;
-                        case emojiCharacters['5']:
-                            winReact = `${reactionID} for Sniper Kit`;
-                    }
-
-                    let warmodewepsResult;
-
-                    if (draws.length > 1) {
-                        warmodewepsResult = {
-                            color: 0x009900,
-                            title: `${title}`,
-                            description: '',
-                            fields: [
-                                {
-                                    name: 'Draws',
-                                    value: `${draws.join(' ')}`,
-                                    inline: true
-                                },
-                                {
-                                    name: `${winValue}`,
-                                    value: `${winReact}`,
-                                    inline: true
-                                }
-                            ],
-                            timestamp: new Date(),
-                            footer: {
-                                icon_url: client.user.avatarURL,
-                            }
-                        };
-                    } else {
-                        warmodewepsResult = {
-                            color: 0x009900,
-                            title: `${title}`,
-                            description: '',
-                            fields: [
-                                {
-                                    name: `${winValue}`,
-                                    value: `${winReact}`,
-                                }
-                            ],
-                            timestamp: new Date(),
-                            footer: {
-                                icon_url: client.user.avatarURL,
-                            }
-                        };
-                    }
-
-                    embedMessage.delete();
-                    games_channel.send({ embed: warmodewepsResult });
-                    if (client.config.host_channel_messages === true) {
-                        host_channel.send({ embed: warmodewepsResult });
-                    }
+                    }, 1000);
                 });
-                const timeToVote = setTimeout(async function() {
-                    collector.stop();
-                }, timer * 60 * 1000);
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-            });
-    }
-    catch (error) {
-        console.log(`${error}`);
+        }
+        catch (error) {
+            console.log(`${error}`);
+        }
     }
 };
