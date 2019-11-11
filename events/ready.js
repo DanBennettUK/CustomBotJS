@@ -4,7 +4,9 @@ module.exports = (client) => {
     setTimeout(() => {
         console.log(`${client.user.username} is ready for action!`);
         const roleChannel = client.channels.get(client.config.role_channel_id);
-        roleChannel.fetchMessage(client.config.role_message_id).then(msg => msg.react(client.config.role_reaction_emoji)).catch(console.error);
+            if (client.config.role_message_id !== "") {
+                roleChannel.fetchMessage(client.config.role_message_id).then(msg => msg.react(client.config.role_reaction_emoji)).catch(console.error);
+            }
 
         $.ajax({
             dataType: 'json',
