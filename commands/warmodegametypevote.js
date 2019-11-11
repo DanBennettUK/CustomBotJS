@@ -41,6 +41,8 @@ exports.run = async (client, message, args) => {
     `${emojiCharacters['WarMode']} for War Mode
     ${emojiCharacters['Conquest']} for War Mode Conquest`;
 
+    const gameTypeChoices = [`${emojiCharacters['WarMode']} for War Mode`, `${emojiCharacters['Conquest']} for War Mode Conquest`]
+
     const warmodeGametypeMessage = {
         color: 0x3366ff,
         title: `${title}`,
@@ -60,126 +62,154 @@ exports.run = async (client, message, args) => {
             icon_url: client.user.avatarURL,
         }
     };
-
-    try {
-        await games_channel
-            .send({ embed: warmodeGametypeMessage })
-            .then(async embedMessage => {
-                const filter = (reaction, user) => reaction.users.has(client.user.id);
-                const collector = embedMessage.createReactionCollector(filter);
-                await embedMessage.react(emojiCharacters['WarMode']);
-                await embedMessage.react(emojiCharacters['Conquest']);
-                if (client.config.custom_role_ping == true) {
-                    await customRole
-                        .setMentionable(true, 'Role needs to be pinged')
-                        .catch(console.error);
-                    await games_channel
-                        .send(customRole + ' - get voting!')
-                        .then(msg =>
-                            setTimeout(function() {
-                                msg.delete();
-                            }, timer * 60 * 1000)
-                        )
-                        .catch(console.error);
-                    await customRole
-                        .setMentionable(
-                            false,
-                            'Role no longer needs to be pinged'
-                        )
-                        .catch(console.error);
+    if (timer == 0) {
+        const ramdomWarModeGameTypeEmbed = {
+            color: 0x3366ff,
+            title: `Random War Mode gametype selection`,
+            description: `The War Mode gametype for the next game will be chosen randomly`,
+            fields: [
+                {
+                    name: 'Choices',
+                    value: gameTypeChoices.join('\n'),
+                    inline: true
+                },
+                {
+                    name: 'Selection',
+                    value: gameTypeChoices[Math.floor(Math.random() * Math.floor(gameTypeChoices.length))],
+                    inline: true
                 }
-                collector.on('end', reactions => {
-                    let reactionID;
-                    let maxCount = 0;
-                    reactions.forEach(r => {
-                        if (r.count > maxCount) {
-                            maxCount = r.count;
-                            reactionID = r.emoji.name;
+            ],
+            timestamp: new Date(),
+            footer: {
+                icon_url: client.user.avatarURL,
+            }
+        };
+        games_channel.send({ embed: ramdomWarModeGameTypeEmbed }).catch(console.error);
+        if (client.config.host_channel_messages === true) {
+            host_channel.send({ embed: ramdomWarModeGameTypeEmbed }).catch(console.error);
+        }
+    }
+    else {
+        try {
+            await games_channel
+                .send({ embed: warmodeGametypeMessage })
+                .then(async embedMessage => {
+                    const filter = (reaction, user) => reaction.users.has(client.user.id);
+                    const collector = embedMessage.createReactionCollector(filter);
+                    await embedMessage.react(emojiCharacters['WarMode']);
+                    await embedMessage.react(emojiCharacters['Conquest']);
+                    if (client.config.custom_role_ping == true) {
+                        await customRole
+                            .setMentionable(true, 'Role needs to be pinged')
+                            .catch(console.error);
+                        await games_channel
+                            .send(customRole + ' - get voting!')
+                            .then(msg =>
+                                setTimeout(function() {
+                                    msg.delete();
+                                }, timer * 60 * 1000)
+                            )
+                            .catch(console.error);
+                        await customRole
+                            .setMentionable(
+                                false,
+                                'Role no longer needs to be pinged'
+                            )
+                            .catch(console.error);
+                    }
+                    collector.on('end', reactions => {
+                        let reactionID;
+                        let maxCount = 0;
+                        reactions.forEach(r => {
+                            if (r.count > maxCount) {
+                                maxCount = r.count;
+                                reactionID = r.emoji.name;
+                            }
+                        });
+                        let draws = [];
+                        reactions.forEach(r => {
+                            if (r.count == maxCount) {
+                                draws.push(r.emoji.name);
+                            }
+                        });
+                        if (draws.length > 1) {
+                            reactionID =
+                                draws[
+                                    Math.floor(
+                                        Math.random() * Math.floor(draws.length)
+                                    )
+                                ];
+                        }
+                        let winReact;
+                        
+                        switch(reactionID) {
+                            case emojiCharacters['WarMode']:
+                                winReact = `${reactionID} for War Mode`;
+                                break;
+                            case emojiCharacters['Conquest']:
+                                winReact = `${reactionID} for War Mode Conquest`;
+                        }
+
+                        let gametypeResult;
+
+                        if (draws.length > 1) {
+                            gametypeResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                fields: [
+                                    {
+                                        name: 'Draws',
+                                        value: `${draws.join(' ')}`,
+                                        inline: true
+                                    },
+                                    {
+                                        name: `${winValue}`,
+                                        value: `${winReact}`,
+                                        inline: true
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        } else {
+                            gametypeResult = {
+                                color: 0x009900,
+                                title: `${title}`,
+                                fields: [
+                                    {
+                                        name: `${winValue}`,
+                                        value: `${winReact}`,
+                                    }
+                                ],
+                                timestamp: new Date(),
+                                footer: {
+                                    icon_url: client.user.avatarURL,
+                                }
+                            };
+                        }
+
+                        embedMessage.delete();
+                        games_channel.send({ embed: gametypeResult });
+                        if (client.config.host_channel_messages === true) {
+                            host_channel.send({ embed: gametypeResult });
                         }
                     });
-                    let draws = [];
-                    reactions.forEach(r => {
-                        if (r.count == maxCount) {
-                            draws.push(r.emoji.name);
+                    const timeToVote = setTimeout(async function() {
+                        collector.stop();
+                    }, timer * 60 * 1000);
+                    // Checks if message is deleted
+                    const checkIfDeleted = setInterval(function() {
+                        if (embedMessage.deleted) {
+                            clearTimeout(timeToVote);
+                            clearInterval(checkIfDeleted);
                         }
-                    });
-                    if (draws.length > 1) {
-                        reactionID =
-                            draws[
-                                Math.floor(
-                                    Math.random() * Math.floor(draws.length)
-                                )
-                            ];
-                    }
-                    let winReact;
-                    
-                    switch(reactionID) {
-                        case emojiCharacters['WarMode']:
-                            winReact = `${reactionID} for War Mode`;
-                            break;
-                        case emojiCharacters['Conquest']:
-                            winReact = `${reactionID} for War Mode Conquest`;
-                    }
-
-                    let gametypeResult;
-
-                    if (draws.length > 1) {
-                        gametypeResult = {
-                            color: 0x009900,
-                            title: `${title}`,
-                            fields: [
-                                {
-                                    name: 'Draws',
-                                    value: `${draws.join(' ')}`,
-                                    inline: true
-                                },
-                                {
-                                    name: `${winValue}`,
-                                    value: `${winReact}`,
-                                    inline: true
-                                }
-                            ],
-                            timestamp: new Date(),
-                            footer: {
-                                icon_url: client.user.avatarURL,
-                            }
-                        };
-                    } else {
-                        gametypeResult = {
-                            color: 0x009900,
-                            title: `${title}`,
-                            fields: [
-                                {
-                                    name: `${winValue}`,
-                                    value: `${winReact}`,
-                                }
-                            ],
-                            timestamp: new Date(),
-                            footer: {
-                                icon_url: client.user.avatarURL,
-                            }
-                        };
-                    }
-
-                    embedMessage.delete();
-                    games_channel.send({ embed: gametypeResult });
-                    if (client.config.host_channel_messages === true) {
-                        host_channel.send({ embed: gametypeResult });
-                    }
+                    }, 1000);
                 });
-                const timeToVote = setTimeout(async function() {
-                    collector.stop();
-                }, timer * 60 * 1000);
-                // Checks if message is deleted
-                const checkIfDeleted = setInterval(function() {
-                    if (embedMessage.deleted) {
-                        clearTimeout(timeToVote);
-                        clearInterval(checkIfDeleted);
-                    }
-                }, 1000);
-            });
-        } 
-        catch (error) {
-            console.log(`${error}`);
+            } 
+            catch (error) {
+                console.log(`${error}`);
+            }
         }
 }
