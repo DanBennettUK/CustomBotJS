@@ -3,19 +3,13 @@ const Enmap = require('enmap');
 const fs = require('fs');
 const config = require('./config.json');
 const client = new Discord.Client();
-const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const { window } = new JSDOM();
-const { document } = new JSDOM('').window;
-global.document = document;
+const request = require('request');
 
-const $ = require('jquery')(window);
 client.commands = new Discord.Collection();
 
 // We also need to make sure we're attaching it to the CLIENT so it's accessible everywhere!
 client.config = config;
-client.$ = $;
-
+client.request = request;
 fs.readdir('./events/', (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {
