@@ -34,7 +34,7 @@ fs.readdir('./commands/', (err, files) => {
 });
 
 // Current bot version
-client.version = '1.1';
+client.version = '1.2';
 
 // Debug errors
 if (config.debug_enable === true) {
