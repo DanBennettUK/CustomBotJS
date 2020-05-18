@@ -43,3 +43,5 @@ if (config.debug_enable === true) {
     client.on('debug', e => console.info(e));
 }
 client.login(config.token);
+
+exports.client = client;

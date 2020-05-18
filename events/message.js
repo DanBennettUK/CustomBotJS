@@ -1,4 +1,9 @@
-module.exports = (client, message) => {
+const Discord = require('discord.js');
+const { client } = require('../index');
+const config = require('../config.json');
+
+/**@param {Discord.Message} message*/
+module.exports = (message) => {
     // Ignore all bots
     if (message.author.bot) return;
 
@@ -6,10 +11,10 @@ module.exports = (client, message) => {
         // If the message is a DM or GroupDM, return.
 
         // Ignore messages not starting with the prefix (in config.json)
-        if (message.content.indexOf(client.config.prefix) !== 0) return;
+        if (message.content.indexOf(config.prefix) !== 0) return;
         // Our standard argument/command name definition.
         let args = message.content
-            .slice(client.config.prefix.length)
+            .slice(config.prefix.length)
             .trim()
             .split(/ +/g);
 
@@ -26,19 +31,11 @@ module.exports = (client, message) => {
         if (command === 'wmgv') command = 'warmodegametypevote';
         if (command === 'wv') command = 'weathervote';
 
-        // Grab the command data from the client.commands Enmap
-        const cmd = client.commands.get(command);
-
-        // If that command doesn't exist, silently exit and do nothing
-        if (!cmd) return;
-
-        // Run the command
-        cmd.run(client, message, args);
     } else {
         const directMessageEmbed = {
             color: 0x3366ff,
             title: `Info`,
-            description: client.config.directMessage.join(`\n`),
+            description: config.directMessage.join(`\n`),
             timestamp: new Date(),
             footer: {
                 icon_url: client.user.avatarURL,
