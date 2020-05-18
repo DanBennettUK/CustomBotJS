@@ -1,16 +1,21 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const config = require('../config.json');
+const { client } = require('../index');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-    
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
+
+    const host_channel = client.channels.get(config.host_channel_id);
+    const games_channel = client.channels.get(config.games_channel_id);
     const startingGameText = 'The game will start in';
     const gameStarted = 'Game Started!';
     let timerText;
-    let timer = client.config.default_timer;
+    let timer = config.default_timer;
 
     if (args.length > 0) {
         if (parseInt(args[args.length - 1]) || args[args.length - 1] == 0) {
@@ -48,8 +53,8 @@ exports.run = async (client, message, args) => {
         }
     };
     if (timer == 0) {
-        games_channel.send({embed: gameStartedEmbed}).catch(console.error);
-        if (client.config.host_channel_messages === true) {
+        games_channel.send({ embed: gameStartedEmbed }).catch(console.error);
+        if (config.host_channel_messages === true) {
             host_channel.send({ embed: gameStartedEmbed });
         }
     }
@@ -58,15 +63,15 @@ exports.run = async (client, message, args) => {
             await games_channel
                 .send({ embed: startGameEmbed })
                 .then(async embedMessage => {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         embedMessage.delete();
                         games_channel.send({ embed: gameStartedEmbed });
-                        if (client.config.host_channel_messages === true) {
+                        if (config.host_channel_messages === true) {
                             host_channel.send({ embed: gameStartedEmbed });
                         }
                     }, timer * 60 * 1000);
                     // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
+                    const checkIfDeleted = setInterval(function () {
                         if (embedMessage.deleted) {
                             clearInterval(checkIfDeleted);
                         }
