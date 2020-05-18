@@ -1,4 +1,8 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const { client } = require('../index');
+
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
 
     if (message.channel.id !== client.config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
