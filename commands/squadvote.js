@@ -1,17 +1,22 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const config = require('../config.json');
+const { client } = require('../index');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(client.config.custom_role_id);
+    const customRole = message.guild.roles.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
-    let timer = client.config.default_timer;
+    const host_channel = client.channels.get(config.host_channel_id);
+    const games_channel = client.channels.get(config.games_channel_id);
+    let timer = config.default_timer;
     let error_message;
 
     // Set up the message as an embed, ready to post
@@ -28,7 +33,7 @@ exports.run = async (client, message, args) => {
 
     // Function to compare two arrays
     function containsAny(source, target) {
-        const result = source.filter(function(item) {
+        const result = source.filter(function (item) {
             return target.indexOf(item) > -1;
         });
         return result.length > 0;
@@ -93,9 +98,9 @@ exports.run = async (client, message, args) => {
                     icon_url: client.user.avatarURL,
                 }
             };
-            games_channel.send({embed: randomSquadEmbed }).catch(console.error);
-            if (client.config.host_channel_messages === true) {
-                host_channel.send({embed: randomSquadEmbed }).catch(console.error);
+            games_channel.send({ embed: randomSquadEmbed }).catch(console.error);
+            if (config.host_channel_messages === true) {
+                host_channel.send({ embed: randomSquadEmbed }).catch(console.error);
             }
             let channelSize;
 
@@ -105,11 +110,11 @@ exports.run = async (client, message, args) => {
                     return;
                 }
             });
-                
+
             client.channels.forEach(channel => {
                 if (channel.type == 'voice') {
                     if (
-                        channel.name.startsWith(client.config.voice_channel_emoji)
+                        channel.name.startsWith(config.voice_channel_emoji)
                     ) {
                         try {
                             channel.setUserLimit(channelSize).catch(console.error);
@@ -135,14 +140,14 @@ exports.run = async (client, message, args) => {
                             );
                         }
 
-                        if (client.config.custom_role_ping == true) {
+                        if (config.custom_role_ping == true) {
                             await customRole
                                 .setMentionable(true, 'Role needs to be pinged')
                                 .catch(console.error);
                             await games_channel
                                 .send(customRole + ' - get voting!')
                                 .then(msg =>
-                                    setTimeout(function() {
+                                    setTimeout(function () {
                                         msg.delete();
                                     }, timer * 60 * 1000)
                                 )
@@ -172,9 +177,9 @@ exports.run = async (client, message, args) => {
                             if (draws.length > 1) {
                                 reactionID =
                                     draws[
-                                        Math.floor(
-                                            Math.random() * Math.floor(draws.length)
-                                        )
+                                    Math.floor(
+                                        Math.random() * Math.floor(draws.length)
+                                    )
                                     ];
                             }
                             let winReact = reactionID;
@@ -221,7 +226,7 @@ exports.run = async (client, message, args) => {
 
                             embedMessage.delete();
                             games_channel.send({ embed: squadResult });
-                            if (client.config.host_channel_messages === true) {
+                            if (config.host_channel_messages === true) {
                                 host_channel.send({ embed: squadResult });
                             }
 
@@ -233,11 +238,11 @@ exports.run = async (client, message, args) => {
                                     return;
                                 }
                             });
-                                
+
                             client.channels.forEach(channel => {
                                 if (channel.type == 'voice') {
                                     if (
-                                        channel.name.startsWith(client.config.voice_channel_emoji)
+                                        channel.name.startsWith(config.voice_channel_emoji)
                                     ) {
                                         try {
                                             channel.setUserLimit(channelSize).catch(console.error);
@@ -250,11 +255,11 @@ exports.run = async (client, message, args) => {
                             });
                             host_channel.send(`:white_check_mark: Voice limit set to ${channelSize}`);
                         });
-                        const timeToVote = setTimeout(async function() {
+                        const timeToVote = setTimeout(async function () {
                             collector.stop();
                         }, timer * 60 * 1000);
                         // Checks if message is deleted
-                        const checkIfDeleted = setInterval(function() {
+                        const checkIfDeleted = setInterval(function () {
                             if (embedMessage.deleted) {
                                 clearTimeout(timeToVote);
                                 clearInterval(checkIfDeleted);
