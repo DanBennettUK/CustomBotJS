@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const config = require('../config.json');
 const { client } = require('../index');
 
-/**@param {Discord.Message} message @param {String} args*/
+/**@param {Discord.Message} message @param {String[]} args*/
 module.exports = async (message, args) => {
 
     if (message.channel.id !== config.host_channel_id) {

@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const { client } = require('../index');
 const config = require('../config.json');
 
-/**@param {Discord.Message} message @param {String} args*/
+/**@param {Discord.Message} message @param {String[]} args*/
 module.exports = async (message, args) => {
     const customRole = message.guild.roles.get(config.custom_role_id);
 
