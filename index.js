@@ -16,7 +16,7 @@ fs.readdir('./events/', (err, files) => {
         const event = require(`./events/${file}`);
         const eventName = file.split('.')[0];
         console.log(`Attempting to load event ${eventName}`);
-        client.on(eventName, event.bind(null, client));
+        client.on(eventName, event.bind());
     });
 });
 
