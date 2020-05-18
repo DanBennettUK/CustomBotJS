@@ -34,8 +34,8 @@ module.exports = (message) => {
 
         fs.readdir('./commands', (err, files) => {
             if (err) throw err;
-            if (files.some(file => file.split[0]) === command)
-                require(`../commands/${command}`);
+            if (files.some(file => file.split('.')[0] === command))
+                require(`../commands/${command}`)(message, args);
         });
 
     } else {
