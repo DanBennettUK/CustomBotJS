@@ -1,22 +1,27 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const { client } = require('../index');
+const config = require('../config.json');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(client.config.custom_role_id);
+    const customRole = message.guild.roles.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
+    const host_channel = client.channels.get(config.host_channel_id);
+    const games_channel = client.channels.get(config.games_channel_id);
 
     // Set up the message as an embed, ready to post
     const title = 'Vote for perspective!';
     const description = 'Please vote on the perspective for the next game!';
     const winValue = 'The winning perspective is:';
-    let timer = client.config.default_timer;
+    let timer = config.default_timer;
     let timerText;
 
     if (args.length > 0) {
@@ -55,7 +60,7 @@ exports.run = async (client, message, args) => {
                 name: 'Choose a reaction',
                 value: `${emojiCharacters[1]} for FPP \n${
                     emojiCharacters[3]
-                } for TPP`,
+                    } for TPP`,
             },
             {
                 name: 'Vote will close in:',
@@ -90,8 +95,8 @@ exports.run = async (client, message, args) => {
                 icon_url: client.user.avatarURL,
             }
         };
-        games_channel.send({ embed: randomPerspectiveEmbed}).catch(console.error);
-        if (client.config.host_channel_messages === true) {
+        games_channel.send({ embed: randomPerspectiveEmbed }).catch(console.error);
+        if (config.host_channel_messages === true) {
             host_channel.send({ embed: randomPerspectiveEmbed }).catch(console.error);
         }
     }
@@ -104,14 +109,14 @@ exports.run = async (client, message, args) => {
                     const collector = embedMessage.createReactionCollector(filter);
                     await embedMessage.react(emojiCharacters[1]);
                     await embedMessage.react(emojiCharacters[3]);
-                    if (client.config.custom_role_ping == true) {
+                    if (config.custom_role_ping == true) {
                         await customRole
                             .setMentionable(true, 'Role needs to be pinged')
                             .catch(console.error);
                         await games_channel
                             .send(customRole + ' - get voting!')
                             .then(msg =>
-                                setTimeout(function() {
+                                setTimeout(function () {
                                     msg.delete();
                                 }, timer * 60 * 1000)
                             )
@@ -141,13 +146,13 @@ exports.run = async (client, message, args) => {
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
-                                    Math.floor(
-                                        Math.random() * Math.floor(draws.length)
-                                    )
+                                Math.floor(
+                                    Math.random() * Math.floor(draws.length)
+                                )
                                 ];
                         }
                         let winReact;
-                        switch(reactionID) {
+                        switch (reactionID) {
                             case emojiCharacters[1]:
                                 winReact = `${reactionID} for FPP`;
                                 break;
@@ -199,15 +204,15 @@ exports.run = async (client, message, args) => {
 
                         embedMessage.delete();
                         games_channel.send({ embed: perspectiveResult });
-                        if (client.config.host_channel_messages === true) {
+                        if (config.host_channel_messages === true) {
                             host_channel.send({ embed: perspectiveResult });
                         }
                     });
-                    const timeToVote = setTimeout(async function() {
+                    const timeToVote = setTimeout(async function () {
                         collector.stop();
                     }, timer * 60 * 1000);
                     // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
+                    const checkIfDeleted = setInterval(function () {
                         if (embedMessage.deleted) {
                             clearTimeout(timeToVote);
                             clearInterval(checkIfDeleted);
