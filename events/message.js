@@ -1,6 +1,7 @@
 const Discord = require('discord.js');
 const { client } = require('../index');
 const config = require('../config.json');
+const fs = require('fs');
 
 /**@param {Discord.Message} message*/
 module.exports = (message) => {
@@ -30,6 +31,12 @@ module.exports = (message) => {
         if (command === 'setvoicelimit') command = 'vclimit';
         if (command === 'wmgv') command = 'warmodegametypevote';
         if (command === 'wv') command = 'weathervote';
+
+        fs.readdir('./commands', (err, files) => {
+            if (err) throw err;
+            if (files.some(file => file.split[0]) === command)
+                require(`../commands/${command}`);
+        });
 
     } else {
         const directMessageEmbed = {
