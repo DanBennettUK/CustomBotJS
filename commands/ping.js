@@ -1,6 +1,11 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const { client } = require('../index');
+const config = require('../config.json');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
@@ -14,13 +19,13 @@ exports.run = async (client, message, args) => {
         }
     };
 
-    const ping_message = await message.channel.send({embed: pingEmbed});
+    const ping_message = await message.channel.send({ embed: pingEmbed });
     pingEmbed.description = `Pong!`;
     pingEmbed.fields = [
         {
             name: `Latency`,
             value: `${ping_message.createdTimestamp -
-            message.createdTimestamp}ms`,
+                message.createdTimestamp}ms`,
             inline: true
         },
         {
@@ -29,5 +34,5 @@ exports.run = async (client, message, args) => {
             inline: true
         }
     ];
-    ping_message.edit({embed: pingEmbed}).catch(console.error);
+    ping_message.edit({ embed: pingEmbed }).catch(console.error);
 };
