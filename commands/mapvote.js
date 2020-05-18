@@ -1,17 +1,22 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const config = require('../config.json');
+const { client } = require('../index');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(client.config.custom_role_id);
+    const customRole = message.guild.roles.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
-    let timer = client.config.default_timer;
+    const host_channel = client.channels.get(config.host_channel_id);
+    const games_channel = client.channels.get(config.games_channel_id);
+    let timer = config.default_timer;
     let timerText;
 
     // Set up the message as an embed, ready to post
@@ -20,7 +25,7 @@ exports.run = async (client, message, args) => {
     const winValue = 'The winning map is:';
     let mapChoices = [];
 
-    args.forEach(function(arg, i) {
+    args.forEach(function (arg, i) {
         args[i] = arg.toLowerCase();
     });
 
@@ -92,7 +97,7 @@ exports.run = async (client, message, args) => {
                     mapChoices.push(`${emojiCharacters['Jackal']} for Camp Jackal`);
                 }
             }
-        } 
+        }
         else {
             mapChoices = [
                 `${emojiCharacters['Erangel']} for Erangel`,
@@ -153,12 +158,12 @@ exports.run = async (client, message, args) => {
                 icon_url: client.user.avatarURL,
             }
         };
-        games_channel.send({ embed: randomMapEmbed}).catch(console.error);
-        if (client.config.host_channel_messages === true) {
+        games_channel.send({ embed: randomMapEmbed }).catch(console.error);
+        if (config.host_channel_messages === true) {
             host_channel.send({ embed: randomMapEmbed }).catch(console.error);
         }
     }
-    else {    
+    else {
         try {
             await games_channel
                 .send({ embed: mapVoteMessage })
@@ -204,7 +209,7 @@ exports.run = async (client, message, args) => {
                                     await embedMessage.react(emojiCharacters['Jackal']);
                                 }
                             }
-                        } 
+                        }
                         else {
                             await embedMessage.react(emojiCharacters['Erangel']);
                             await embedMessage.react(emojiCharacters['Miramar']);
@@ -218,14 +223,14 @@ exports.run = async (client, message, args) => {
                         await embedMessage.react(emojiCharacters['Sanhok']);
                         await embedMessage.react(emojiCharacters['Vikendi']);
                     }
-                    if (client.config.custom_role_ping == true) {
+                    if (config.custom_role_ping == true) {
                         await customRole
                             .setMentionable(true, 'Role needs to be pinged')
                             .catch(console.error);
                         await games_channel
                             .send(customRole + ' - get voting!')
                             .then(msg =>
-                                setTimeout(function() {
+                                setTimeout(function () {
                                     msg.delete();
                                 }, timer * 60 * 1000)
                             )
@@ -255,14 +260,14 @@ exports.run = async (client, message, args) => {
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
-                                    Math.floor(
-                                        Math.random() * Math.floor(draws.length)
-                                    )
+                                Math.floor(
+                                    Math.random() * Math.floor(draws.length)
+                                )
                                 ];
                         }
                         let winReact;
 
-                        switch(reactionID) {
+                        switch (reactionID) {
                             case emojiCharacters['Erangel']:
                                 winReact = `${reactionID} for Erangel`;
                                 break;
@@ -299,7 +304,7 @@ exports.run = async (client, message, args) => {
                                 footer: {
                                     icon_url: client.user.avatarURL,
                                 }
-                            };   
+                            };
                         } else {
                             mapResult = {
                                 color: 0x009900,
@@ -319,15 +324,15 @@ exports.run = async (client, message, args) => {
 
                         embedMessage.delete();
                         games_channel.send({ embed: mapResult });
-                        if (client.config.host_channel_messages === true) {
+                        if (config.host_channel_messages === true) {
                             host_channel.send({ embed: mapResult });
                         }
                     });
-                    const timeToVote = setTimeout(function() {
+                    const timeToVote = setTimeout(function () {
                         collector.stop();
                     }, timer * 60 * 1000);
                     // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
+                    const checkIfDeleted = setInterval(function () {
                         if (embedMessage.deleted) {
                             clearTimeout(timeToVote);
                             clearInterval(checkIfDeleted);
