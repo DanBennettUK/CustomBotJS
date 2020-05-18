@@ -1,17 +1,22 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const config = require('../config.json');
+const { client } = require('../index');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(client.config.custom_role_id);
+    const customRole = message.guild.roles.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
-    let timer = client.config.default_timer;
+    const host_channel = client.channels.get(config.host_channel_id);
+    const games_channel = client.channels.get(config.games_channel_id);
+    let timer = config.default_timer;
     let timerText;
 
     // Set up the message as an embed, ready to post
@@ -20,7 +25,7 @@ exports.run = async (client, message, args) => {
     const winValue = 'The winning weather is:';
     let weatherChoices = [];
 
-    args.forEach(function(arg, i) {
+    args.forEach(function (arg, i) {
         args[i] = arg.toLowerCase();
     });
 
@@ -163,7 +168,7 @@ exports.run = async (client, message, args) => {
             icon_url: client.user.avatarURL,
         }
     };
-    
+
     if (timer == 0) {
         const randomWeatherEmbed = {
             color: 0x3366ff,
@@ -187,7 +192,7 @@ exports.run = async (client, message, args) => {
             }
         };
         games_channel.send({ embed: randomWeatherEmbed }).catch(console.error);
-        if (client.config.host_channel_messages === true) {
+        if (config.host_channel_messages === true) {
             host_channel.send({ embed: randomWeatherEmbed }).catch(console.error);
         }
     }
@@ -277,14 +282,14 @@ exports.run = async (client, message, args) => {
                         await embedMessage.react(emojiCharacters['Moonlight']);
                         await embedMessage.react(emojiCharacters['Snowy']);
                     }
-                    if (client.config.custom_role_ping == true) {
+                    if (config.custom_role_ping == true) {
                         await customRole
                             .setMentionable(true, 'Role needs to be pinged')
                             .catch(console.error);
                         await games_channel
                             .send(customRole + ' - get voting!')
                             .then(msg =>
-                                setTimeout(function() {
+                                setTimeout(function () {
                                     msg.delete();
                                 }, timer * 60 * 1000)
                             )
@@ -314,9 +319,9 @@ exports.run = async (client, message, args) => {
                         if (draws.length > 1) {
                             reactionID =
                                 draws[
-                                    Math.floor(
-                                        Math.random() * Math.floor(draws.length)
-                                    )
+                                Math.floor(
+                                    Math.random() * Math.floor(draws.length)
+                                )
                                 ];
                         }
                         let winReact;
@@ -392,15 +397,15 @@ exports.run = async (client, message, args) => {
 
                         embedMessage.delete();
                         games_channel.send({ embed: weatherResult });
-                        if (client.config.host_channel_messages === true) {
+                        if (config.host_channel_messages === true) {
                             host_channel.send({ embed: weatherResult });
                         }
                     });
-                    const timeToVote = setTimeout(async function() {
+                    const timeToVote = setTimeout(async function () {
                         collector.stop();
                     }, timer * 60 * 1000);
                     // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function() {
+                    const checkIfDeleted = setInterval(function () {
                         if (embedMessage.deleted) {
                             clearTimeout(timeToVote);
                             clearInterval(checkIfDeleted);
