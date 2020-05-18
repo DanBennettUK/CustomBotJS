@@ -1,15 +1,20 @@
-exports.run = async (client, message) => {
+const Discord = require('discord.js');
+const { client } = require('../index');
+const config = require('../config.json');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-    
-    const configPrefix = client.config.prefix;
+
+    const configPrefix = config.prefix;
 
     if (
         !message.member.roles.some(
-            role => role.id === client.config.host_role_id
+            role => role.id === config.host_role_id
         )
     ) {
         try {
@@ -46,7 +51,7 @@ exports.run = async (client, message) => {
     }
     else if (
         message.member.roles.some(
-            role => role.id === client.config.host_role_id
+            role => role.id === config.host_role_id
         )
     ) {
         try {
@@ -123,8 +128,8 @@ exports.run = async (client, message) => {
                         {
                             name: `\`${configPrefix}vclimit <limit>\``,
                             value: `Sets voice channels starting with ${
-                                client.config.voice_channel_emoji
-                            } to <limit>`,
+                                config.voice_channel_emoji
+                                } to <limit>`,
                             inline: false,
                         },
                         {
@@ -134,7 +139,7 @@ exports.run = async (client, message) => {
                         },
                         {
                             name: `\`${configPrefix}custom [message]\``,
-                            value: `Pings the custom role and sends the provided message. \nExample: \`${configPrefix}custom get voting!\`\nResult: \`@Custom get voting!\` is posted in ${client.channels.get(client.config.games_channel_id)}`
+                            value: `Pings the custom role and sends the provided message. \nExample: \`${configPrefix}custom get voting!\`\nResult: \`@Custom get voting!\` is posted in ${client.channels.get(config.games_channel_id)}`
                         }
                     ],
                     timestamp: new Date(),
