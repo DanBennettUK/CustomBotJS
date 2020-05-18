@@ -1,18 +1,23 @@
-exports.run = async (client, message, args) => {
+const Discord = require('discord.js');
+const config = require('../config.json');
+const { client } = require('../index');
 
-    if (message.channel.id !== client.config.host_channel_id) {
+/**@param {Discord.Message} message @param {String[]} args*/
+module.exports = async (message, args) => {
+
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-    
-    const host_channel = client.channels.get(client.config.host_channel_id);
+
+    const host_channel = client.channels.get(config.host_channel_id);
     let error;
 
     if (args[0] > -1 && args[0] < 100) {
         client.channels.forEach(channel => {
             if (channel.type == 'voice') {
                 if (
-                    channel.name.startsWith(client.config.voice_channel_emoji)
+                    channel.name.startsWith(config.voice_channel_emoji)
                 ) {
                     try {
                         channel.setUserLimit(args[0]).catch(console.error);
