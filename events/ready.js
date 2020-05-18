@@ -11,7 +11,7 @@ module.exports = () => {
             roleChannel.fetchMessage(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
         }
 
-        //Won't work
+        /* //Won't work
         function checkTwitch() {
             request({
                 url: `https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
@@ -45,6 +45,6 @@ module.exports = () => {
             });
         }
         checkTwitch();
-        setInterval(() => checkTwitch(), 30000);
+        setInterval(() => checkTwitch(), 30000); */
     }, 5000)
 }
