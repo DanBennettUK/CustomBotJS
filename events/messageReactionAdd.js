@@ -6,6 +6,6 @@ module.exports = (messageReaction, user) => {
     if (user.bot) return;
     if (messageReaction.message.id === config.role_message_id && messageReaction.emoji.name == config.role_reaction_emoji) {
         const guild = messageReaction.message.guild;
-        guild.member(user.id).addRole(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
+        guild.member(user.id).roles.add(guild.roles.find(r => r.id === config.custom_role_id)).catch(console.error);
     }
 }

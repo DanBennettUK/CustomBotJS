@@ -11,11 +11,13 @@ module.exports = async (message, args) => {
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(config.custom_role_id);
+    const customRole = message.guild.roles.cache.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(config.host_channel_id);
-    const games_channel = client.channels.get(config.games_channel_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const games_channel = client.channels.cache.get(config.games_channel_id);
 
     // Set up the message as an embed, ready to post
     const title = 'Vote for War Mode Weapons!';
@@ -36,7 +38,7 @@ module.exports = async (message, args) => {
                 description: 'Minutes is missing or not a number!',
                 timestamp: new Date(),
                 footer: {
-                    icon_url: client.user.avatarURL
+                    icon_url: client.user.displayAvatarURL()
                 }
             };
             host_channel.send({ embed: error });
@@ -77,7 +79,7 @@ module.exports = async (message, args) => {
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL,
+            icon_url: client.user.displayAvatarURL(),
         },
     };
     if (timer == 0) {
@@ -99,7 +101,7 @@ module.exports = async (message, args) => {
             ],
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL,
+                icon_url: client.user.displayAvatarURL(),
             }
         };
         games_channel.send({ embed: ramdomeWarmodeWeaponChoices }).catch(console.error);
@@ -112,7 +114,8 @@ module.exports = async (message, args) => {
             await games_channel
                 .send({ embed: warmodewepsVote })
                 .then(async embedMessage => {
-                    const filter = (reaction, user) => reaction.users.has(client.user.id);
+                    /**@param {Discord.MessageReaction} reaction @param {Discord.User} user*/
+                    const filter = (reaction, user) => reaction.users.cache.has(client.user.id);
                     const collector = embedMessage.createReactionCollector(filter);
                     await embedMessage.react(emojiCharacters[1]);
                     await embedMessage.react(emojiCharacters[2]);
@@ -201,7 +204,7 @@ module.exports = async (message, args) => {
                                 ],
                                 timestamp: new Date(),
                                 footer: {
-                                    icon_url: client.user.avatarURL,
+                                    icon_url: client.user.displayAvatarURL(),
                                 }
                             };
                         } else {
@@ -217,7 +220,7 @@ module.exports = async (message, args) => {
                                 ],
                                 timestamp: new Date(),
                                 footer: {
-                                    icon_url: client.user.avatarURL,
+                                    icon_url: client.user.displayAvatarURL(),
                                 }
                             };
                         }

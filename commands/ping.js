@@ -15,7 +15,7 @@ module.exports = async (message, args) => {
         title: `Ping`,
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL,
+            icon_url: client.user.displayAvatarURL(),
         }
     };
 

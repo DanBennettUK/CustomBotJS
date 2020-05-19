@@ -9,12 +9,12 @@ module.exports = async (message, args) => {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-
-    const host_channel = client.channels.get(config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(config.host_channel_id);
     let error;
 
     if (args[0] > -1 && args[0] < 100) {
-        client.channels.forEach(channel => {
+        client.channels.cache.forEach(channel => {
             if (channel.type == 'voice') {
                 if (
                     channel.name.startsWith(config.voice_channel_emoji)
@@ -49,7 +49,7 @@ module.exports = async (message, args) => {
             ],
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL,
+                icon_url: client.user.displayAvatarURL(),
             },
         };
         host_channel.send({ embed: errorMessage });

@@ -8,9 +8,11 @@ module.exports = async (message, args) => {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-    const customRole = message.guild.roles.get(config.custom_role_id);
-    const host_channel = client.channels.get(config.host_channel_id);
-    const games_channel = client.channels.get(config.games_channel_id);
+    const customRole = message.guild.roles.cache.get(config.custom_role_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const games_channel = client.channels.cache.get(config.games_channel_id);
 
     await customRole.setMentionable(true, 'Role needs to be pinged').catch(console.error);
     await games_channel.send(`${customRole} ${args.join(' ')}`).catch(console.error);
@@ -23,7 +25,7 @@ module.exports = async (message, args) => {
             description: `Message:\n${customRole} ${args.join(' ')}`,
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL,
+                icon_url: client.user.displayAvatarURL(),
             }
         }
     }).catch(console.error);

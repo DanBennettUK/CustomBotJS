@@ -13,7 +13,7 @@ module.exports = async (message, args) => {
     const configPrefix = config.prefix;
 
     if (
-        !message.member.roles.some(
+        !message.member.roles.cache.some(
             role => role.id === config.host_role_id
         )
     ) {
@@ -23,7 +23,7 @@ module.exports = async (message, args) => {
                     color: 0x666633,
                     author: {
                         name: client.user.username,
-                        icon_url: client.user.avatarURL,
+                        icon_url: client.user.displayAvatarURL(),
                         url: 'https://github.com/DanBennettUK/CustomBotJS',
                     },
                     title: 'Commands for users',
@@ -39,7 +39,7 @@ module.exports = async (message, args) => {
                     ],
                     timestamp: new Date(),
                     footer: {
-                        icon_url: client.user.avatarURL,
+                        icon_url: client.user.displayAvatarURL(),
                         text: '© DanBennett',
                     },
                 },
@@ -50,7 +50,7 @@ module.exports = async (message, args) => {
         }
     }
     else if (
-        message.member.roles.some(
+        message.member.roles.cache.some(
             role => role.id === config.host_role_id
         )
     ) {
@@ -60,7 +60,7 @@ module.exports = async (message, args) => {
                     color: 0x666633,
                     author: {
                         name: client.user.username,
-                        icon_url: client.user.avatarURL,
+                        icon_url: client.user.displayAvatarURL(),
                         url: 'https://github.com/DanBennettUK/CustomBotJS',
                     },
                     title: 'Commands for hosts',
@@ -144,7 +144,7 @@ module.exports = async (message, args) => {
                     ],
                     timestamp: new Date(),
                     footer: {
-                        icon_url: client.user.avatarURL,
+                        icon_url: client.user.displayAvatarURL(),
                         text: `© DanBennett - Version: ${client.version}`,
                     },
                 },

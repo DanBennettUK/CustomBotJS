@@ -8,14 +8,15 @@ module.exports = async (message, args) => {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-
-    const host_channel = client.channels.get(client.config.host_channel_id);
-    const games_channel = client.channels.get(client.config.games_channel_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(client.config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const games_channel = client.channels.cache.get(client.config.games_channel_id);
     let clearMessage;
 
     if (args[0] && args[0].toLowerCase() === 'all') {
-        await games_channel
-            .fetchMessages({ limit: 100 })
+        await games_channel.messages
+            .fetch({ limit: 100 })
             .then(async collected => {
                 const botMsg = await collected.filter(
                     m => m.author.id == client.user.id
@@ -27,7 +28,7 @@ module.exports = async (message, args) => {
                         description: `Cleared ${botMsg.size} messages!`,
                         timestamp: new Date(),
                         footer: {
-                            icon_url: client.user.avatarURL,
+                            icon_url: client.user.displayAvatarURL(),
                         },
                     }),
                     host_channel.send({ embed: clearMessage })
@@ -36,8 +37,8 @@ module.exports = async (message, args) => {
             .catch(console.error);
     }
     else if (!isNaN(args[0])) {
-        await games_channel
-            .fetchMessages({ limit: args[0] })
+        await games_channel.messages
+            .fetch({ limit: args[0] })
             .then(async collected => {
                 const botMsg = collected.filter(
                     m => m.author.id == client.config.bot_id
@@ -49,7 +50,7 @@ module.exports = async (message, args) => {
                         description: `Cleared ${botMsg.size} messages!`,
                         timestamp: new Date(),
                         footer: {
-                            icon_url: client.user.avatarURL,
+                            icon_url: client.user.displayAvatarURL(),
                         },
                     }),
                     host_channel.send({ embed: clearMessage })
@@ -65,7 +66,7 @@ module.exports = async (message, args) => {
                 'Choose the number of messages you want to clear, or `all` to clear all messages',
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL,
+                icon_url: client.user.displayAvatarURL()
             },
         };
         host_channel.send({ embed: clearMessage });

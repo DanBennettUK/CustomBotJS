@@ -3,9 +3,6 @@ const fs = require('fs');
 const config = require('./config.json');
 const client = new Discord.Client();
 
-client.commands = new Discord.Collection();
-
-// We also need to make sure we're attaching it to the CLIENT so it's accessible everywhere!
 fs.readdir('./events/', (err, files) => {
     if (err) return console.error(err);
     files.forEach(file => {

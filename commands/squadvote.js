@@ -11,11 +11,13 @@ module.exports = async (message, args) => {
     }
 
     // Get customRole for pinging later
-    const customRole = message.guild.roles.get(config.custom_role_id);
+    const customRole = message.guild.roles.cache.get(config.custom_role_id);
 
     const emojiCharacters = require('../emojiCharacters.js');
-    const host_channel = client.channels.get(config.host_channel_id);
-    const games_channel = client.channels.get(config.games_channel_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const games_channel = client.channels.cache.get(config.games_channel_id);
     let timer = config.default_timer;
     let error_message;
 
@@ -32,6 +34,7 @@ module.exports = async (message, args) => {
     const message_squad_sizes = args;
 
     // Function to compare two arrays
+    /**@param {String[]} source @param {String[]} target*/
     function containsAny(source, target) {
         const result = source.filter(function (item) {
             return target.indexOf(item) > -1;
@@ -65,7 +68,7 @@ module.exports = async (message, args) => {
         ],
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL,
+            icon_url: client.user.displayAvatarURL(),
         }
     };
 
@@ -95,7 +98,7 @@ module.exports = async (message, args) => {
                 ],
                 timestamp: new Date(),
                 footer: {
-                    icon_url: client.user.avatarURL,
+                    icon_url: client.user.displayAvatarURL(),
                 }
             };
             games_channel.send({ embed: randomSquadEmbed }).catch(console.error);
@@ -111,7 +114,7 @@ module.exports = async (message, args) => {
                 }
             });
 
-            client.channels.forEach(channel => {
+            client.channels.cache.forEach(channel => {
                 if (channel.type == 'voice') {
                     if (
                         channel.name.startsWith(config.voice_channel_emoji)
@@ -132,7 +135,8 @@ module.exports = async (message, args) => {
                 await games_channel
                     .send({ embed: squadVoteMessage })
                     .then(async embedMessage => {
-                        const filter = (reaction, user) => reaction.users.has(client.user.id);
+                        /**@param {Discord.MessageReaction} reaction @param {Discord.User} user*/
+                        const filter = (reaction, user) => reaction.users.cache.has(client.user.id);
                         const collector = embedMessage.createReactionCollector(filter);
                         for (let i = 0; i < squad_sizes.length; i++) {
                             await embedMessage.react(
@@ -204,7 +208,7 @@ module.exports = async (message, args) => {
                                     ],
                                     timestamp: new Date(),
                                     footer: {
-                                        icon_url: client.user.avatarURL,
+                                        icon_url: client.user.displayAvatarURL(),
                                     }
                                 };
                             } else {
@@ -219,7 +223,7 @@ module.exports = async (message, args) => {
                                     ],
                                     timestamp: new Date(),
                                     footer: {
-                                        icon_url: client.user.avatarURL,
+                                        icon_url: client.user.displayAvatarURL(),
                                     }
                                 };
                             }
@@ -239,7 +243,7 @@ module.exports = async (message, args) => {
                                 }
                             });
 
-                            client.channels.forEach(channel => {
+                            client.channels.cache.forEach(channel => {
                                 if (channel.type == 'voice') {
                                     if (
                                         channel.name.startsWith(config.voice_channel_emoji)

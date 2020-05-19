@@ -45,7 +45,7 @@ module.exports = (message) => {
             description: config.directMessage.join(`\n`),
             timestamp: new Date(),
             footer: {
-                icon_url: client.user.avatarURL,
+                icon_url: client.user.displayAvatarURL(),
             }
         };
         message.channel.send({ embed: directMessageEmbed });

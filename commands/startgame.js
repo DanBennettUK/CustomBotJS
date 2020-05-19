@@ -9,9 +9,10 @@ module.exports = async (message, args) => {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
-
-    const host_channel = client.channels.get(config.host_channel_id);
-    const games_channel = client.channels.get(config.games_channel_id);
+    /**@type {Discord.TextChannel} */
+    const host_channel = client.channels.cache.get(config.host_channel_id);
+    /**@type {Discord.TextChannel} */
+    const games_channel = client.channels.cache.get(config.games_channel_id);
     const startingGameText = 'The game will start in';
     const gameStarted = 'Game Started!';
     let timerText;
@@ -41,7 +42,7 @@ module.exports = async (message, args) => {
         description: `${timer} ${timerText}`,
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL,
+            icon_url: client.user.displayAvatarURL(),
         },
     };
     const gameStartedEmbed = {
@@ -49,7 +50,7 @@ module.exports = async (message, args) => {
         title: `${gameStarted}`,
         timestamp: new Date(),
         footer: {
-            icon_url: client.user.avatarURL,
+            icon_url: client.user.displayAvatarURL(),
         }
     };
     if (timer == 0) {

@@ -1,3 +1,4 @@
+const Discord = require('discord.js');
 const config = require('../config.json');
 const request = require('request');
 const { client } = require('../index');
@@ -6,9 +7,10 @@ module.exports = () => {
     // On connect do these:
     setTimeout(() => {
         console.log(`${client.user.username} is ready for action!`);
-        const roleChannel = client.channels.get(config.role_channel_id);
+        /**@type {Discord.TextChannel} */
+        const roleChannel = client.channels.cache.get(config.role_channel_id);
         if (config.role_message_id !== "") {
-            roleChannel.fetchMessage(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
+            roleChannel.messages.fetch(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
         }
 
         /* //Won't work
