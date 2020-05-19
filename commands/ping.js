@@ -30,7 +30,7 @@ module.exports = async (message, args) => {
         },
         {
             name: `API latency`,
-            value: `${Math.round(client.ping)}ms`,
+            value: `${Math.round(client.ws.ping)}ms`,
             inline: true
         }
     ];
