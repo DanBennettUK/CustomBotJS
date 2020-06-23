@@ -23,7 +23,7 @@ module.exports = async (message, args) => {
                 await games_channel.bulkDelete(botMsg, true).then(
                     host_channel.send(new Discord.MessageEmbed()
                         .setColor(0x009900)
-                        .setTitle('Clera Messages')
+                        .setTitle('Clear Messages')
                         .setDescription(`Cleared ${botMsg.size} messages!`)
                         .setTimestamp()
                         .setFooter('', client.user.displayAvatarURL())
@@ -41,7 +41,7 @@ module.exports = async (message, args) => {
                 await games_channel.bulkDelete(botMsg, true).then(
                     host_channel.send(new Discord.MessageEmbed()
                         .setColor(0x009900)
-                        .setTitle('Clera Messages')
+                        .setTitle('Clear Messages')
                         .setDescription(`Cleared ${botMsg.size} messages!`)
                         .setTimestamp()
                         .setFooter('', client.user.displayAvatarURL())
@@ -52,7 +52,7 @@ module.exports = async (message, args) => {
     else
         host_channel.send(new Discord.MessageEmbed()
             .setColor(0x009900)
-            .setTitle('Clera Messages')
+            .setTitle('Clear Messages')
             .setDescription('Choose the number of messages you want to clear, or `all` to clear all messages')
             .setTimestamp()
             .setFooter('', client.user.displayAvatarURL())
