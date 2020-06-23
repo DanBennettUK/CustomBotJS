@@ -1,52 +1,97 @@
 const Discord = require('discord.js');
 const config = require('../config.json');
-const request = require('request');
+const https = require('https');
 const { client } = require('../index');
+let authToken = '';
 
-module.exports = () => {
+module.exports = async () => {
     // On connect do these:
-    setTimeout(() => {
-        console.log(`${client.user.username} is ready for action!`);
-        /**@type {Discord.TextChannel} */
-        const roleChannel = client.channels.cache.get(config.role_channel_id);
-        if (config.role_message_id !== "") {
-            roleChannel.messages.fetch(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
-        }
+    console.log(`${client.user.username} is ready for action!`);
+    /**@type {Discord.TextChannel} */
+    const roleChannel = client.channels.cache.get(config.role_channel_id);
+    if (config.role_message_id !== "")
+        roleChannel.messages.fetch(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
 
-        /* //Won't work
-        function checkTwitch() {
-            request({
-                url: `https://api.twitch.tv/helix/streams/?user_login=${config.activity.twitchUsername}`,
-                headers: {
-                    'Client-ID': config.activity.twitch_client_id
+    checkTwitch();
+    setInterval(() => checkTwitch(), 30000);
+}
+
+/**@function getToken
+ * This function fetches an authentication token from twitch, if one is not present
+ * @param {Function} callback The function to be executed after the token is fetched
+ */
+function getToken(callback) {
+    const authReq = https.request({
+        hostname: 'id.twitch.tv',
+        port: 443,
+        path: `/oauth2/token?client_id=${config.activity.twitch_client_id}&client_secret=${config.activity.twitch_client_secret}&grant_type=client_credentials`,
+        method: "POST"
+    }, (res) => {
+        res.setEncoding('utf8');
+        res.on('data', async d => {
+            let data = JSON.parse(d);
+            authToken = data.access_token;
+            callback();
+        });
+    });
+    authReq.end();
+}
+
+/**@function checkTwitch
+ * This function checks if the specified twitch channel is active and adjusts presence accordingly  
+ * If there is no authorization token, it calls the getToken function
+ * @see getToken
+ */
+function checkTwitch() {
+    const req = https.get({
+        host: 'api.twitch.tv',
+        path: `/helix/streams/?user_login=${config.activity.twitchUsername}`,
+        headers: {
+            'Client-ID': `${config.activity.twitch_client_id}`,
+            'Authorization': `Bearer ${authToken}`
+        }
+    }, res => {
+        if (res.statusCode === 401) {
+            client.user.setPresence({
+                activity: {
+                    name: config.activity.message,
+                    type: 'WATCHING'
                 }
-            }, (error, response, body) => {
-                if (!error) {
-                    const channel = JSON.parse(body);
-                    if (channel.data.length > 0) {
-                        client.user.setActivity(channel.data[0].title, {
+            });
+            getToken(() => checkTwitch());
+        }
+        else {
+            res.on('error', e => {
+                console.error(e);
+                client.user.setPresence({
+                    activity: {
+                        name: config.activity.message,
+                        type: 'WATCHING'
+                    },
+                    status: config.activity.status
+                });
+            });
+            res.on('data', d => {
+                let channel = JSON.parse(d);
+                if (channel.data.length > 0)
+                    client.user.setPresence({
+                        activity: {
+                            name: channel.data[0].title,
                             url: `https://twitch.tv/${config.activity.twitchUsername}`,
-                        });
-                    } else {
-                        client.user.setActivity(config.activity.message, {
-                            type: 'WATCHING',
-                            // PLAYING, LISTENING, WATCHING
-                        });
-                        client.user.setStatus(config.activity.status);
-                        // dnd, idle, online, invisible
-                    }
-                } else {
-                    console.log(error);
-                    client.user.setActivity(config.activity.message, {
-                        type: 'WATCHING',
-                        // PLAYING, LISTENING, WATCHING
+                            type: 'STREAMING'
+                        }
                     });
-                    client.user.setStatus(config.activity.status);
-                    // dnd, idle, online, invisible
+                else {
+                    client.user.setPresence({
+                        activity: {
+                            name: config.activity.message,
+                            type: 'WATCHING'
+                        },
+                        status: config.activity.status
+                    });
                 }
             });
         }
-        checkTwitch();
-        setInterval(() => checkTwitch(), 30000); */
-    }, 5000)
+    });
+    req.end();
 }
