@@ -18,15 +18,11 @@ module.exports = async (message, args) => {
     await games_channel.send(`${customRole} ${args.join(' ')}`).catch(console.error);
     await customRole.setMentionable(false, 'Role no longer needs to be pinged').catch(console.error);
 
-    host_channel.send({
-        embed: {
-            color: 0x3366ff,
-            title: 'Message sent',
-            description: `Message:\n${customRole} ${args.join(' ')}`,
-            timestamp: new Date(),
-            footer: {
-                icon_url: client.user.displayAvatarURL(),
-            }
-        }
-    }).catch(console.error);
+    host_channel.send(new Discord.MessageEmbed()
+        .setColor(0x3366ff)
+        .setTitle('Message sent')
+        .setDescription(`Message:\n${customRole} ${args.join(' ')}`)
+        .setTimestamp()
+        .setFooter('', client.user.displayAvatarURL())
+    ).catch(console.error);
 }
