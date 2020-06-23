@@ -12,7 +12,6 @@ module.exports = async (message, args) => {
     const host_channel = client.channels.cache.get(client.config.host_channel_id);
     /**@type {Discord.TextChannel} */
     const games_channel = client.channels.cache.get(client.config.games_channel_id);
-    let clearMessage;
 
     if (args[0] && args[0].toLowerCase() === 'all') {
         await games_channel.messages
@@ -22,19 +21,15 @@ module.exports = async (message, args) => {
                     m => m.author.id == client.user.id
                 );
                 await games_channel.bulkDelete(botMsg, true).then(
-                    (clearMessage = {
-                        color: 0x009900,
-                        title: 'Clear Messages',
-                        description: `Cleared ${botMsg.size} messages!`,
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.displayAvatarURL(),
-                        },
-                    }),
-                    host_channel.send({ embed: clearMessage })
-                );
-            })
-            .catch(console.error);
+                    host_channel.send(new Discord.MessageEmbed()
+                        .setColor(0x009900)
+                        .setTitle('Clera Messages')
+                        .setDescription(`Cleared ${botMsg.size} messages!`)
+                        .setTimestamp()
+                        .setFooter('', client.user.displayAvatarURL())
+                    ).catch(console.error)
+                ).catch(console.error);
+            }).catch(console.error);
     }
     else if (!isNaN(args[0])) {
         await games_channel.messages
@@ -44,31 +39,22 @@ module.exports = async (message, args) => {
                     m => m.author.id == client.config.bot_id
                 );
                 await games_channel.bulkDelete(botMsg, true).then(
-                    (clearMessage = {
-                        color: 0x009900,
-                        title: 'Clear Messages',
-                        description: `Cleared ${botMsg.size} messages!`,
-                        timestamp: new Date(),
-                        footer: {
-                            icon_url: client.user.displayAvatarURL(),
-                        },
-                    }),
-                    host_channel.send({ embed: clearMessage })
-                );
-            })
-            .catch(console.error);
+                    host_channel.send(new Discord.MessageEmbed()
+                        .setColor(0x009900)
+                        .setTitle('Clera Messages')
+                        .setDescription(`Cleared ${botMsg.size} messages!`)
+                        .setTimestamp()
+                        .setFooter('', client.user.displayAvatarURL())
+                    ).catch(console.error)
+                ).catch(console.error);
+            }).catch(console.error);
     }
-    else {
-        clearMessage = {
-            color: 0x009900,
-            title: 'Clear Messages',
-            description:
-                'Choose the number of messages you want to clear, or `all` to clear all messages',
-            timestamp: new Date(),
-            footer: {
-                icon_url: client.user.displayAvatarURL()
-            },
-        };
-        host_channel.send({ embed: clearMessage });
-    }
+    else
+        host_channel.send(new Discord.MessageEmbed()
+            .setColor(0x009900)
+            .setTitle('Clera Messages')
+            .setDescription('Choose the number of messages you want to clear, or `all` to clear all messages')
+            .setTimestamp()
+            .setFooter('', client.user.displayAvatarURL())
+        ).catch(console.error);
 };
