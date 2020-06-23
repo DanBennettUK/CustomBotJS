@@ -39,15 +39,12 @@ module.exports = (message) => {
         });
 
     } else {
-        const directMessageEmbed = {
-            color: 0x3366ff,
-            title: `Info`,
-            description: config.directMessage.join(`\n`),
-            timestamp: new Date(),
-            footer: {
-                icon_url: client.user.displayAvatarURL(),
-            }
-        };
-        message.channel.send({ embed: directMessageEmbed });
+        message.channel.send(new Discord.MessageEmbed()
+            .setColor(0x3366ff)
+            .setTitle('Info')
+            .setDescription(config.directMessage.join('\n'))
+            .setTimestamp()
+            .setFooter('', client.user.displayAvatarURL())
+        ).catch(console.error);
     }
 };
