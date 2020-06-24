@@ -18,7 +18,8 @@ module.exports = async (message, args) => {
     ).then(ping_message => {
         ping_message.edit(new Discord.MessageEmbed(ping_message.embeds[0])
             .setDescription('Pong!')
-            .addField('Latency', `${ping_message.createdTimestamp - message.createdTimestamp}ms`), true)
+            .addField('Latency', `${ping_message.createdTimestamp - message.createdTimestamp}ms`, true)
             .addField('API latency', `${Math.round(client.ws.ping)}ms`, true)
+        ).catch(console.error)
     }).catch(console.error);
 };
