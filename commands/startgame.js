@@ -13,9 +13,7 @@ module.exports = async (message, args) => {
     const host_channel = client.channels.cache.get(config.host_channel_id);
     /**@type {Discord.TextChannel} */
     const games_channel = client.channels.cache.get(config.games_channel_id);
-    const startingGameText = 'The game will start in';
-    const gameStarted = 'Game Started!';
-    let timerText;
+    let timerText = '';
     let timer = config.default_timer;
 
     if (args.length > 0) {
@@ -25,59 +23,62 @@ module.exports = async (message, args) => {
         }
     }
 
-    if (isNaN(args)) {
+    if (isNaN(args))
         host_channel.send(`'${args}' is not a number!`);
-    }
 
-    if (timer == 1) {
+    if (timer == 1)
         timerText = 'minute';
-    }
-    else {
+    else
         timerText = 'minutes';
-    }
 
-    const startGameEmbed = {
-        color: 0x3366ff,
-        title: `${startingGameText}`,
-        description: `${timer} ${timerText}`,
-        timestamp: new Date(),
-        footer: {
-            icon_url: client.user.displayAvatarURL(),
-        },
-    };
-    const gameStartedEmbed = {
-        color: 0x009900,
-        title: `${gameStarted}`,
-        timestamp: new Date(),
-        footer: {
-            icon_url: client.user.displayAvatarURL(),
-        }
-    };
     if (timer == 0) {
-        games_channel.send({ embed: gameStartedEmbed }).catch(console.error);
-        if (config.host_channel_messages === true) {
-            host_channel.send({ embed: gameStartedEmbed });
-        }
+        games_channel.send(new Discord.MessageEmbed()
+            .setColor(0x009900)
+            .setTitle('Game started!')
+            .setTimestamp()
+            .setFooter('', client.user.displayAvatarURL())
+        ).catch(console.error);
+        if (config.host_channel_messages === true)
+            host_channel.send(new Discord.MessageEmbed()
+                .setColor(0x009900)
+                .setTitle('Game started!')
+                .setTimestamp()
+                .setFooter('', client.user.displayAvatarURL())
+            ).catch(console.error);
     }
     else {
         try {
-            await games_channel
-                .send({ embed: startGameEmbed })
-                .then(async embedMessage => {
-                    setTimeout(function () {
-                        embedMessage.delete();
-                        games_channel.send({ embed: gameStartedEmbed });
-                        if (config.host_channel_messages === true) {
-                            host_channel.send({ embed: gameStartedEmbed });
-                        }
-                    }, timer * 60 * 1000);
-                    // Checks if message is deleted
-                    const checkIfDeleted = setInterval(function () {
-                        if (embedMessage.deleted) {
-                            clearInterval(checkIfDeleted);
-                        }
-                    }, 1000);
-                });
+            await games_channel.send(new Discord.MessageEmbed()
+                .setColor(0x3366ff)
+                .setTitle('The game will start in')
+                .setDescription(`${timer} ${timerText}`)
+                .setTimestamp()
+                .setFooter('', client.user.displayAvatarURL())
+            ).then(async embedMessage => {
+                const timeToVote = setTimeout(function () {
+                    embedMessage.delete();
+                    games_channel.send(new Discord.MessageEmbed()
+                        .setColor(0x009900)
+                        .setTitle('Game started!')
+                        .setTimestamp()
+                        .setFooter('', client.user.displayAvatarURL())
+                    ).catch(console.error);
+                    if (config.host_channel_messages === true)
+                        host_channel.send(new Discord.MessageEmbed()
+                            .setColor(0x009900)
+                            .setTitle('Game started!')
+                            .setTimestamp()
+                            .setFooter('', client.user.displayAvatarURL())
+                        ).catch(console.error);
+                }, timer * 60 * 1000);
+                // Checks if message is deleted
+                const checkIfDeleted = setInterval(function () {
+                    if (embedMessage.deleted) {
+                        clearTimeout(timeToVote);
+                        clearInterval(checkIfDeleted);
+                    }
+                }, 1000);
+            });
         }
         catch (error) {
             console.log(`${error}`);
