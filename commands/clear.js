@@ -4,14 +4,14 @@ const { client } = require('../index');
 /**@param {Discord.Message} message @param {String[]} args*/
 module.exports = async (message, args) => {
 
-    if (message.channel.id !== client.config.host_channel_id) {
+    if (message.channel.id !== config.host_channel_id) {
         // If the command isn't ran in the host channel, do nothing.
         return;
     }
     /**@type {Discord.TextChannel} */
-    const host_channel = client.channels.cache.get(client.config.host_channel_id);
+    const host_channel = client.channels.cache.get(config.host_channel_id);
     /**@type {Discord.TextChannel} */
-    const games_channel = client.channels.cache.get(client.config.games_channel_id);
+    const games_channel = client.channels.cache.get(config.games_channel_id);
 
     if (args[0] && args[0].toLowerCase() === 'all') {
         await games_channel.messages
@@ -36,7 +36,7 @@ module.exports = async (message, args) => {
             .fetch({ limit: args[0] })
             .then(async collected => {
                 const botMsg = collected.filter(
-                    m => m.author.id == client.config.bot_id
+                    m => m.author.id == config.bot_id
                 );
                 await games_channel.bulkDelete(botMsg, true).then(
                     host_channel.send(new Discord.MessageEmbed()
