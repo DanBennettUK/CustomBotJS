@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const config = require('../config.json');
 const { client } = require('../index');
 
 /**@param {Discord.Message} message @param {String[]} args*/
