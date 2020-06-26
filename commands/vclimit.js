@@ -25,7 +25,8 @@ module.exports = async (message, args) => {
                 }
             }
         });
-        host_channel.send(`:white_check_mark: Voice limit set to ${args[0]}`).catch(console.error);
+        if (args[0] == 0) host_channel.send(`:white_check_mark: Voice limit removed`).catch(console.error);
+        else host_channel.send(`:white_check_mark: Voice limit set to ${args[0]}`).catch(console.error);
     }
     else {
         host_channel.send(new Discord.MessageEmbed()
