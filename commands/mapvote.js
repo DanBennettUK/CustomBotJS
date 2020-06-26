@@ -105,7 +105,7 @@ module.exports = async (message, args) => {
             .setTitle('Random map selection')
             .setDescription('The map for the next game will be chosen randomly out of the choices provided')
             .addField('Choices', mapChoices.join('\n'), true)
-            .addField('Selection', mapChoices[Math.floor(Math.random() * Math.floor(mapChoices.length()))], true)
+            .addField('Selection', mapChoices[Math.floor(Math.random() * Math.floor(mapChoices.length))], true)
             .setTimestamp()
             .setFooter('', client.user.displayAvatarURL())
         ).catch(console.error);
@@ -115,7 +115,7 @@ module.exports = async (message, args) => {
                 .setTitle('Random map selection')
                 .setDescription('The map for the next game will be chosen randomly out of the choices provided')
                 .addField('Choices', mapChoices.join('\n'), true)
-                .addField('Selection', mapChoices[Math.floor(Math.random() * Math.floor(mapChoices.length()))], true)
+                .addField('Selection', mapChoices[Math.floor(Math.random() * Math.floor(mapChoices.length))], true)
                 .setTimestamp()
                 .setFooter('', client.user.displayAvatarURL())
             ).catch(console.error);
@@ -183,7 +183,7 @@ module.exports = async (message, args) => {
                     }
                     if (config.custom_role_ping == true) {
                         await customRole.setMentionable(true, 'Role needs to be pinged').catch(console.error);
-                        await games_channel.send(customRole + ' - get voting!').then(msg =>
+                        await games_channel.send(`${customRole} - get voting!`).then(msg =>
                             setTimeout(function () {
                                 msg.delete();
                             }, timer * 60 * 1000)
