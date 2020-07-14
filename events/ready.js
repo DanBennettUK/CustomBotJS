@@ -72,8 +72,10 @@ function checkTwitch() {
                 });
             });
             res.on('data', d => {
-                let channel = JSON.parse(d);
-                if (channel.data.length > 0)
+                let channel = null;
+                if (!d || d == undefined || d == null)
+                    channel = JSON.parse(d);
+                if (channel != null && channel && channel.data && channel.data.length > 0)
                     client.user.setPresence({
                         activity: {
                             name: channel.data[0].title,
