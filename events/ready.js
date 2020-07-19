@@ -64,8 +64,12 @@ function checkTwitch() {
             res.on('error', e => console.error(e));
             res.on('data', d => {
                 let channel = null;
-                if (!(!d || d == undefined || d == null))
+                try {
                     channel = JSON.parse(d);
+                } catch (e) {
+                    channel = null;
+                    console.error(e);
+                }
                 if (channel != null && channel && channel.data && channel.data.length > 0)
                     if (streamPresence === false) {
                         client.user.setPresence({
