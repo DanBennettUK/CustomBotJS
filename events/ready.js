@@ -64,7 +64,7 @@ function checkTwitch() {
             res.on('error', e => console.error(e));
             res.on('data', d => {
                 let channel = null;
-                if (!d || d == undefined || d == null)
+                if (!(!d || d == undefined || d == null))
                     channel = JSON.parse(d);
                 if (channel != null && channel && channel.data && channel.data.length > 0)
                     if (streamPresence === false) {
