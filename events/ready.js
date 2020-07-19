@@ -3,11 +3,18 @@ const config = require('../config.json');
 const https = require('https');
 const { client } = require('../index');
 let authToken = '';
+let streamPresence = false;
 
 module.exports = async () => {
     // On connect do these:
     console.log(`${client.user.username} is ready for action!`);
     /**@type {Discord.TextChannel} */
+    client.user.setPresence({
+        activity: {
+            name: config.activity.message,
+            type: 'WATCHING'
+        }
+    });
     const roleChannel = client.channels.cache.get(config.role_channel_id);
     if (config.role_message_id !== "")
         roleChannel.messages.fetch(config.role_message_id).then(msg => msg.react(config.role_reaction_emoji)).catch(console.error);
@@ -51,47 +58,35 @@ function checkTwitch() {
             'Authorization': `Bearer ${authToken}`
         }
     }, res => {
-        if (res.statusCode === 401) {
-            client.user.setPresence({
-                activity: {
-                    name: config.activity.message,
-                    type: 'WATCHING'
-                }
-            });
+        if (res.statusCode === 401)
             getToken(() => checkTwitch());
-        }
         else {
-            res.on('error', e => {
-                console.error(e);
-                client.user.setPresence({
-                    activity: {
-                        name: config.activity.message,
-                        type: 'WATCHING'
-                    },
-                    status: config.activity.status
-                });
-            });
+            res.on('error', e => console.error(e));
             res.on('data', d => {
                 let channel = null;
                 if (!d || d == undefined || d == null)
                     channel = JSON.parse(d);
                 if (channel != null && channel && channel.data && channel.data.length > 0)
-                    client.user.setPresence({
-                        activity: {
-                            name: channel.data[0].title,
-                            url: `https://twitch.tv/${config.activity.twitchUsername}`,
-                            type: 'STREAMING'
-                        }
-                    });
-                else {
-                    client.user.setPresence({
-                        activity: {
-                            name: config.activity.message,
-                            type: 'WATCHING'
-                        },
-                        status: config.activity.status
-                    });
-                }
+                    if (streamPresence === false) {
+                        client.user.setPresence({
+                            activity: {
+                                name: channel.data[0].title,
+                                url: `https://twitch.tv/${config.activity.twitchUsername}`,
+                                type: 'STREAMING'
+                            }
+                        });
+                        streamPresence = true;
+                    }
+                    else if (streamPresence === true) {
+                        client.user.setPresence({
+                            activity: {
+                                name: config.activity.message,
+                                type: 'WATCHING'
+                            },
+                            status: config.activity.status
+                        });
+                        streamPresence = false;
+                    }
             });
         }
     });
