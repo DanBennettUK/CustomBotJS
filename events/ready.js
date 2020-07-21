@@ -68,7 +68,6 @@ function checkTwitch() {
                     channel = JSON.parse(d);
                 } catch (e) {
                     channel = null;
-                    console.error(e);
                 }
                 if (channel != null && channel && channel.data && channel.data.length > 0)
                     if (streamPresence === false) {
