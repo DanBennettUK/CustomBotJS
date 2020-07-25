@@ -3,7 +3,9 @@ const config = require('../config.json');
 const https = require('https');
 const { client } = require('../index');
 let authToken = '';
-let streamPresence = false;
+let global = {
+    streamPresence: false
+};
 
 module.exports = async () => {
     // On connect do these:
@@ -70,7 +72,7 @@ function checkTwitch() {
                     channel = null;
                 }
                 if (channel != null && channel && channel.data && channel.data.length > 0) {
-                    if (streamPresence === false) {
+                    if (global.streamPresence === false) {
                         client.user.setPresence({
                             activity: {
                                 name: channel.data[0].title,
@@ -78,10 +80,10 @@ function checkTwitch() {
                                 type: 'STREAMING'
                             }
                         });
-                        streamPresence = true;
+                        global.streamPresence = true;
                     }
                 }
-                else if (streamPresence === true) {
+                else if (global.streamPresence === true) {
                     client.user.setPresence({
                         activity: {
                             name: config.activity.message,
@@ -89,7 +91,7 @@ function checkTwitch() {
                         },
                         status: config.activity.status
                     });
-                    streamPresence = false;
+                    global.streamPresence = false;
                 }
             });
         }
