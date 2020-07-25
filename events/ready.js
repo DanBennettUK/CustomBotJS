@@ -69,7 +69,7 @@ function checkTwitch() {
                 } catch (e) {
                     channel = null;
                 }
-                if (channel != null && channel && channel.data && channel.data.length > 0)
+                if (channel != null && channel && channel.data && channel.data.length > 0) {
                     if (streamPresence === false) {
                         client.user.setPresence({
                             activity: {
@@ -80,16 +80,17 @@ function checkTwitch() {
                         });
                         streamPresence = true;
                     }
-                    else if (streamPresence === true) {
-                        client.user.setPresence({
-                            activity: {
-                                name: config.activity.message,
-                                type: 'WATCHING'
-                            },
-                            status: config.activity.status
-                        });
-                        streamPresence = false;
-                    }
+                }
+                else if (streamPresence === true) {
+                    client.user.setPresence({
+                        activity: {
+                            name: config.activity.message,
+                            type: 'WATCHING'
+                        },
+                        status: config.activity.status
+                    });
+                    streamPresence = false;
+                }
             });
         }
     });

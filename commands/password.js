@@ -27,7 +27,7 @@ module.exports = async (message, args) => {
     let timerText = '';
 
     if (args[1]) {
-        if (typeof timer == 'number')
+        if (!isNaN(args[1]))
             timer = parseInt(args[1]);
         else {
             sendError(host_channel, 'Minutes is missing or not a number!');
