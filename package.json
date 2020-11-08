@@ -14,7 +14,7 @@
     "license": "GPL-3.0",
     "dependencies": {
         "discord.js": "^11.5.1",
-        "enmap": "^5.2.3",
+        "enmap": "^5.8.2",
         "request": "^2.88.0"
     }
 }
