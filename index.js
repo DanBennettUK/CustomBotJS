@@ -1,7 +1,11 @@
 const Discord = require('discord.js');
 const fs = require('fs');
 const config = require('./config.json');
-const client = new Discord.Client();
+const client = new Discord.Client({
+    ws: {
+        intents: ['GUILDS', 'GUILD_MEMBERS', 'GUILD_MESSAGES', 'GUILD_MESSAGE_REACTIONS', 'DIRECT_MESSAGES']
+    }
+});
 
 fs.readdir('./events/', (err, files) => {
     if (err) return console.error(err);
