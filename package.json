@@ -13,7 +13,7 @@
     "author": "Dan Bennett",
     "license": "GPL-3.0",
     "dependencies": {
-        "discord.js": "^11.6.4",
+        "discord.js": "^14.14.1",
         "enmap": "^5.9.8",
         "request": "^2.88.2"
     }
